@@ -1,4 +1,5 @@
 import type { Context, Env, Input, Next } from "hono";
+import type { StatusCode } from "hono/utils/http-status";
 import type { Promisify } from "./promisify";
 import type { Store } from "./store";
 
@@ -58,7 +59,7 @@ export type ConfigType<
    *
    * Defaults to `HTTP 429 Too Many Requests` (RFC 6585).
    */
-  statusCode: number;
+  statusCode: StatusCode;
 
   /**
    * Whether to enable support for the standardized rate limit headers (`RateLimit-*`).
@@ -103,7 +104,7 @@ export type ConfigType<
    *
    * By default, sends back the `statusCode` and `message` set via the options.
    */
-  handler: RateLimitExceededEventHandler;
+  handler: RateLimitExceededEventHandler<E, P, I>;
 
   /**
    * Method (in the form of middleware) to determine whether or not this request

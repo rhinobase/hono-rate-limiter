@@ -1,4 +1,4 @@
-import type { Context, Env, Input } from "hono";
+import type { Context, Env, Input, Next } from "hono";
 import { createMiddleware } from "hono/factory";
 import MemoryStore from "../memcache";
 import type { ConfigType, RateLimitInfo } from "../types";
@@ -23,10 +23,25 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     keyGenerator = () => "",
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
-    handler = () => undefined,
+    handler = async (
+      c: Context<E, P, I>,
+      _next: Next,
+      options: ConfigType<E, P, I>,
+    ) => {
+      c.status(options.statusCode);
+
+      const responseMessage =
+        typeof options.message === "function"
+          ? await options.message(c)
+          : options.message;
+
+      if (typeof responseMessage === "string") return c.text(responseMessage);
+      return c.json(responseMessage);
+    },
+    store = new MemoryStore(),
   } = config ?? {};
 
-  const options: ConfigType<E, P, I> = {
+  const options = {
     windowMs,
     limit,
     message,
@@ -39,9 +54,8 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     skip,
     requestWasSuccessful,
     handler,
+    store,
   };
-
-  const store = config?.store ?? new MemoryStore();
 
   // Call the `init` method on the store, if it exists
   if (typeof store.init === "function") store.init(options);
@@ -74,6 +88,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     };
 
     // Set the rate limit information in the hono context
+    // @ts-expect-error TODO: need to figure this out
     c.set(requestPropertyName, info);
 
     // Set the standardized `RateLimit-*` headers on the response object
@@ -82,36 +97,6 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
         setDraft6Headers(c, info, windowMs);
       } else if (standardHeaders === "draft-7") {
         setDraft7Headers(c, info, windowMs);
-      }
-    }
-
-    // If we are to skip failed/successfull requests, decrement the
-    // counter accordingly once we know the status code of the request
-    if (skipFailedRequests || skipSuccessfulRequests) {
-      let decremented = false;
-      const decrementKey = async () => {
-        if (!decremented) {
-          await store.decrement(key);
-          decremented = true;
-        }
-      };
-
-      if (skipFailedRequests) {
-        response.on("finish", async () => {
-          if (!(await requestWasSuccessful(c))) await decrementKey();
-        });
-        response.on("close", async () => {
-          if (!response.writableEnded) await decrementKey();
-        });
-        response.on("error", async () => {
-          await decrementKey();
-        });
-      }
-
-      if (skipSuccessfulRequests) {
-        response.on("finish", async () => {
-          if (await requestWasSuccessful(c)) await decrementKey();
-        });
       }
     }
 
@@ -126,6 +111,32 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
       return;
     }
 
-    await next();
+    // If we are to skip failed/successfull requests, decrement the
+    // counter accordingly once we know the status code of the request
+    let decremented = false;
+    const decrementKey = async () => {
+      if (!decremented) {
+        await store.decrement(key);
+        decremented = true;
+      }
+    };
+
+    try {
+      await next();
+
+      if (skipFailedRequests || skipSuccessfulRequests) {
+        const wasRequestSuccessful = await requestWasSuccessful(c);
+
+        if (
+          (skipFailedRequests && !wasRequestSuccessful) ||
+          (skipSuccessfulRequests && wasRequestSuccessful)
+        )
+          await decrementKey();
+      }
+    } catch (error) {
+      if (skipFailedRequests) await decrementKey();
+    } finally {
+      if (!c.finalized) await decrementKey();
+    }
   });
 }
