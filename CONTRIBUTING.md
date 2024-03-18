@@ -19,7 +19,7 @@ The following steps will get you up and running to contribute to Hono Rate Limit
 
 3. Set up all the dependencies and packages by running `pnpm install`. This command will install dependencies.
 
-> If you run into any issues during this step, kindly reach out to the Rhinobase team here: https://discord.gg/YtzxUfCk8c
+> If you run into any issues during this step, kindly reach out to the Rhinobase team here: <https://discord.gg/YtzxUfCk8c>
 
 ## Development
 
@@ -69,7 +69,7 @@ When you create a commit we kindly ask you to follow the convention `category(sc
 
 You can use `pnpm commit` command to help you with your commits
 
-If you are interested in the detailed specification you can visit https://www.conventionalcommits.org/ or check out the [Angular Commit Message Guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
+If you are interested in the detailed specification you can visit <https://www.conventionalcommits.org/> or check out the [Angular Commit Message Guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
 
 ### Steps to PR
 
@@ -87,7 +87,7 @@ All commits that fix bugs or add features need a test.
 
 ## Want to write a blog post or tutorial
 
-That would be amazing! Reach out to the core team here: https://discord.gg/YtzxUfCk8c. We would love to support you in any way we can.
+That would be amazing! Reach out to the core team here: <https://discord.gg/YtzxUfCk8c>. We would love to support you in any way we can.
 
 ## License
 
