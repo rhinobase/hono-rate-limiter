@@ -2,8 +2,8 @@ import { Hono } from "hono";
 import { testClient } from "hono/testing";
 import { rateLimiter } from ".";
 
-describe("rateLimiter", () => {
-  it("should work", async () => {
+describe("core", () => {
+  it("basic", async () => {
     const app = new Hono()
       .use(rateLimiter())
       .get("/", (c) => c.json({ hello: "world" }));
