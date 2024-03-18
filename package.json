@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.1",
+    "@jscutlery/semver": "^5.2.0",
     "@nx/eslint": "18.1.1",
     "@nx/eslint-plugin": "18.1.1",
     "@nx/js": "18.1.1",
@@ -34,6 +35,7 @@
     "husky": "^9.0.11",
     "is-ci": "^3.0.1",
     "lint-staged": "^15.2.2",
+    "ngx-deploy-npm": "^8.0.1",
     "nx": "18.1.1",
     "prettier": "^2.6.2",
     "tslib": "^2.6.2",

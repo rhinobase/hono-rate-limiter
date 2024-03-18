@@ -25,6 +25,20 @@
       "options": {
         "reportsDirectory": "../../coverage/packages/rate-limiter"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
+      }
+    },
+    "deploy": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "distFolderPath": "dist/packages/rate-limiter"
+      },
+      "dependsOn": ["build"]
     }
   },
   "tags": [],
