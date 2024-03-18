@@ -107,8 +107,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
         setRetryAfterHeader(c, info, windowMs);
       }
 
-      handler(c, next, options);
-      return;
+      return handler(c, next, options);
     }
 
     // If we are to skip failed/successfull requests, decrement the
