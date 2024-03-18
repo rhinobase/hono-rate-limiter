@@ -1,0 +1,13 @@
+{
+  "name": "@hono-ratelimiter/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "18.1.1",
+    "@nx/workspace": "18.1.1",
+    "nx": "18.1.1"
+  }
+}
