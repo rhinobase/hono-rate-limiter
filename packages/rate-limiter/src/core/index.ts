@@ -93,10 +93,11 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
 
     // Set the standardized `RateLimit-*` headers on the response object
     if (standardHeaders && !c.finalized) {
-      if (standardHeaders === "draft-6") {
-        setDraft6Headers(c, info, windowMs);
-      } else if (standardHeaders === "draft-7") {
+      if (standardHeaders === "draft-7") {
         setDraft7Headers(c, info, windowMs);
+      } else {
+        // For true and draft-6
+        setDraft6Headers(c, info, windowMs);
       }
     }
 
