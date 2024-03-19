@@ -9,6 +9,16 @@ import {
 } from "./headers";
 import { isValidStore } from "./validations";
 
+/**
+ *
+ * Create an instance of IP rate-limiting middleware for Hono.
+ *
+ * @param config {ConfigType} - Options to configure the rate limiter.
+ *
+ * @returns - The middleware that rate-limits clients based on your configuration.
+ *
+ * @public
+ */
 export function rateLimiter<E extends Env, P extends string, I extends Input>(
   config?: Partial<ConfigType<E, P, I>>,
 ) {
