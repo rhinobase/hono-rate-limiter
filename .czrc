@@ -3,6 +3,10 @@
     {
       "value": "core",
       "name": "core:                 anything core specific"
+    },
+    {
+      "value": "sandbox",
+      "name": "sandbox:              anything sandbox specific"
     }
   ],
   "scopesSearchValue": true,

@@ -13,7 +13,7 @@ const app = new Hono<{
 // Adding the rate limitter
 app.use(
   rateLimiter({
-    windowMs: 10_000,
+    windowMs: 1_000,
     limit: 2,
   }),
 );
