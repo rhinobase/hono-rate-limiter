@@ -1,13 +1,13 @@
 // import { platform } from 'node:process'
 import { createAdaptorServer } from "@hono/node-server";
 import { agent as request } from "supertest";
+import { rateLimiter } from "..";
 import type {
   ClientRateLimitInfo,
   ConfigType,
   RateLimitInfo,
   Store,
 } from "../../types";
-import { rateLimiter } from "../limiter";
 import { createServer } from "./helpers";
 
 describe("middleware test", () => {

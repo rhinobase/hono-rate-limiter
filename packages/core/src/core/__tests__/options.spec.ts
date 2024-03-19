@@ -1,5 +1,5 @@
+import { rateLimiter } from "..";
 import type { ClientRateLimitInfo, ConfigType, Store } from "../../types";
-import { rateLimiter } from "../limiter";
 
 describe("options test", () => {
   it("should not allow the use of an invalid store", async () => {
