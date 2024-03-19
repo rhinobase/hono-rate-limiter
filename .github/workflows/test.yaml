@@ -3,29 +3,29 @@ name: Test Package
 on: push
 
 jobs:
-test-library:
-  name: Test (Library)
-  strategy:
-    matrix:
-      node-version: [lts/gallium, lts/*, latest]
-      os: [ubuntu-latest, windows-latest, macos-latest]
-  runs-on: ${{ matrix.os }}
-  steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v4
-    - name: Use Pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8
-    - name: Use Node ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        registry-url: "https://registry.npmjs.org"
-        cache: "pnpm"
-    - name: Install dependencies
-      run: pnpm install
-    - name: Run library tests
-      run: |
-        pnpm install
-        pnpm nx test rate-limiter
+  test-library:
+    name: Test (Library)
+    strategy:
+      matrix:
+        node-version: [lts/gallium, lts/*, latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      - name: Use Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run library tests
+        run: |
+          pnpm install
+          pnpm nx test rate-limiter
