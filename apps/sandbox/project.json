@@ -15,10 +15,9 @@
         "bundle": false,
         "main": "apps/sandbox/src/main.tsx",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
-        "assets": ["apps/sandbox/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
-          "sourcemap": true,
+          "sourcemap": false,
           "outExtension": {
             ".js": ".js"
           }

@@ -19,7 +19,7 @@ app.use(
 );
 
 // Routes
-app.get("/", (c) => c.html(<Page />));
+app.get("/", (c) => c.html(<Page info={c.get("rateLimit")} />));
 
 // Serving the app
 serve(app);
