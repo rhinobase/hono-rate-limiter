@@ -19,7 +19,7 @@ describe("headers test", () => {
       }),
     );
 
-    const res = await app.request("/");
+    const res = await testClient(app).index.$get();
 
     expect(res.headers.get("ratelimit-policy")).toBe("5;w=60");
     expect(res.headers.get("ratelimit-limit")).toBe("5");
