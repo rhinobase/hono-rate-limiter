@@ -3,7 +3,7 @@ import type { ConfigType } from "../../types";
 
 const minute = 60 * 1000;
 
-describe.only("memory store test", () => {
+describe("memory store test", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.spyOn(global, "clearInterval");
