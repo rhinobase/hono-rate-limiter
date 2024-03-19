@@ -1,6 +1,6 @@
 {
   "name": "hono-rate-limiter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "commonjs",
   "dependencies": {
     "@swc/helpers": "~0.5.2"
