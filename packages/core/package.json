@@ -2,6 +2,28 @@
   "name": "hono-rate-limiter",
   "version": "0.1.1",
   "type": "commonjs",
+  "license": "MIT",
+  "keywords": [
+    "hono",
+    "api",
+    "middleware",
+    "rest-api",
+    "rate-limiting",
+    "rate-limiter",
+    "honojs"
+  ],
+  "homepage": "https://github.com/rhinobase/hono-rate-limiter",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhinobase/hono-rate-limiter.git",
+    "directory": "packages/ui"
+  },
+  "bugs": {
+    "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
+  },
   "dependencies": {
     "@swc/helpers": "~0.5.2"
   },
