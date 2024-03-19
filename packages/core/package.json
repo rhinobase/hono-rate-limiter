@@ -8,14 +8,6 @@
   "peerDependencies": {
     "hono": "^4.1.1"
   },
-  "exports": {
-    ".": {
-      "default": "./src/index.js",
-      "types": "./src/index.d.ts"
-    },
-    "./redis": {
-      "default": "./src/redis/index.js",
-      "types": "./src/redis/index.d.ts"
-    }
-  }
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
 }

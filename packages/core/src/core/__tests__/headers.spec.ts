@@ -1,13 +1,13 @@
 import { createAdaptorServer } from "@hono/node-server";
 import type { Context } from "hono";
 import { agent as request } from "supertest";
-import { rateLimiter } from "..";
 import type { RateLimitInfo } from "../../types";
 import {
   setDraft6Headers,
   setDraft7Headers,
   setRetryAfterHeader,
 } from "../headers";
+import { rateLimiter } from "../limiter";
 import { createServer } from "./helpers";
 
 describe("headers test", () => {

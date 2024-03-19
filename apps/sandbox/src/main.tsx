@@ -1,6 +1,10 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { type RateLimitInfo, rateLimiter } from "hono-rate-limiter";
+import {
+  type RateLimitInfo,
+  defaultKeyGenerator,
+  rateLimiter,
+} from "hono-rate-limiter";
 import { logger } from "hono/logger";
 import Page from "./Page";
 
@@ -18,6 +22,7 @@ app.use(
     windowMs: 10_000,
     limit: 10,
     handler: (_, next) => next(),
+    keyGenerator: defaultKeyGenerator,
   }),
 );
 
