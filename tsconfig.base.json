@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "hono-rate-limiter": ["packages/rate-limiter/src/index.ts"]
+      "hono-rate-limiter": ["packages/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

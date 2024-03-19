@@ -9,7 +9,9 @@ export function createServer<
   I extends Input = NonNullable<unknown>,
 >({
   middleware,
-}: { middleware: MiddlewareHandler<E, P, I> | MiddlewareHandler<E, P, I>[] }) {
+}: {
+  middleware: MiddlewareHandler<E, P, I> | MiddlewareHandler<E, P, I>[];
+}) {
   const wares = Array.isArray(middleware) ? middleware : [middleware];
 
   // Init the app
