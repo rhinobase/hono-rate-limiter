@@ -16,7 +16,7 @@ type Client = {
  *
  * @public
  */
-export default class MemoryStore {
+export default class MemoryStore implements Store {
   /**
    * The duration of time before which all hit counts are reset (in milliseconds).
    */

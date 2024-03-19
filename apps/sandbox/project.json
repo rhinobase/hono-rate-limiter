@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/sandbox",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/sandbox/src/main.ts",
+        "main": "apps/sandbox/src/main.tsx",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
         "assets": ["apps/sandbox/src/assets"],
         "generatePackageJson": true,
@@ -42,12 +42,7 @@
       "options": {
         "buildTarget": "sandbox:build"
       },
-      "dependsOn": [
-        {
-          "projects": ["rate-limiter"],
-          "target": "build"
-        }
-      ],
+      "dependsOn": [{ "dependencies": true, "target": "build" }],
       "configurations": {
         "development": {
           "buildTarget": "sandbox:build:development"

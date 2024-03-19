@@ -7,6 +7,7 @@ import {
   setDraft7Headers,
   setRetryAfterHeader,
 } from "./headers";
+import { isValidStore } from "./validations";
 
 export function rateLimiter<E extends Env, P extends string, I extends Input>(
   config?: Partial<ConfigType<E, P, I>>,
@@ -56,6 +57,10 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     handler,
     store,
   };
+
+  // Checking if store is valid
+  if (!isValidStore(store))
+    throw new Error("The store is not correctly implmented!");
 
   // Call the `init` method on the store, if it exists
   if (typeof store.init === "function") store.init(options);

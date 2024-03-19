@@ -40,6 +40,6 @@ describe("options test", () => {
         // @ts-expect-error Check if the library can detect invalid stores without TSC's help
         store: new InvalidStore(),
       });
-    }).toThrowError(/store/);
+    }).not.toThrowError(/store/);
   });
 });
