@@ -1,7 +1,8 @@
 import type { Context, Env, Input, Next } from "hono";
 import { createMiddleware } from "hono/factory";
-import MemoryStore from "../memcache";
+import MemoryStore from "../memory-store";
 import type { ConfigType, RateLimitInfo } from "../types";
+import { defaultKeyGenerator } from "./defaultKeyGenerator";
 import {
   setDraft6Headers,
   setDraft7Headers,
@@ -31,7 +32,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     requestPropertyName = "rateLimit",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = () => "",
+    keyGenerator = defaultKeyGenerator,
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
@@ -116,16 +117,6 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
       }
     }
 
-    // If the client has exceeded their rate limit, set the Retry-After header
-    // and call the `handler` function.
-    if (totalHits > _limit) {
-      if (standardHeaders) {
-        setRetryAfterHeader(c, info, windowMs);
-      }
-
-      return handler(c, next, options);
-    }
-
     // If we are to skip failed/successfull requests, decrement the
     // counter accordingly once we know the status code of the request
     let decremented = false;
@@ -136,9 +127,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
       }
     };
 
-    try {
-      await next();
-
+    const shouldSkipRequest = async () => {
       if (skipFailedRequests || skipSuccessfulRequests) {
         const wasRequestSuccessful = await requestWasSuccessful(c);
 
@@ -148,6 +137,22 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
         )
           await decrementKey();
       }
+    };
+
+    // If the client has exceeded their rate limit, set the Retry-After header
+    // and call the `handler` function.
+    if (totalHits > _limit) {
+      if (standardHeaders) {
+        setRetryAfterHeader(c, info, windowMs);
+      }
+
+      await shouldSkipRequest();
+      return handler(c, next, options);
+    }
+
+    try {
+      await next();
+      await shouldSkipRequest();
     } catch (error) {
       if (skipFailedRequests) await decrementKey();
     } finally {

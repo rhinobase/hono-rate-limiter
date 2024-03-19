@@ -1,13 +1,21 @@
 {
   "name": "hono-rate-limiter",
   "version": "0.0.1",
+  "type": "commonjs",
   "dependencies": {
     "@swc/helpers": "~0.5.2"
   },
   "peerDependencies": {
     "hono": "^4.1.1"
   },
-  "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts"
+  "exports": {
+    ".": {
+      "default": "./src/index.js",
+      "types": "./src/index.d.ts"
+    },
+    "./redis": {
+      "default": "./src/redis/index.js",
+      "types": "./src/redis/index.d.ts"
+    }
+  }
 }

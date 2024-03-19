@@ -19,7 +19,7 @@
     "type": "commonjs"
   },
   "minify": true,
-  "sourceMaps": true,
+  "sourceMaps": false,
   "exclude": [
     "vite.config.ts",
     ".*\\.spec.tsx?$",

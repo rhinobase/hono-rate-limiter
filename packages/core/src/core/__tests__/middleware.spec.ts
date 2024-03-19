@@ -10,7 +10,7 @@ import type {
 } from "../../types";
 import { createServer } from "./helpers";
 
-describe.skip("middleware test", () => {
+describe("middleware test", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -331,8 +331,8 @@ describe.skip("middleware test", () => {
     await request(app)
       .get("/")
       .expect(200)
-      .expect("x-ratelimit-limit", "2")
-      .expect("x-ratelimit-remaining", "1")
+      .expect("ratelimit-limit", "2")
+      .expect("ratelimit-remaining", "1")
       .expect((response) => {
         if ("retry-after" in response.headers) {
           throw new Error(
