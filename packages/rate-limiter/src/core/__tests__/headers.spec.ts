@@ -13,13 +13,13 @@ import { createServer } from "./helpers";
 describe("headers test", () => {
   it("should send correct `ratelimit-*` headers for the standard headers draft 6", async () => {
     const app = createAdaptorServer(
-      createServer(
-        rateLimiter({
+      createServer({
+        middleware: rateLimiter({
           windowMs: 60 * 1000,
           limit: 5,
           standardHeaders: true,
         }),
-      ),
+      }),
     );
 
     await request(app)
@@ -33,13 +33,13 @@ describe("headers test", () => {
 
   it("should send policy and combined ratelimit headers for the standard draft 7", async () => {
     const app = createAdaptorServer(
-      createServer(
-        rateLimiter({
+      createServer({
+        middleware: rateLimiter({
           windowMs: 60 * 1000,
           limit: 5,
           standardHeaders: "draft-7",
         }),
-      ),
+      }),
     );
 
     await request(app)
@@ -51,12 +51,12 @@ describe("headers test", () => {
 
   it("should return the `retry-after` header once IP has reached the max", async () => {
     const app = createAdaptorServer(
-      createServer(
-        rateLimiter({
+      createServer({
+        middleware: rateLimiter({
           windowMs: 60 * 1000,
           limit: 1,
         }),
-      ),
+      }),
     );
 
     await request(app).get("/").expect(200);

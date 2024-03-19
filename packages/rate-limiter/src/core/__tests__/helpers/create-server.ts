@@ -1,14 +1,22 @@
 import { type Env, Hono, type Input, type MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 
-export function createServer<E extends Env, P extends string, I extends Input>(
-  middleware: MiddlewareHandler<E, P, I>,
-) {
+export function createServer<
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  E extends Env = any,
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  P extends string = any,
+  I extends Input = NonNullable<unknown>,
+>({
+  middleware,
+}: { middleware: MiddlewareHandler<E, P, I> | MiddlewareHandler<E, P, I>[] }) {
+  const wares = Array.isArray(middleware) ? middleware : [middleware];
+
   // Init the app
   const app = new Hono()
 
     // Adding the middleware
-    .use(middleware)
+    .use(...wares)
 
     // Register test routes
     .get("/", (c) => c.text("Hi there!"))
