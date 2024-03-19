@@ -28,4 +28,4 @@ jobs:
       - name: Run library tests
         run: |
           pnpm install
-          pnpm nx test rate-limiter
+          pnpm nx test core
