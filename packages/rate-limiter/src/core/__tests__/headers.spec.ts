@@ -1,5 +1,6 @@
+import { createAdaptorServer } from "@hono/node-server";
 import type { Context } from "hono";
-import { testClient } from "hono/testing";
+import { agent as request } from "supertest";
 import { rateLimiter } from "..";
 import type { RateLimitInfo } from "../../types";
 import {
@@ -11,56 +12,55 @@ import { createServer } from "./helpers";
 
 describe("headers test", () => {
   it("should send correct `ratelimit-*` headers for the standard headers draft 6", async () => {
-    const app = createServer(
-      rateLimiter({
-        windowMs: 60 * 1000,
-        limit: 5,
-        standardHeaders: true,
-      }),
+    const app = createAdaptorServer(
+      createServer(
+        rateLimiter({
+          windowMs: 60 * 1000,
+          limit: 5,
+          standardHeaders: true,
+        }),
+      ),
     );
 
-    const res = await testClient(app).index.$get();
-
-    expect(res.headers.get("ratelimit-policy")).toBe("5;w=60");
-    expect(res.headers.get("ratelimit-limit")).toBe("5");
-    expect(res.headers.get("ratelimit-remaining")).toBe("4");
-    expect(res.headers.get("ratelimit-reset")).toBe("60");
-    expect(res.status).toBe(200);
-    expect(await res.text()).toBe("Hi there!");
+    await request(app)
+      .get("/")
+      .expect("ratelimit-policy", "5;w=60")
+      .expect("ratelimit-limit", "5")
+      .expect("ratelimit-remaining", "4")
+      .expect("ratelimit-reset", "60")
+      .expect(200, "Hi there!");
   });
 
   it("should send policy and combined ratelimit headers for the standard draft 7", async () => {
-    const app = createServer(
-      rateLimiter({
-        windowMs: 60 * 1000,
-        limit: 5,
-        standardHeaders: "draft-7",
-      }),
+    const app = createAdaptorServer(
+      createServer(
+        rateLimiter({
+          windowMs: 60 * 1000,
+          limit: 5,
+          standardHeaders: "draft-7",
+        }),
+      ),
     );
 
-    const res = await testClient(app).index.$get();
-
-    expect(res.headers.get("ratelimit-policy")).toBe("5;w=60");
-    expect(res.headers.get("ratelimit")).toBe("limit=5, remaining=4, reset=60");
-    expect(res.status).toBe(200);
-    expect(await res.text()).toBe("Hi there!");
+    await request(app)
+      .get("/")
+      .expect("ratelimit-policy", "5;w=60")
+      .expect("ratelimit", "limit=5, remaining=4, reset=60")
+      .expect(200, "Hi there!");
   });
 
   it("should return the `retry-after` header once IP has reached the max", async () => {
-    const app = createServer(
-      rateLimiter({
-        windowMs: 60 * 1000,
-        limit: 1,
-      }),
+    const app = createAdaptorServer(
+      createServer(
+        rateLimiter({
+          windowMs: 60 * 1000,
+          limit: 1,
+        }),
+      ),
     );
 
-    const request = testClient(app).index.$get;
-
-    expect((await request()).status).toBe(200);
-
-    const res = await request();
-    expect(res.status).toBe(429);
-    expect(res.headers.get("retry-after")).toBe("60");
+    await request(app).get("/").expect(200);
+    await request(app).get("/").expect(429).expect("retry-after", "60");
   });
 
   it("should not attempt to set headers if request.headersSent is true", () => {
