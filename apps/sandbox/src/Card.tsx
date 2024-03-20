@@ -5,6 +5,7 @@ const cardLayout = css`
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid transparent;
+  text-align: center;
   &:hover {
     border: 1px solid rgb(209 213 219);
     background-color: rgb(243 244 246);
@@ -16,6 +17,9 @@ const cardLayout = css`
       background-color: rgba(38, 38, 38, 0.3);
       border: 1px solid rgb(38 38 38);
     }
+  }
+  @media screen and (min-width: 1024px) {
+    text-align: left;
   }
 `;
 

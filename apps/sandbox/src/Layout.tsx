@@ -23,8 +23,11 @@ const mainClass = css`
   max-width: 1024;
   margin: 0 auto;
   flex-direction: column;
-  padding: 6rem;
   height: 79vh;
+  padding: 3rem;
+  @media screen and (min-width: 1024px) {
+    padding: 6rem;
+  }
 `;
 
 const Layout: FC = (props) => {

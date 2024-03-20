@@ -22,17 +22,36 @@ const checkOut = css`
 
 const heading = css`
   text-align: center;
-  font-size: 4.5rem;
   line-height: 1;
   font-weight: 600;
+  font-size: 1.31rem;
   @media (prefers-color-scheme: dark) {
     color: white;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 1023px) {
+    font-size: 3rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    font-size: 4.5rem;
   }
 `;
 
 const cardCss = css`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 1023px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 const linkClass = css`
