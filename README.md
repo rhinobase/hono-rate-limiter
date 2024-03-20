@@ -51,7 +51,7 @@ Here is a list of stores:
 | [`cluster-memory-store`](https://npm.im/@express-rate-limit/cluster-memory-store)    | A memory-store wrapper that shares state across all processes on a single server via the [node:cluster](https://nodejs.org/api/cluster.html) module. Does not share state across multiple servers. |
 | [`precise-memory-rate-limit`](https://www.npm.im/precise-memory-rate-limit)          | A memory store similar to the built-in one, except that it stores a distinct timestamp for each key.                                                                                               |
 | [`typeorm-rate-limit-store`](https://www.npmjs.com/package/typeorm-rate-limit-store) | Supports a variety of databases via [TypeORM](https://typeorm.io/): MySQL, MariaDB, CockroachDB, SQLite, Microsoft SQL Server, Oracle, SAP Hana, and more.                                         |
-| [`@rlimit/storage`](<(https://www.npmjs.com/package/@rlimit/storage)>)               | A distributed rlimit store, ideal for multi-regional deployments.                                                                                                                                  |
+| [`@rlimit/storage`](https://www.npmjs.com/package/@rlimit/storage)                   | A distributed rlimit store, ideal for multi-regional deployments.                                                                                                                                  |
 
 Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creating-a-store) if you wish to create your own store.
 
