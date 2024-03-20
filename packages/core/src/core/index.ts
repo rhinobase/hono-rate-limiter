@@ -20,9 +20,11 @@ import { isValidStore } from "./validations";
  *
  * @public
  */
-export function rateLimiter<E extends Env, P extends string, I extends Input>(
-  config?: Partial<ConfigType<E, P, I>>,
-) {
+export function rateLimiter<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+>(config?: Partial<ConfigType<E, P, I>>) {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -30,6 +32,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     statusCode = 429,
     standardHeaders = "draft-6",
     requestPropertyName = "rateLimit",
+    requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
     keyGenerator = defaultKeyGenerator,
@@ -60,6 +63,7 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     statusCode,
     standardHeaders,
     requestPropertyName,
+    requestStorePropertyName,
     skipFailedRequests,
     skipSuccessfulRequests,
     keyGenerator,
@@ -106,6 +110,12 @@ export function rateLimiter<E extends Env, P extends string, I extends Input>(
     // Set the rate limit information in the hono context
     // @ts-expect-error TODO: need to figure this out
     c.set(requestPropertyName, info);
+    // Set the data store in the hono context
+    // @ts-expect-error TODO: need to figure this out
+    c.set(requestStorePropertyName, {
+      getKey: store.get?.bind(store),
+      resetKey: store.resetKey.bind(store),
+    });
 
     // Set the standardized `RateLimit-*` headers on the response object
     if (standardHeaders && !c.finalized) {

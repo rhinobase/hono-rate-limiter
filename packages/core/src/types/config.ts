@@ -52,7 +52,10 @@ export type ConfigType<
    *
    * Defaults to `'Too many requests, please try again later.'`
    */
-  message: string | JSON | ((c: Context<E, P, I>) => Promisify<string | JSON>);
+  message:
+    | string
+    | Record<string, unknown>
+    | ((c: Context<E, P, I>) => Promisify<string | Record<string, unknown>>);
 
   /**
    * The HTTP status code to send back when a client is rate limited.
@@ -69,11 +72,18 @@ export type ConfigType<
   standardHeaders: boolean | "draft-6" | "draft-7";
 
   /**
-   * The name of the property on the request object to store the rate limit info.
+   * The name of the property on the context object to store the rate limit info.
    *
    * Defaults to `rateLimit`.
    */
   requestPropertyName: string;
+
+  /**
+   * The name of the property on the context object to store the Data Store instance.
+   *
+   * Defaults to `rateLimitStore`.
+   */
+  requestStorePropertyName: string;
 
   /**
    * If `true`, the library will (by default) skip all requests that have a 4XX

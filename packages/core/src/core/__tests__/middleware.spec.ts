@@ -1,13 +1,9 @@
 // import { platform } from 'node:process'
 import { createAdaptorServer } from "@hono/node-server";
+import type { Context } from "hono";
 import { agent as request } from "supertest";
 import { rateLimiter } from "..";
-import type {
-  ClientRateLimitInfo,
-  ConfigType,
-  RateLimitInfo,
-  Store,
-} from "../../types";
+import type { ClientRateLimitInfo, RateLimitInfo, Store } from "../../types";
 import { createServer } from "./helpers";
 
 describe("middleware test", () => {
@@ -29,33 +25,33 @@ describe("middleware test", () => {
 
     counter = 0;
 
-    init(_options: ConfigType): void {
+    init(): void {
       this.initWasCalled = true;
     }
 
-    async get(_key: string): Promise<ClientRateLimitInfo> {
+    async get() {
       this.getWasCalled = true;
 
       return { totalHits: this.counter, resetTime: undefined };
     }
 
-    async increment(_key: string): Promise<ClientRateLimitInfo> {
+    async increment() {
       this.counter += 1;
       this.incrementWasCalled = true;
 
       return { totalHits: this.counter, resetTime: undefined };
     }
 
-    async decrement(_key: string): Promise<void> {
+    async decrement() {
       this.counter -= 1;
       this.decrementWasCalled = true;
     }
 
-    async resetKey(_key: string): Promise<void> {
+    async resetKey() {
       this.resetKeyWasCalled = true;
     }
 
-    async resetAll(): Promise<void> {
+    async resetAll() {
       this.resetAllWasCalled = true;
     }
   }
@@ -166,7 +162,7 @@ describe("middleware test", () => {
       createServer({
         middleware: rateLimiter({
           limit: 1,
-          // @ts-expect-error
+          // @ts-expect-error Checking if we can use custom status code
           statusCode,
         }),
       }),
@@ -175,7 +171,7 @@ describe("middleware test", () => {
     await request(app).get("/").expect(statusCode);
   });
 
-  it.skip("should allow responding with a JSON message", async () => {
+  it("should allow responding with a JSON message", async () => {
     const message = {
       error: {
         code: "too-many-requests",
@@ -229,7 +225,7 @@ describe("middleware test", () => {
         middleware: rateLimiter({
           limit: 1,
           handler(c) {
-            // @ts-expect-error
+            // @ts-expect-error Checking if we can use custom handler
             c.status(420);
             return c.text("Enhance your calm");
           },
@@ -361,27 +357,48 @@ describe("middleware test", () => {
     },
   );
 
-  it.skip.each([["modern", new MockStore()]])(
+  it.each([["modern", new MockStore()]])(
     "should call `resetKey` on the store (%s store)",
     async (name, store) => {
-      const limiter = rateLimiter({
-        store,
-      });
+      const app = createAdaptorServer(
+        createServer({
+          middleware: [
+            rateLimiter({
+              store,
+            }),
+            async (c, next) => {
+              await c.get("rateLimitStore").resetKey("key");
+              await next();
+            },
+          ],
+        }),
+      );
 
-      limiter.resetKey("key");
+      await request(app).get("/").expect(200);
 
       expect(store.resetKeyWasCalled).toEqual(true);
     },
   );
 
-  it.skip.each([["modern", new MockStore()]])(
+  it.each([["modern", new MockStore()]])(
     "should call `get` on the store (%s store)",
     async (name, store) => {
-      const limiter = rateLimiter({
-        store,
-      });
+      let response: ClientRateLimitInfo | undefined;
+      const app = createAdaptorServer(
+        createServer({
+          middleware: [
+            rateLimiter({
+              store,
+            }),
+            async (c, next) => {
+              response = await c.get("rateLimitStore").getKey("key");
+              await next();
+            },
+          ],
+        }),
+      );
 
-      const response = await limiter.getKey("key");
+      await request(app).get("/").expect(200);
 
       expect(store.getWasCalled).toEqual(true);
       expect(typeof response?.totalHits).toBe("number");
@@ -559,8 +576,6 @@ describe("middleware test", () => {
   /*
 	;(platform === 'darwin' ? it.skip : it).each([
 		['modern', new MockStore()],
-		['legacy', new MockLegacyStore()],
-		['compat', new MockBackwardCompatibleStore()],
 	])(
 		'should decrement hits when response closes and `skipFailedRequests` is set to true (%s store)',
 		async (name, store) => {
@@ -687,17 +702,17 @@ describe("middleware test", () => {
     },
   );
 
-  it.skip("should pass the number of hits and the limit to the next request handler in the `request.rateLimiter` property", async () => {
+  it("should pass the number of hits and the limit to the next request handler in the `request.rateLimiter` property", async () => {
     let savedRequestObject: RateLimitInfo | undefined;
 
     const app = createAdaptorServer(
       createServer<{ Variables: { rateLimit: RateLimitInfo } }>({
         middleware: [
+          rateLimiter(),
           async (c, next) => {
             savedRequestObject = c.get("rateLimit");
             await next();
           },
-          rateLimiter(),
         ],
       }),
     );
@@ -710,9 +725,6 @@ describe("middleware test", () => {
       resetTime: expect.any(Date),
     });
 
-    // Make sure the hidden proerty is also set.
-    expect(savedRequestObject?.current).toBe(1);
-
     savedRequestObject = undefined;
     await request(app).get("/").expect(200);
     expect(savedRequestObject).toMatchObject({
@@ -721,22 +733,21 @@ describe("middleware test", () => {
       remaining: 3,
       resetTime: expect.any(Date),
     });
-    expect(savedRequestObject?.current).toBe(2);
   });
 
-  it.skip("should pass the number of hits and the limit to the next request handler with a custom property", async () => {
+  it("should pass the number of hits and the limit to the next request handler with a custom property", async () => {
     let savedRequestObject: RateLimitInfo | undefined;
 
     const app = createAdaptorServer(
-      createServer<{ Variables: { rateLimit: RateLimitInfo } }>({
+      createServer<{ Variables: { rateLimitInfo: RateLimitInfo } }>({
         middleware: [
-          async (c, next) => {
-            savedRequestObject = c.get("rateLimit");
-            await next();
-          },
           rateLimiter({
             requestPropertyName: "rateLimitInfo",
           }),
+          async (c, next) => {
+            savedRequestObject = c.get("rateLimitInfo");
+            await next();
+          },
         ],
       }),
     );
@@ -748,7 +759,6 @@ describe("middleware test", () => {
       remaining: 4,
       resetTime: expect.any(Date),
     });
-    expect(savedRequestObject?.current).toBe(1);
 
     savedRequestObject = undefined;
     await request(app).get("/").expect(200);
@@ -758,84 +768,99 @@ describe("middleware test", () => {
       remaining: 3,
       resetTime: expect.any(Date),
     });
-    expect(savedRequestObject?.current).toBe(2);
   });
 
-  it.skip("should handle two rate-limiters with different `requestPropertyNames` operating independently", async () => {
-    const keyLimiter = rateLimiter({
-      limit: 2,
-      requestPropertyName: "rateLimitKey",
-      keyGenerator: (c) => c.req.query("key") ?? "",
-      handler(c) {
-        // @ts-expect-error
-        c.status(420);
-        return c.text("Enhance your calm");
-      },
-    });
-    const globalLimiter = rateLimiter({
-      limit: 5,
-      requestPropertyName: "rateLimitGlobal",
-      keyGenerator: () => "global",
-      handler(c) {
-        c.status(429);
-        return c.text("Too many requests");
-      },
-    });
-
-    let savedRequestObject: RateLimitInfo;
+  it("should handle two rate-limiters with different `requestPropertyNames` operating independently", async () => {
+    let savedRequestObject:
+      | Context<{
+          Variables: {
+            rateLimitKey?: RateLimitInfo;
+            rateLimitGlobal?: RateLimitInfo;
+          };
+        }>["get"]
+      | undefined;
 
     const app = createAdaptorServer(
       createServer<{
         Variables: {
-          rateLimit: RateLimitInfo;
-          rateLimitKey: RateLimitInfo;
-          rateLimitGlobal: RateLimitInfo;
+          rateLimitKey?: RateLimitInfo;
+          rateLimitGlobal?: RateLimitInfo;
         };
       }>({
         middleware: [
+          // Test
           async (c, next) => {
-            savedRequestObject = c.get("rateLimit");
+            savedRequestObject = c.get;
             await next();
           },
-          keyLimiter,
-          globalLimiter,
+          // Key Limiter
+          rateLimiter({
+            limit: 2,
+            requestPropertyName: "rateLimitKey",
+            keyGenerator: (c) => c.req.query("key") ?? "",
+            handler(c) {
+              // @ts-expect-error Checking if we can use custom status code
+              c.status(420);
+              return c.text("Enhance your calm");
+            },
+          }),
+          // Global Limiter
+          rateLimiter({
+            limit: 5,
+            requestPropertyName: "rateLimitGlobal",
+            keyGenerator: () => "global",
+            handler(c) {
+              c.status(429);
+              return c.text("Too many requests");
+            },
+          }),
         ],
       }),
     );
 
     await request(app).get("/").query({ key: 1 }).expect(200);
     expect(savedRequestObject).toBeTruthy();
-    expect(savedRequestObject.rateLimiter).toBeUndefined();
+    // @ts-expect-error Checking if the default `requestPropertyName` is not getting asigned
+    expect(savedRequestObject("rateLimiter")).toBeUndefined();
 
-    expect(savedRequestObject.rateLimitKey).toBeTruthy();
-    expect(savedRequestObject.rateLimitKey.limit).toEqual(2);
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(1);
+    expect(savedRequestObject?.("rateLimitKey")).toBeTruthy();
+    expect(savedRequestObject?.("rateLimitKey")?.limit).toEqual(2);
+    expect(savedRequestObject?.("rateLimitKey")?.remaining).toEqual(1);
 
-    expect(savedRequestObject.rateLimitGlobal).toBeTruthy();
-    expect(savedRequestObject.rateLimitGlobal.limit).toEqual(5);
-    expect(savedRequestObject.rateLimitGlobal.remaining).toEqual(4);
+    expect(savedRequestObject?.("rateLimitGlobal")).toBeTruthy();
+    expect(savedRequestObject?.("rateLimitGlobal")?.limit).toEqual(5);
+    expect(savedRequestObject?.("rateLimitGlobal")?.remaining).toEqual(4);
 
     savedRequestObject = undefined;
     await request(app).get("/").query({ key: 2 }).expect(200);
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(1);
-    expect(savedRequestObject.rateLimitGlobal.remaining).toEqual(3);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitKey").remaining).toEqual(1);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitGlobal").remaining).toEqual(3);
 
     savedRequestObject = undefined;
     await request(app).get("/").query({ key: 1 }).expect(200);
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(0);
-    expect(savedRequestObject.rateLimitGlobal.remaining).toEqual(2);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitKey").remaining).toEqual(0);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitGlobal").remaining).toEqual(2);
 
     savedRequestObject = undefined;
     await request(app).get("/").query({ key: 2 }).expect(200);
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(0);
-    expect(savedRequestObject.rateLimitGlobal.remaining).toEqual(1);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitKey").remaining).toEqual(0);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitGlobal").remaining).toEqual(1);
 
     savedRequestObject = undefined;
     await request(app)
       .get("/")
       .query({ key: 1 })
       .expect(420, "Enhance your calm");
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(0);
+
+    console.log(savedRequestObject);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitKey").remaining).toEqual(0);
 
     savedRequestObject = undefined;
     await request(app).get("/").query({ key: 3 }).expect(200);
@@ -843,7 +868,9 @@ describe("middleware test", () => {
       .get("/")
       .query({ key: 3 })
       .expect(429, "Too many requests");
-    expect(savedRequestObject.rateLimitKey.remaining).toEqual(0);
-    expect(savedRequestObject.rateLimitGlobal.remaining).toEqual(0);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitKey").remaining).toEqual(0);
+    // @ts-expect-error This value should exist
+    expect(savedRequestObject("rateLimitGlobal").remaining).toEqual(0);
   });
 });

@@ -2,9 +2,9 @@ import { type Env, Hono, type Input, type MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 
 export function createServer<
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: For testing
   E extends Env = any,
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: For testing
   P extends string = any,
   I extends Input = NonNullable<unknown>,
 >({
