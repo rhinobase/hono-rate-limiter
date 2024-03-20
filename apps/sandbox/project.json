@@ -4,49 +4,12 @@
   "sourceRoot": "apps/sandbox/src",
   "projectType": "application",
   "targets": {
-    "build": {
-      "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "platform": "node",
-        "outputPath": "dist/apps/sandbox",
-        "format": ["esm"],
-        "bundle": false,
-        "main": "apps/sandbox/src/main.tsx",
-        "tsConfig": "apps/sandbox/tsconfig.app.json",
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": false,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
-      },
-      "configurations": {
-        "development": {},
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
-      }
-    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "sandbox:build"
       },
-      "dependsOn": [
-        {
-          "dependencies": true,
-          "target": "build"
-        }
-      ],
       "configurations": {
         "development": {
           "buildTarget": "sandbox:build:development"
