@@ -11,7 +11,7 @@
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/sandbox",
-        "format": ["cjs"],
+        "format": ["esm"],
         "bundle": false,
         "main": "apps/sandbox/src/main.tsx",
         "tsConfig": "apps/sandbox/tsconfig.app.json",
