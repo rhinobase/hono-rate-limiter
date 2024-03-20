@@ -42,10 +42,11 @@ Deployments requiring more consistently enforced rate limits should use an exter
 
 Here is a list of stores:
 
-| Name        | Description                                                                                         |
-| ----------- | --------------------------------------------------------------------------------------------------- |
-| MemoryStore | (default) Simple in-memory option. Does not share state when app has multiple processes or servers. |
-| RedisStore  | A [Redis](https://redis.io/)-backed store, more suitable for large or demanding deployments.        |
+| Name         | Description                                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| MemoryStore  | (default) Simple in-memory option. Does not share state when app has multiple processes or servers.                |
+| RedisStore   | A [Redis](https://redis.io/)-backed store, more suitable for large or demanding deployments.                       |
+| rlimit       | A distributed [rlimit store](https://www.npmjs.com/package/@rlimit/storage), ideal for multi-regional deployments. |
 
 Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creating-a-store) if you wish to create your own store.
 
