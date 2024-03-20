@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
+import { kv } from "@vercel/kv";
 import { Hono } from "hono";
-import { type RateLimitInfo, rateLimiter } from "hono-rate-limiter";
+import { type RateLimitInfo, RedisStore, rateLimiter } from "hono-rate-limiter";
 import { logger } from "hono/logger";
 import Page from "./Page";
 
@@ -17,6 +18,9 @@ app.use(
   rateLimiter({
     windowMs: 10_000,
     limit: 10,
+    // store: new RedisStore({
+    //   sendCommand: (...args: string[]) => kv(args),
+    // }),
     handler: (_, next) => next(),
   }),
 );

@@ -8,6 +8,9 @@ dependencies:
   '@hono/node-server':
     specifier: ^1.8.2
     version: 1.8.2
+  '@vercel/kv':
+    specifier: ^1.0.1
+    version: 1.0.1
   hono:
     specifier: ^4.1.1
     version: 4.1.1
@@ -3298,6 +3301,19 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
+  /@upstash/redis@1.25.1:
+    resolution: {integrity: sha512-ACj0GhJ4qrQyBshwFgPod6XufVEfKX2wcaihsEvSdLYnY+m+pa13kGt1RXm/yTHKf4TQi/Dy2A8z/y6WUEOmlg==}
+    dependencies:
+      crypto-js: 4.2.0
+    dev: false
+
+  /@vercel/kv@1.0.1:
+    resolution: {integrity: sha512-uTKddsqVYS2GRAM/QMNNXCTuw9N742mLoGRXoNDcyECaxEXvIHG0dEY+ZnYISV4Vz534VwJO+64fd9XeSggSKw==}
+    engines: {node: '>=14.6'}
+    dependencies:
+      '@upstash/redis': 1.25.1
+    dev: false
+
   /@verdaccio/commons-api@10.2.0:
     resolution: {integrity: sha512-F/YZANu4DmpcEV0jronzI7v2fGVWkQ5Mwi+bVmV+ACJ+EzR0c9Jbhtbe5QyLUuzR97t8R5E/Xe53O0cc2LukdQ==}
     engines: {node: '>=8'}
@@ -4613,6 +4629,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    dev: false
 
   /czg@1.9.0:
     resolution: {integrity: sha512-cYmC5/99kUGlnK1D8uXr4hykzC50MqzpMp3SlrE+w8wVzd9+0XxKsjWXhi+QIuDnzkx2CCvKSMT4xwDeaOD/xg==}
