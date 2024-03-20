@@ -1,3 +1,2 @@
-export * from "./core";
+export { rateLimiter as default, rateLimiter } from "./core";
 export type * from "./types";
-export * from "./redis";

@@ -41,7 +41,12 @@
       "options": {
         "buildTarget": "sandbox:build"
       },
-      "dependsOn": [{ "dependencies": true, "target": "build" }],
+      "dependsOn": [
+        {
+          "dependencies": true,
+          "target": "build"
+        }
+      ],
       "configurations": {
         "development": {
           "buildTarget": "sandbox:build:development"

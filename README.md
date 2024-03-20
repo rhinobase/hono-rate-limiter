@@ -34,19 +34,24 @@ app.use(limiter);
 
 # Data Stores
 
-Express-rate-limit supports external data stores to sychronize hit counts across multiple processes and servers.
+Express-rate-limit supports external data stores to synchronize hit counts across multiple processes and servers.
 
-By default, `MemoryStore` is used. This one does not synchronize it’s state across instances. It’s simple to deploy, and often sufficient for basic abuse prevention, but will be inconnsistent across reboots or in deployments with multiple process or servers.
+By default, `MemoryStore` is used. This one does not synchronize its state across instances. It’s simple to deploy, and often sufficient for basic abuse prevention, but will be inconnsistent across reboots or in deployments with multiple process or servers.
 
 Deployments requiring more consistently enforced rate limits should use an external store.
 
 Here is a list of stores:
 
-| Name         | Description                                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| MemoryStore  | (default) Simple in-memory option. Does not share state when app has multiple processes or servers.                |
-| RedisStore   | A [Redis](https://redis.io/)-backed store, more suitable for large or demanding deployments.                       |
-| rlimit       | A distributed [rlimit store](https://www.npmjs.com/package/@rlimit/storage), ideal for multi-regional deployments. |
+| Name                                                                                 | Description                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MemoryStore                                                                          | (default) Simple in-memory option. Does not share state when the app has multiple processes or servers.                                                                                            |
+| [`rate-limit-redis`](https://npm.im/rate-limit-redis)                                | A [Redis](https://redis.io/)-backed store, more suitable for large or demanding deployments.                                                                                                       |
+| [`rate-limit-postresql`](https://www.npm.im/@acpr/rate-limit-postgresql)             | A [PostgreSQL](https://www.postgresql.org/)-backed store.                                                                                                                                          |
+| [`rate-limit-memecached`](https://npmjs.org/package/rate-limit-memcached)            | A [Memcached](https://memcached.org/)-backed store.                                                                                                                                                |
+| [`cluster-memory-store`](https://npm.im/@express-rate-limit/cluster-memory-store)    | A memory-store wrapper that shares state across all processes on a single server via the [node:cluster](https://nodejs.org/api/cluster.html) module. Does not share state across multiple servers. |
+| [`precise-memory-rate-limit`](https://www.npm.im/precise-memory-rate-limit)          | A memory store similar to the built-in one, except that it stores a distinct timestamp for each key.                                                                                               |
+| [`typeorm-rate-limit-store`](https://www.npmjs.com/package/typeorm-rate-limit-store) | Supports a variety of databases via [TypeORM](https://typeorm.io/): MySQL, MariaDB, CockroachDB, SQLite, Microsoft SQL Server, Oracle, SAP Hana, and more.                                         |
+| [`@rlimit/storage`](<(https://www.npmjs.com/package/@rlimit/storage)>)               | A distributed rlimit store, ideal for multi-regional deployments.                                                                                                                                  |
 
 Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creating-a-store) if you wish to create your own store.
 
