@@ -19,7 +19,7 @@ app.use(
     windowMs: 10_000,
     limit: 10,
     // store: new RedisStore({
-    //   sendCommand: (...args: string[]) => kv(args),
+    //   sendCommand: (...args: string[]) => kv.eval(...args),
     // }),
     handler: (_, next) => next(),
   }),
@@ -29,4 +29,10 @@ app.use(
 app.get("/", (c) => c.html(<Page info={c.get("rateLimit")} />));
 
 // Serving the app
-serve(app);
+const port = Number(process.env.PORT) || 3000;
+console.log(`Server is running on port ${port}`);
+
+serve({
+  fetch: app.fetch,
+  port,
+});
