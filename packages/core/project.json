@@ -16,7 +16,7 @@
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs core {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+      "dependsOn": []
     },
     "nx-release-publish": {
       "options": {
