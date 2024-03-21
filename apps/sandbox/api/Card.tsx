@@ -40,7 +40,7 @@ const valueClass = css`
   }
 `;
 
-export type Card = { label: string; value: string | number };
+export type Card = { label: string; value?: string | number };
 
 const Card: FC<Card> = ({ label, value }: Card) => {
   return (

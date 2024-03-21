@@ -1,5 +1,5 @@
 import { Style, css } from "hono/css";
-import type { FC } from "hono/jsx";
+import type { FC, PropsWithChildren } from "hono/jsx";
 
 const globalClasses = css`
   font-family: "Inter", sans-serif;
@@ -30,7 +30,7 @@ const mainClass = css`
   }
 `;
 
-const Layout: FC = (props) => {
+const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
   return (
     <html lang="en">
       <head>

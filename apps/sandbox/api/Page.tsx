@@ -1,8 +1,8 @@
 import type { RateLimitInfo } from "hono-rate-limiter";
 import { css } from "hono/css";
 import type { FC } from "hono/jsx";
-import Card from "./Card";
-import Layout from "./Layout";
+import Card from "./Card.js";
+import Layout from "./Layout.js";
 
 const checkOut = css`
   font-family: monospace;
@@ -83,7 +83,7 @@ const Page: FC<Page> = ({ info: { limit, remaining, resetTime } }: Page) => {
     },
     {
       label: "Reset",
-      value: resetTime.toUTCString(),
+      value: resetTime?.toUTCString(),
     },
   ];
 

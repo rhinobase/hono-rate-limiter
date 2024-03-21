@@ -1,13 +1,27 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ],
   "compilerOptions": {
-    "esModuleInterop": true
-  }
+    "module": "esnext",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "outDir": "../../dist/out-tsc",
+    "declaration": true
+  },
+
+  "include": ["api/**/*.ts", "api/**/*.tsx"],
+  "exclude": [
+    "vite.config.ts",
+    "api/**/*.spec.ts",
+    "api/**/*.test.ts",
+    "./**/__tests__/*"
+  ]
 }
