@@ -1,7 +1,7 @@
 {
   "name": "hono-rate-limiter",
   "version": "0.1.3",
-  "type": "commonjs",
+  "type": "module",
   "license": "MIT",
   "keywords": [
     "hono",

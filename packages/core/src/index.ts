@@ -1,2 +1,2 @@
-export { rateLimiter as default, rateLimiter } from "./core";
-export type * from "./types";
+export { rateLimiter as default, rateLimiter } from "./core.js";
+export type * from "./types.js";
