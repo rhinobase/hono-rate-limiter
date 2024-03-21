@@ -34,7 +34,7 @@ app.use(limiter);
 
 # Data Stores
 
-Express-rate-limit supports external data stores to synchronize hit counts across multiple processes and servers.
+`hono-rate-limit` supports external data stores to synchronize hit counts across multiple processes and servers.
 
 By default, `MemoryStore` is used. This one does not synchronize its state across instances. It’s simple to deploy, and often sufficient for basic abuse prevention, but will be inconnsistent across reboots or in deployments with multiple process or servers.
 
