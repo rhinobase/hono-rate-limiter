@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.1.3...core-0.2.0) (2024-03-21)
+
+
+### Bug Fixes
+
+* **core:** corrected the esm issue ([2879931](https://github.com/rhinobase/hono-rate-limiter/commit/287993159c7c310a8dd769b885bd852912be7270))
+
 ## [0.1.3](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.1.2...core-0.1.3) (2024-03-21)
 
 ## [0.1.2](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.1.1...core-0.1.2) (2024-03-20)
