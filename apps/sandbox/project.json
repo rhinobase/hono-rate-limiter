@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "main": "apps/sandbox/api/index.tsx",
+        "main": "apps/sandbox/api/index.ts",
         "outputPath": "dist/apps/sandbox",
         "tsConfig": "apps/sandbox/tsconfig.json",
         "compiler": "swc",

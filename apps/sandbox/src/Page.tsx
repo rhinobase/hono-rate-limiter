@@ -1,8 +1,8 @@
 // import type { RateLimitInfo } from "hono-rate-limiter";
 import { css } from "hono/css";
 import type { FC } from "hono/jsx";
-import { Card } from "./Card.js";
-import { Layout } from "./Layout.js";
+import { Card } from "./Card";
+import { Layout } from "./Layout";
 
 const checkOut = css`
   font-family: monospace;

@@ -17,11 +17,11 @@
     "declaration": true
   },
 
-  "include": ["api/**/*.ts", "api/**/*.tsx"],
+  "include": ["api/**/*.ts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "vite.config.ts",
-    "api/**/*.spec.ts",
-    "api/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
     "./**/__tests__/*"
   ]
 }
