@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "build-vercel": "echo 🔥"
+  },
   "dependencies": {
     "hono": "^4.1.3"
   }
