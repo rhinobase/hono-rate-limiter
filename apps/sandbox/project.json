@@ -5,6 +5,16 @@
   "projectType": "application",
   "targets": {
     "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run sandbox:rollup",
+          "mv dist/apps/sandbox/index.esm.js dist/apps/sandbox/api/index.js"
+        ],
+        "parallel": false
+      }
+    },
+    "rollup": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
