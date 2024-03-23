@@ -16,7 +16,13 @@
         "external": ["react/jsx-runtime"],
         "project": "apps/sandbox/package.json",
         "format": ["esm"],
-        "assets": ["apps/sandbox/vercel.json"]
+        "assets": [
+          {
+            "glob": "apps/sandbox/vercel.json",
+            "input": ".",
+            "output": "."
+          }
+        ]
       },
       "configurations": {
         "production": {
