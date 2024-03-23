@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 // import { type RateLimitInfo, rateLimiter } from "hono-rate-limiter";
 import { logger } from "hono/logger";
-import Page from "./Page";
+// import Page from "./Page";
 
 // Init the app
 export const app = new Hono();
@@ -20,8 +20,4 @@ app.use(
 );
 
 // Routes
-app.get("/", (c) =>
-  c.html(
-    <Page info={{ limit: 5, used: 1, remaining: 4, resetTime: new Date() }} />,
-  ),
-);
+app.all("*", (c) => c.text("hello"));
