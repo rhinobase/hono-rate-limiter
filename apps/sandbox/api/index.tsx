@@ -1,7 +1,7 @@
 import { handle } from "@hono/node-server/vercel";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import Page from "./Page.js";
+import { Page } from "./Page.js";
 
 const app = new Hono();
 

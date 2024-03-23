@@ -1,8 +1,8 @@
 // import type { RateLimitInfo } from "hono-rate-limiter";
 import { css } from "hono/css";
 import type { FC } from "hono/jsx";
-import Card from "./Card.js";
-import Layout from "./Layout.js";
+import { Card } from "./Card.js";
+import { Layout } from "./Layout.js";
 
 const checkOut = css`
   font-family: monospace;
@@ -67,7 +67,9 @@ export type Page = {
   info: { limit: number; used: number; remaining: number; resetTime: Date };
 };
 
-const Page: FC<Page> = ({ info: { limit, remaining, resetTime } }: Page) => {
+export const Page: FC<Page> = ({
+  info: { limit, remaining, resetTime },
+}: Page) => {
   const isSuccessful = remaining > 0;
 
   const cards = [
@@ -117,5 +119,3 @@ const Page: FC<Page> = ({ info: { limit, remaining, resetTime } }: Page) => {
     </Layout>
   );
 };
-
-export default Page;

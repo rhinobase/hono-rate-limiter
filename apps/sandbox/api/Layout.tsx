@@ -30,7 +30,7 @@ const mainClass = css`
   }
 `;
 
-const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
+export const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
   return (
     <html lang="en">
       <head>
@@ -50,5 +50,3 @@ const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
     </html>
   );
 };
-
-export default Layout;

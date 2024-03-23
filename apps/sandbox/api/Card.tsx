@@ -42,7 +42,7 @@ const valueClass = css`
 
 export type Card = { label: string; value?: string | number };
 
-const Card: FC<Card> = ({ label, value }: Card) => {
+export const Card: FC<Card> = ({ label, value }: Card) => {
   return (
     <div class={cardLayout}>
       <div class={labelClass}>{label}</div>
@@ -50,5 +50,3 @@ const Card: FC<Card> = ({ label, value }: Card) => {
     </div>
   );
 };
-
-export default Card;

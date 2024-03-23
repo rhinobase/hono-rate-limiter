@@ -1,9 +1,11 @@
 {
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "vercel-build": "echo 🔥"
   },
   "dependencies": {
+    "@hono/node-server": "^1.8.2",
     "hono": "^4.1.3"
   }
 }
