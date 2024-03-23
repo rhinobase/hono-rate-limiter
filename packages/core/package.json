@@ -1,7 +1,6 @@
 {
   "name": "hono-rate-limiter",
   "version": "0.2.0",
-  "type": "module",
   "license": "MIT",
   "keywords": [
     "hono",
@@ -27,5 +26,5 @@
   "peerDependencies": {
     "hono": "^4.1.1"
   },
-  "types": "./index.esm.d.ts"
+  "types": "./index.cjs.d.ts"
 }

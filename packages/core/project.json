@@ -14,7 +14,7 @@
         "tsConfig": "packages/core/tsconfig.lib.json",
         "compiler": "swc",
         "project": "packages/core/package.json",
-        "format": ["esm"]
+        "format": ["esm", "cjs"]
       },
       "configurations": {
         "production": {
