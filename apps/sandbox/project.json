@@ -15,14 +15,7 @@
         "compiler": "swc",
         "external": ["react/jsx-runtime"],
         "project": "apps/sandbox/package.json",
-        "format": ["esm"],
-        "assets": [
-          {
-            "glob": "apps/sandbox/vercel.json",
-            "input": ".",
-            "output": "."
-          }
-        ]
+        "format": ["esm"]
       },
       "configurations": {
         "production": {
