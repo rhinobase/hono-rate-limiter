@@ -7,7 +7,11 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["echo 🔥"],
+        "commands": [
+          "nx run sandbox:rollup",
+          "mv dist/apps/sandbox/index.esm.js dist/apps/sandbox/api/index.js",
+          "mv dist/apps/sandbox/index.esm.d.ts dist/apps/sandbox/api/index.d.ts"
+        ],
         "parallel": false
       }
     },
