@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import type { RateLimitInfo } from "./types.js";
+import type { RateLimitInfo } from "./types";
 
 /**
  * Returns the number of seconds left for the window to reset. Uses `windowMs`

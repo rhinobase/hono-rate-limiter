@@ -5,13 +5,27 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/js:swc",
+      "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/sandbox",
         "main": "apps/sandbox/api/index.ts",
+        "outputPath": "dist/apps/sandbox",
         "tsConfig": "apps/sandbox/tsconfig.json",
-        "assets": ["apps/sandbox/public/*"]
+        "compiler": "swc",
+        "external": ["react/jsx-runtime"],
+        "project": "apps/sandbox/package.json",
+        "format": ["esm"],
+        "assets": ["vercel.json"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
       }
     }
   },

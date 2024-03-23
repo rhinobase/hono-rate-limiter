@@ -1,14 +1,14 @@
 import type { Context, Env, Input, Next } from "hono";
 import { createMiddleware } from "hono/factory";
-import { defaultKeyGenerator } from "./defaultKeyGenerator.js";
+import { defaultKeyGenerator } from "./defaultKeyGenerator";
 import {
   setDraft6Headers,
   setDraft7Headers,
   setRetryAfterHeader,
-} from "./headers.js";
-import MemoryStore from "./memoryStore.js";
-import type { ConfigType, RateLimitInfo } from "./types.js";
-import { isValidStore } from "./validations.js";
+} from "./headers";
+import MemoryStore from "./memoryStore";
+import type { ConfigType, RateLimitInfo } from "./types";
+import { isValidStore } from "./validations";
 
 /**
  *
