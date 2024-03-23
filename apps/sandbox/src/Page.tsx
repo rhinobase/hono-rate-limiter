@@ -1,4 +1,4 @@
-// import type { RateLimitInfo } from "hono-rate-limiter";
+import type { RateLimitInfo } from "hono-rate-limiter";
 import { css } from "hono/css";
 import type { FC } from "hono/jsx";
 import { Card } from "./Card";
@@ -64,7 +64,7 @@ const linkClass = css`
 `;
 
 export type Page = {
-  info: { limit: number; used: number; remaining: number; resetTime: Date };
+  info: RateLimitInfo;
 };
 
 export const Page: FC<Page> = ({
