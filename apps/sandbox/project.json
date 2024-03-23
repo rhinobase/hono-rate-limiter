@@ -21,11 +21,6 @@
             "glob": "apps/sandbox/public",
             "input": ".",
             "output": "."
-          },
-          {
-            "glob": "apps/sandbox/vercel.json",
-            "input": ".",
-            "output": "."
           }
         ]
       },
