@@ -2,6 +2,8 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.2](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1...core-0.2.2) (2024-03-24)
+
 ## [0.2.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1-rc.0...core-0.2.1) (2024-03-23)
 
 
