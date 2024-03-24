@@ -23,9 +23,7 @@ app.get(
   rateLimiter({
     windowMs: 60_000, // 1 min
     limit: 10,
-    keyGenerator(c) {
-      return "";
-    },
+    keyGenerator: (c) => c.req.header("x-forwarded-for") ?? "",
     store: new RedisStore({
       client: kv,
     }),
@@ -33,5 +31,3 @@ app.get(
   }),
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
-
-app.get("/sample", (c) => c.json(JSON.stringify(c.req.header())));
