@@ -11,14 +11,14 @@
     "rate-limiter",
     "honojs"
   ],
-  "homepage": "https://github.com/rhinobase/hono-rate-limiter",
+  "homepage": "https://hono-rate-limiter.vercel.app",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rhinobase/hono-rate-limiter.git",
-    "directory": "packages/ui"
+    "directory": "packages/core"
   },
   "bugs": {
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"

@@ -30,95 +30,82 @@ npm add @hono-rate-limiter/redis
 
 ### Examples
 
-To use it with a [`node-redis`](https://github.com/redis/node-redis) client:
+To use it with a [`@vercel/kv`](https://github.com/redis/node-redis) client:
 
 ```ts
-import { rateLimit } from "express-rate-limit";
-import { RedisStore } from "rate-limit-redis";
-import { createClient } from "redis";
+import { RedisStore } from "@hono-rate-limiter/redis";
+import { kv } from "@vercel/kv";
+import { rateLimiter } from "hono-rate-limiter";
 
-// Create a `node-redis` client
-const client = createClient({
-  // ... (see https://github.com/redis/node-redis/blob/master/docs/client-configuration.md)
-});
-// Then connect to the Redis server
-await client.connect();
-
-// Create and use the rate limiter
-const limiter = rateLimit({
-  // Rate limiter configuration
+const limiter = rateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-
-  // Redis store configuration
-  store: new RedisStore({
-    sendCommand: (...args: string[]) => client.sendCommand(args),
-  }),
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "", // Method to generate custom identifiers for clients.
+  store: new RedisStore({ client: kv }), // Redis, MemoryStore, etc. See below.
 });
-app.use(limiter);
-```
 
-To use it with a [`ioredis`](https://github.com/luin/ioredis) client:
-
-```ts
-import { rateLimit } from "express-rate-limit";
-import { RedisStore } from "rate-limit-redis";
-import RedisClient from "ioredis";
-
-// Create a `ioredis` client
-const client = new RedisClient();
-// ... (see https://github.com/luin/ioredis#connect-to-redis)
-
-// Create and use the rate limiter
-const limiter = rateLimit({
-  // Rate limiter configuration
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-
-  // Redis store configuration
-  store: new RedisStore({
-    sendCommand: (command: string, ...args: string[]) => client.send_command(command, ...args),
-  }),
-});
+// Apply the rate limiting middleware to all requests.
 app.use(limiter);
 ```
 
 ### Configuration
 
-#### `sendCommand`
+#### `client`
 
 The function used to send commands to Redis. The function signature is as
 follows:
 
 ```ts
-(...args: string[]) => Promise<number> | number;
+export type RedisClient = {
+  scriptLoad: (script: string) => Promise<string>;
+  evalsha: <TArgs extends unknown[], TData = unknown>(sha1: string, keys: string[], args: TArgs) => Promise<TData>;
+  decr: (key: string) => Promise<number>;
+  del: (key: string) => Promise<number>;
+};
 ```
 
-The raw command sending function varies from library to library; some are given
-below:
+#### Examples
 
-| Library                                                            | Function                                                                              |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| [`node-redis`](https://github.com/redis/node-redis)                | `async (...args: string[]) => client.sendCommand(args)`                               |
-| [`ioredis`](https://github.com/luin/ioredis)                       | `async (command: string, ...args: string[]) => client.send_command(command, ...args)` |
-| [`handy-redis`](https://github.com/mmkal/handy-redis)              | `async (...args: string[]) => client.nodeRedis.sendCommand(args)`                     |
-| [`tedis`](https://github.com/silkjs/tedis)                         | `async (...args: string[]) => client.command(...args)`                                |
-| [`redis-fast-driver`](https://github.com/h0x91b/redis-fast-driver) | `async (...args: string[]) => client.rawCallAsync(args)`                              |
-| [`yoredis`](https://github.com/djanowski/yoredis)                  | `async (...args: string[]) => (await client.callMany([args]))[0]`                     |
-| [`noderis`](https://github.com/wallneradam/noderis)                | `async (...args: string[]) => client.callRedis(...args)`                              |
+[`@vercel/kv`](https://github.com/@vercel/kv)
+
+```ts
+import { kv } from "@vercel/kv";
+
+const store = new RedisStore({ client: kv });
+```
+
+[`@upstash/redis`](https://github.com/@upstash/redis)
+
+```ts
+import { Redis } from "@upstash/redis"
+
+const redis = new Redis({
+url: <UPSTASH_REDIS_REST_URL>,
+token: <UPSTASH_REDIS_REST_TOKEN>,
+})
+
+const store = new RedisStore({ client: redis })
+```
 
 #### `prefix`
 
 The text to prepend to the key in Redis.
 
-Defaults to `rl:`.
+Defaults to `hrl`.
 
 #### `resetExpiryOnChange`
 
 Whether to reset the expiry for a particular key whenever its hit count changes.
 
 Defaults to `false`.
+
+## Contributing
+
+We would love to have more contributors involved!
+
+To get started, please read our [Contributing Guide](https://github.com/rhinobase/hono-rate-limiter/blob/main/CONTRIBUTING.md).
+
+## Credits
+
+The `@hono-rate-limiter/redis` project is heavily inspired by [rate-limit-redis](https://github.com/express-rate-limit/rate-limit-redis)

@@ -15,7 +15,7 @@ limit repeated requests to public APIs and/or endpoints such as password reset.
 > [!WARNING]  
 > The `keyGenerator` function is currently under construction and needs to be defined for `hono-rate-limiter` to work properly in your environment. Please ensure that you define the `keyGenerator` function according to the documentation before using the library.
 
-## Usage
+##Usage
 
 ```ts
 import { rateLimiter } from "hono-rate-limiter";
@@ -24,7 +24,7 @@ const limiter = rateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
   limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
   standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-  keyGenerator: () => "<unique_key>", // Method to generate custom identifiers for clients.
+  keyGenerator: (c) => "<unique_key>", // Method to generate custom identifiers for clients.
   // store: ... , // Redis, MemoryStore, etc. See below.
 });
 
@@ -32,7 +32,7 @@ const limiter = rateLimiter({
 app.use(limiter);
 ```
 
-# Data Stores
+## Data Stores
 
 `hono-rate-limit` supports external data stores to synchronize hit counts across multiple processes and servers.
 
@@ -45,6 +45,7 @@ Here is a list of stores:
 | Name                                                                                 | Description                                                                                                                                                                                        |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | MemoryStore                                                                          | (default) Simple in-memory option. Does not share state when the app has multiple processes or servers.                                                                                            |
+| [`@hono-rate-limiter/redis`](https://www.npm.im/@hono-rate-limiter/redis)            | A [Redis](https://redis.io/)-backed store, used with [`@vercel/kv`](https://www.npmjs.com/package/@vercel/kv) and [`@upstash/redis`](https://www.npmjs.com/package/@upstash/redis)                 |
 | [`rate-limit-redis`](https://npm.im/rate-limit-redis)                                | A [Redis](https://redis.io/)-backed store, more suitable for large or demanding deployments.                                                                                                       |
 | [`rate-limit-postresql`](https://www.npm.im/@acpr/rate-limit-postgresql)             | A [PostgreSQL](https://www.postgresql.org/)-backed store.                                                                                                                                          |
 | [`rate-limit-memecached`](https://npmjs.org/package/rate-limit-memcached)            | A [Memcached](https://memcached.org/)-backed store.                                                                                                                                                |
@@ -55,12 +56,12 @@ Here is a list of stores:
 
 Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creating-a-store) if you wish to create your own store.
 
-# Contributing
+## Contributing
 
 We would love to have more contributors involved!
 
 To get started, please read our [Contributing Guide](https://github.com/rhinobase/hono-rate-limiter/blob/main/CONTRIBUTING.md).
 
-# Credits
+## Credits
 
 The `hono-rate-limiter` project is heavily inspired by [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit)
