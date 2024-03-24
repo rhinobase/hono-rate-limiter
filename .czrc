@@ -5,6 +5,10 @@
       "name": "core:                 anything core specific"
     },
     {
+      "value": "redis",
+      "name": "redis:                anything redis specific"
+    },
+    {
       "value": "sandbox",
       "name": "sandbox:              anything sandbox specific"
     }

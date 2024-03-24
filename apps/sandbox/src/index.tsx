@@ -1,3 +1,5 @@
+import { RedisStore } from "@hono-rate-limiter/redis";
+import { kv } from "@vercel/kv";
 import { Hono } from "hono";
 import {
   type Promisify,
@@ -21,12 +23,10 @@ app.get(
   rateLimiter({
     windowMs: 60_000, // 1 min
     limit: 10,
-    // store: new RedisStore({
-    //   sendCommand: (...args: string[]) => kv.eval(...args),
-    // }),
+    store: new RedisStore({
+      client: kv,
+    }),
     handler: (_, next) => next(),
   }),
-  (c) => {
-    return c.html(<Page info={c.get("rateLimit")} />);
-  },
+  (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
