@@ -34,4 +34,4 @@ app.get(
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/sample", (c) => c.json(JSON.stringify(c)));
+app.get("/sample", (c) => c.json(JSON.stringify(c.req.header())));
