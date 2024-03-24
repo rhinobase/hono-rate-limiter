@@ -1,10 +1,18 @@
 import { Hono } from "hono";
-import { type RateLimitInfo, rateLimiter } from "hono-rate-limiter";
+import {
+  type Promisify,
+  type RateLimitInfo,
+  rateLimiter,
+} from "hono-rate-limiter";
 import { Page } from "./Page";
 
 export const app = new Hono<{
   Variables: {
     rateLimit: RateLimitInfo;
+    rateLimitStore: {
+      get?: (key: string) => Promisify<RateLimitInfo | undefined>;
+      resetKey: (key: string) => Promisify<void>;
+    };
   };
 }>();
 
