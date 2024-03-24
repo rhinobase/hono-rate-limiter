@@ -1,4 +1,4 @@
-import type { ClientRateLimitInfo, ConfigType, Store } from "./types.js";
+import type { ClientRateLimitInfo, ConfigType, Store } from "./types";
 
 /**
  * The record that stores information about a client - namely, how many times

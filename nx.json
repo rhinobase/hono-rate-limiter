@@ -21,7 +21,7 @@
       "cache": true,
       "inputs": ["default", "^production"]
     },
-    "@nx/esbuild:esbuild": {
+    "@nx/rollup:rollup": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
@@ -40,11 +40,9 @@
       }
     },
     {
-      "plugin": "@nx/webpack/plugin",
+      "plugin": "@nx/rollup/plugin",
       "options": {
-        "buildTargetName": "build",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview"
+        "buildTargetName": "build"
       }
     }
   ]

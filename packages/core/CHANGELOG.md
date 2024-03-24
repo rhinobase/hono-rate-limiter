@@ -2,6 +2,17 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.2](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1...core-0.2.2) (2024-03-24)
+
+## [0.2.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1-rc.0...core-0.2.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* **core:** minor config update ([560cdac](https://github.com/rhinobase/hono-rate-limiter/commit/560cdac4a98cc0ba0ce1c677fbf8ebb8e5b4df3d))
+
+## [0.2.1-rc.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.0...core-0.2.1-rc.0) (2024-03-23)
+
 ## [0.2.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.1.3...core-0.2.0) (2024-03-21)
 
 

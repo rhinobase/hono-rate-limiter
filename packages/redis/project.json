@@ -1,52 +1,38 @@
 {
-  "name": "core",
+  "name": "redis",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/core/src",
+  "sourceRoot": "packages/redis/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
-        "main": "packages/core/src/index.ts",
-        "outputPath": "dist/packages/core",
-        "tsConfig": "packages/core/tsconfig.lib.json",
-        "compiler": "swc",
-        "project": "packages/core/package.json",
-        "format": ["esm", "cjs"],
+        "outputPath": "dist/packages/redis",
+        "main": "packages/redis/src/index.ts",
+        "tsConfig": "packages/redis/tsconfig.lib.json",
         "assets": [
           {
-            "glob": "README.md",
+            "glob": "packages/redis/README.md",
             "input": ".",
             "output": "."
           }
-        ]
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false
-        }
+        ],
+        "project": "packages/redis/package.json",
+        "compiler": "swc",
+        "format": ["cjs", "esm"]
       }
-    },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs core {args.ver} {args.tag}",
-      "dependsOn": []
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist\\{projectRoot}"
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/core"
+        "reportsDirectory": "../../coverage/packages/redis"
       }
     },
     "version": {
@@ -59,7 +45,7 @@
       "executor": "ngx-deploy-npm:deploy",
       "options": {
         "access": "public",
-        "distFolderPath": "dist/packages/core"
+        "distFolderPath": "dist/packages/redis"
       },
       "dependsOn": ["build"]
     }
@@ -68,7 +54,7 @@
   "release": {
     "version": {
       "generatorOptions": {
-        "packageRoot": "dist\\{projectRoot}",
+        "packageRoot": "dist/{projectRoot}",
         "currentVersionResolver": "git-tag"
       }
     }

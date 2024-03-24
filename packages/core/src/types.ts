@@ -12,6 +12,13 @@ export type ClientRateLimitInfo = {
   resetTime?: Date;
 };
 
+/**
+ * Promisify<T> is a utility type that represents a value of type T or a Promise<T>.
+ * This type is useful for converting synchronous functions to asynchronous functions.
+ * @example
+ *   type getResult = Promisify<number>;  // getResult can be number or Promise<number>
+ *   type getUser = Promisify<User>;      // getUser can be User or Promise<User>
+ */
 export type Promisify<T> = T | Promise<T>;
 
 /**
@@ -184,12 +191,7 @@ export type Store = {
    *
    * @returns {ClientRateLimitInfo} - The number of hits and reset time for that client.
    */
-  get?: (
-    key: string,
-  ) =>
-    | Promise<ClientRateLimitInfo | undefined>
-    | ClientRateLimitInfo
-    | undefined;
+  get?: (key: string) => Promisify<ClientRateLimitInfo | undefined>;
 
   /**
    * Method to increment a client's hit counter.
@@ -198,31 +200,31 @@ export type Store = {
    *
    * @returns {IncrementResponse | undefined} - The number of hits and reset time for that client.
    */
-  increment: (key: string) => Promise<IncrementResponse> | IncrementResponse;
+  increment: (key: string) => Promisify<IncrementResponse>;
 
   /**
    * Method to decrement a client's hit counter.
    *
    * @param key {string} - The identifier for a client.
    */
-  decrement: (key: string) => Promise<void> | void;
+  decrement: (key: string) => Promisify<void>;
 
   /**
    * Method to reset a client's hit counter.
    *
    * @param key {string} - The identifier for a client.
    */
-  resetKey: (key: string) => Promise<void> | void;
+  resetKey: (key: string) => Promisify<void>;
 
   /**
    * Method to reset everyone's hit counter.
    */
-  resetAll?: () => Promise<void> | void;
+  resetAll?: () => Promisify<void>;
 
   /**
    * Method to shutdown the store, stop timers, and release all resources.
    */
-  shutdown?: () => Promise<void> | void;
+  shutdown?: () => Promisify<void>;
 
   /**
    * Flag to indicate that keys incremented in one instance of this store can

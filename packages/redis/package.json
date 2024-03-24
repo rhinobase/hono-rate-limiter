@@ -1,12 +1,13 @@
 {
-  "name": "hono-rate-limiter",
-  "version": "0.2.2",
+  "name": "@hono-rate-limiter/redis",
+  "version": "0.1.1",
   "license": "MIT",
   "keywords": [
     "hono",
-    "api",
-    "middleware",
-    "rest-api",
+    "redis",
+    "database",
+    "serverless",
+    "edge",
     "rate-limiting",
     "rate-limiter",
     "honojs"
@@ -18,13 +19,13 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rhinobase/hono-rate-limiter.git",
-    "directory": "packages/core"
+    "directory": "packages/redis"
   },
   "bugs": {
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
   },
   "peerDependencies": {
-    "hono": "^4.1.1"
+    "hono-rate-limiter": "^0.2.1"
   },
   "types": "./index.cjs.d.ts"
 }

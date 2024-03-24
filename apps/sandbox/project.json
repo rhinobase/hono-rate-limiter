@@ -1,21 +1,41 @@
 {
   "name": "sandbox",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/sandbox/src",
+  "sourceRoot": "apps/sandbox/api",
   "projectType": "application",
   "targets": {
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "buildTarget": "sandbox:build"
+        "main": "apps/sandbox/api/index.ts",
+        "outputPath": "dist/apps/sandbox",
+        "tsConfig": "apps/sandbox/tsconfig.json",
+        "compiler": "swc",
+        "external": ["react/jsx-runtime"],
+        "project": "apps/sandbox/package.json",
+        "format": ["esm"],
+        "assets": [
+          {
+            "glob": "apps/sandbox/public",
+            "input": ".",
+            "output": "."
+          },
+          {
+            "glob": "apps/sandbox/vercel.json",
+            "input": ".",
+            "output": "."
+          }
+        ]
       },
       "configurations": {
-        "development": {
-          "buildTarget": "sandbox:build:development"
-        },
         "production": {
-          "buildTarget": "sandbox:build:production"
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
         }
       }
     }
