@@ -4,7 +4,6 @@
   "peerDependencies": {
     "hono-rate-limiter": "^0.2.1"
   },
-  "type": "commonjs",
   "types": "./index.cjs.d.ts",
   "main": "./index.cjs",
   "module": "./index.js"

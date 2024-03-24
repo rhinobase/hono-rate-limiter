@@ -11,7 +11,13 @@
         "outputPath": "dist/packages/redis",
         "main": "packages/redis/src/index.ts",
         "tsConfig": "packages/redis/tsconfig.lib.json",
-        "assets": ["packages/redis/README.md"],
+        "assets": [
+          {
+            "glob": "packages/redis/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
         "project": "packages/redis/package.json",
         "compiler": "swc",
         "format": ["cjs", "esm"]
