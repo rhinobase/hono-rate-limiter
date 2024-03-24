@@ -28,6 +28,20 @@
       "options": {
         "reportsDirectory": "../../coverage/packages/redis"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
+      }
+    },
+    "deploy": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "distFolderPath": "dist/packages/core"
+      },
+      "dependsOn": ["build"]
     }
   },
   "tags": [],
