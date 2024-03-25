@@ -42,6 +42,7 @@ export const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <title>Hono Rate Limiter + Vercel KV</title>
         <Style />
       </head>
       <body class={globalClasses}>
