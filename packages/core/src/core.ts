@@ -1,6 +1,5 @@
 import type { Context, Env, Input, Next } from "hono";
 import { createMiddleware } from "hono/factory";
-import { defaultKeyGenerator } from "./defaultKeyGenerator";
 import {
   setDraft6Headers,
   setDraft7Headers,
@@ -35,7 +34,8 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = defaultKeyGenerator,
+    keyGenerator = (c: Context<E, P, I>) =>
+      c.req.header("CF-Connecting-IP") ?? "",
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
