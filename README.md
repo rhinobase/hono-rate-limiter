@@ -15,7 +15,7 @@ limit repeated requests to public APIs and/or endpoints such as password reset.
 > [!WARNING]  
 > The `keyGenerator` function is currently under construction and needs to be defined for `hono-rate-limiter` to work properly in your environment. Please ensure that you define the `keyGenerator` function according to the documentation before using the library.
 
-##Usage
+## Usage
 
 ```ts
 import { rateLimiter } from "hono-rate-limiter";
