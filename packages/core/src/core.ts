@@ -92,6 +92,8 @@ export function rateLimiter<
     // Get a unique key for the client
     const key = await keyGenerator(c);
 
+    console.log(key);
+
     // Increment the client's hit counter by one.
     const { totalHits, resetTime } = await store.increment(key);
 
