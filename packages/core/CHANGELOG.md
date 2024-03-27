@@ -2,6 +2,14 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.2.3](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.2...core-0.2.3) (2024-03-27)
+
+
+### Bug Fixes
+
+* **sandbox:** correct the handler ([2823ff4](https://github.com/rhinobase/hono-rate-limiter/commit/2823ff4e245584ef4bf34ae3938ab687de68e97c))
+* **sandbox:** resolved the bug ([6f83675](https://github.com/rhinobase/hono-rate-limiter/commit/6f83675da42128f91004ebb34976074f1e661755))
+
 ## [0.2.2](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1...core-0.2.2) (2024-03-24)
 
 ## [0.2.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.1-rc.0...core-0.2.1) (2024-03-23)
