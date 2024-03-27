@@ -34,8 +34,8 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = (c: Context<E, P, I>) =>
-      c.req.header("cf-connecting-ip") ?? "",
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    keyGenerator = (c: Context<E, P, I>) => c.req.header("cf-connecting-ip")!,
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
@@ -91,8 +91,6 @@ export function rateLimiter<
 
     // Get a unique key for the client
     const key = await keyGenerator(c);
-
-    console.log(key);
 
     // Increment the client's hit counter by one.
     const { totalHits, resetTime } = await store.increment(key);
