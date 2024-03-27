@@ -26,9 +26,10 @@ app.get(
     store: new RedisStore({
       client: kv,
     }),
+    keyGenerator: (c) => c.req.header("user-agent.x-forwarded-for") ?? "",
     handler: (_, next) => next(),
   }),
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/info", (c) => c.json(c.req.header()));
+app.get("/info", (c) => c.json(c.req.header("user-agent.x-forwarded-for")));
