@@ -31,4 +31,4 @@ app.get(
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/config", (c) => c.json(c.req.header()));
+app.get("/config", (c) => c.json(c.req.header("cf-connecting-ip")));
