@@ -35,7 +35,7 @@ export function rateLimiter<
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
     keyGenerator = (c: Context<E, P, I>) =>
-      c.req.raw.headers.get("CF-Connecting-IP") ?? "",
+      c.req.header("cf-connecting-ip") ?? "",
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
