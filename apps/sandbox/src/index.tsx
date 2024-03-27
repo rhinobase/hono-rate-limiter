@@ -42,4 +42,4 @@ app.get(
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/info", (c) => c.text(c.req.header("user-agent") ?? ""));
+app.get("/info", (c) => c.json(c.req.header()));
