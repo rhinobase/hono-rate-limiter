@@ -30,3 +30,5 @@ app.get(
   }),
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
+
+app.get("/info", (c) => c.json(c.req.header()));
