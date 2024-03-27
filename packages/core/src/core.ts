@@ -34,8 +34,8 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    keyGenerator = (c: Context<E, P, I>) => c.req.header("cf-connecting-ip")!,
+    keyGenerator = (c: Context<E, P, I>) =>
+      c.req.header("cf-connecting-ip") ?? "",
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
