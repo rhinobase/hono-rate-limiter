@@ -23,7 +23,6 @@ app.get(
   rateLimiter({
     windowMs: 60_000, // 1 min
     limit: 10,
-    keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "",
     store: new RedisStore({
       client: kv,
     }),
