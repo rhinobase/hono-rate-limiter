@@ -30,6 +30,7 @@ app.get(
       const userAgent = c.req.header("user-agent");
 
       if (userAgent) {
+        console.log(userAgent);
         const data = JSON.parse(userAgent);
         return data["x-forwarded-for"] ?? "";
       }
@@ -41,13 +42,4 @@ app.get(
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/info", (c) => {
-  const userAgent = c.req.header("user-agent");
-
-  if (userAgent) {
-    const data = JSON.parse(userAgent);
-    return c.text(data["x-forwarded-for"] ?? "");
-  }
-
-  return c.text("");
-});
+app.get("/info", (c) => c.text(c.req.header("user-agent") ?? ""));
