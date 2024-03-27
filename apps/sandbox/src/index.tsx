@@ -26,10 +26,28 @@ app.get(
     store: new RedisStore({
       client: kv,
     }),
-    keyGenerator: (c) => c.req.header("user-agent.x-forwarded-for") ?? "",
+    keyGenerator: (c) => {
+      const userAgent = c.req.header("user-agent");
+
+      if (userAgent) {
+        const data = JSON.parse(userAgent);
+        return data["x-forwarded-for"] ?? "";
+      }
+
+      return "";
+    },
     handler: (_, next) => next(),
   }),
   (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
 
-app.get("/info", (c) => c.json(c.req.header("user-agent.x-forwarded-for")));
+app.get("/info", (c) => {
+  const userAgent = c.req.header("user-agent");
+
+  if (userAgent) {
+    const data = JSON.parse(userAgent);
+    return c.text(data["x-forwarded-for"] ?? "");
+  }
+
+  return c.text("");
+});
