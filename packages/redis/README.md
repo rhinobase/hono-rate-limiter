@@ -13,7 +13,7 @@
 
 <div align="center">
 
-A [`redis`](https://github.com/redis/redis) store for the
+A serverless [`redis`](https://github.com/redis/redis) store for the
 [`hono-rate-limiter`](https://github.com/rhinobase/hono-rate-limiter)
 middleware.
 
