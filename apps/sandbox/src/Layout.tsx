@@ -59,7 +59,7 @@ export const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
         <meta property="og:locale" content="en_US" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image" content="https://rafty.rhinobase.io/api/og" />
+        <meta property="og:image" content="./cover.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:creator" content="@rhinobaseio" />
@@ -70,10 +70,7 @@ export const Layout: FC<PropsWithChildren> = (props: PropsWithChildren) => {
         />
         <meta name="twitter:image:width" content="1200" />
         <meta name="twitter:image:height" content="630" />
-        <meta
-          name="twitter:image"
-          content="https://rafty.rhinobase.io/api/og"
-        />
+        <meta name="twitter:image" content="./cover.png" />
         <meta name="theme-color" content="#09090b" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
