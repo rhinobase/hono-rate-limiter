@@ -75,7 +75,7 @@ export class RedisStore implements Store {
    */
   constructor(options: Options) {
     this.client = options.client;
-    this.prefix = options.prefix ?? "hrl";
+    this.prefix = options.prefix ?? "hrl:";
     this.resetExpiryOnChange = options.resetExpiryOnChange ?? false;
 
     // So that the script loading can occur non-blocking, this will send
@@ -143,7 +143,7 @@ export class RedisStore implements Store {
    * @returns {string} - The text + the key.
    */
   prefixKey(key: string): string {
-    return `${this.prefix}:${key}`;
+    return `${this.prefix}${key}`;
   }
 
   /**
