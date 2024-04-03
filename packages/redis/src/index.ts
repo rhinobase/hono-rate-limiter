@@ -1,2 +1,2 @@
-export * from "./redisStore";
+export * from "./store";
 export * from "./types";
