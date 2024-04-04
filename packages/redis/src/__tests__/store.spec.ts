@@ -149,18 +149,22 @@ describe("redis store test", () => {
 
     let isReady = false;
     console.log(new Date().toISOString());
-    await vi.waitFor(
+    await vi.waitUntil(
       () => {
-        if (!isReady)
-          console.log(
-            "Waiting for the keys to timeout",
-            new Date().toISOString(),
-          );
+        if (!isReady) {
+          isReady = true;
+          return false;
+        }
 
-        isReady = true;
+        console.log(
+          "Waiting for the keys to timeout",
+          new Date().toISOString(),
+        );
+
+        return true;
       },
       {
-        interval: 1000,
+        interval: 60,
       },
     );
 
