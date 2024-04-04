@@ -10,12 +10,7 @@ const client = new Redis({
 });
 
 describe("redis store test", () => {
-  // Mock timers so we can fast forward time instead of waiting for n seconds
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
   afterEach(async () => {
-    vi.useRealTimers();
     await client.flushall();
   });
 
@@ -144,15 +139,13 @@ describe("redis store test", () => {
 
   it("resets the count for all the keys in the store when the timeout is reached", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 50 } as ConfigType);
+    store.init({ windowMs: 5 } as ConfigType);
 
     const keyOne = "test-store-one";
     const keyTwo = "test-store-two";
 
     await store.increment(keyOne);
     await store.increment(keyTwo);
-
-    vi.advanceTimersByTime(60);
 
     // Ensure that the keys have been deleted
     expect(await client.get("hrl:test-store-one")).toEqual(null);
