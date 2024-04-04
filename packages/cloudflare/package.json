@@ -1,0 +1,31 @@
+{
+  "name": "@hono-rate-limiter/cloudflare",
+  "version": "0.1.1",
+  "license": "MIT",
+  "keywords": [
+    "hono",
+    "cloudflare",
+    "database",
+    "serverless",
+    "edge",
+    "rate-limiting",
+    "rate-limiter",
+    "honojs"
+  ],
+  "homepage": "https://hono-rate-limiter.vercel.app",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhinobase/hono-rate-limiter.git",
+    "directory": "packages/cloudflare"
+  },
+  "bugs": {
+    "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
+  },
+  "peerDependencies": {
+    "hono-rate-limiter": "^0.2.1"
+  },
+  "types": "./index.cjs.d.ts"
+}
