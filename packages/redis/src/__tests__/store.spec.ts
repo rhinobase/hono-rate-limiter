@@ -148,12 +148,12 @@ describe("redis store test", () => {
     await store.increment(keyTwo);
 
     let isReady = false;
-    vi.waitFor(
+    await vi.waitFor(
       () => {
         if (!isReady) throw new Error("Waiting for the keys to timeout");
         isReady = true;
       },
-      { interval: 6 },
+      { interval: 10, timeout: 10 },
     );
 
     // Ensure that the keys have been deleted
