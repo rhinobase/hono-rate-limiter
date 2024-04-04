@@ -5,6 +5,7 @@ import {
   setDraft7Headers,
   setRetryAfterHeader,
 } from "./headers";
+import { defaultKeyGenerator } from "./keyGenerator";
 import MemoryStore from "./memoryStore";
 import type { ConfigType, RateLimitInfo } from "./types";
 import { isValidStore } from "./validations";
@@ -34,8 +35,7 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = (c: Context<E, P, I>) =>
-      c.req.header("cf-connecting-ip") ?? "",
+    keyGenerator = defaultKeyGenerator,
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (
