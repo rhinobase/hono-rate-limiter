@@ -139,7 +139,7 @@ describe("redis store test", () => {
 
   it("resets the count for all the keys in the store when the timeout is reached", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 5 } as ConfigType);
+    store.init({ windowMs: 50 } as ConfigType);
 
     const keyOne = "test-store-one";
     const keyTwo = "test-store-two";
@@ -148,9 +148,14 @@ describe("redis store test", () => {
     await store.increment(keyTwo);
 
     let isReady = false;
+    console.log(new Date().toISOString());
     await vi.waitFor(
       () => {
-        if (!isReady) console.log("Waiting for the keys to timeout");
+        if (!isReady)
+          console.log(
+            "Waiting for the keys to timeout",
+            new Date().toISOString(),
+          );
 
         isReady = true;
       },
