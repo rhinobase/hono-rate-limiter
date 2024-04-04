@@ -4,7 +4,7 @@ import type { Context } from "hono";
 import { agent as request } from "supertest";
 import { rateLimiter } from "../core";
 import type { ClientRateLimitInfo, RateLimitInfo, Store } from "../types";
-import { createServer } from "./helpers";
+import { createServer, keyGenerator } from "./helpers";
 
 describe("middleware test", () => {
   beforeEach(() => {
@@ -64,16 +64,14 @@ describe("middleware test", () => {
 
   it("should call `init` even if no requests have come in", async () => {
     const store = new MockStore();
-    rateLimiter({
-      store,
-    });
+    rateLimiter({ keyGenerator, store });
 
     expect(store.initWasCalled).toEqual(true);
   });
 
   it("should let the first request through", async () => {
     const app = createAdaptorServer(
-      createServer({ middleware: rateLimiter({ limit: 1 }) }),
+      createServer({ middleware: rateLimiter({ keyGenerator, limit: 1 }) }),
     );
 
     await request(app).get("/").expect(200).expect("Hi there!");
@@ -82,9 +80,7 @@ describe("middleware test", () => {
   it("should refuse additional connections once IP has reached the max", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: 2,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: 2 }),
       }),
     );
 
@@ -96,10 +92,7 @@ describe("middleware test", () => {
   it("should (eventually) accept new connections from a blocked IP", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: 2,
-          windowMs: 50,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: 2, windowMs: 50 }),
       }),
     );
 
@@ -113,10 +106,7 @@ describe("middleware test", () => {
   it("should work repeatedly", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: 2,
-          windowMs: 50,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: 2, windowMs: 50 }),
       }),
     );
 
@@ -133,7 +123,7 @@ describe("middleware test", () => {
 
   it("should block all requests if max is set to 0", async () => {
     const app = createAdaptorServer(
-      createServer({ middleware: rateLimiter({ limit: 0 }) }),
+      createServer({ middleware: rateLimiter({ keyGenerator, limit: 0 }) }),
     );
 
     await request(app).get("/").expect(429);
@@ -144,6 +134,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           windowMs: 1000,
           limit: 2,
           message,
@@ -161,6 +152,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           limit: 1,
           // @ts-expect-error Checking if we can use custom status code
           statusCode,
@@ -180,10 +172,7 @@ describe("middleware test", () => {
     };
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          message,
-          limit: 1,
-        }),
+        middleware: rateLimiter({ keyGenerator, message, limit: 1 }),
       }),
     );
 
@@ -195,6 +184,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           message: () => "Too many requests.",
           limit: 1,
         }),
@@ -209,6 +199,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           message: async () => "Too many requests.",
           limit: 1,
         }),
@@ -223,6 +214,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           limit: 1,
           handler(c) {
             // @ts-expect-error Checking if we can use custom handler
@@ -261,10 +253,7 @@ describe("middleware test", () => {
   it("should allow custom skip function", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: 2,
-          skip: () => true,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: 2, skip: () => true }),
       }),
     );
 
@@ -276,6 +265,7 @@ describe("middleware test", () => {
 
   it("should allow custom skip function that returns a promise", async () => {
     const limiter = rateLimiter({
+      keyGenerator,
       limit: 2,
       skip: async () => true,
     });
@@ -290,9 +280,7 @@ describe("middleware test", () => {
   it("should allow max to be a function", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: () => 2,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: () => 2 }),
       }),
     );
 
@@ -304,9 +292,7 @@ describe("middleware test", () => {
   it("should allow max to be a function that returns a promise", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: async () => 2,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: async () => 2 }),
       }),
     );
 
@@ -318,9 +304,7 @@ describe("middleware test", () => {
   it("should calculate the remaining hits", async () => {
     const app = createAdaptorServer(
       createServer({
-        middleware: rateLimiter({
-          limit: async () => 2,
-        }),
+        middleware: rateLimiter({ keyGenerator, limit: async () => 2 }),
       }),
     );
 
@@ -346,9 +330,7 @@ describe("middleware test", () => {
     async (name, store) => {
       const app = createAdaptorServer(
         createServer({
-          middleware: rateLimiter({
-            store,
-          }),
+          middleware: rateLimiter({ keyGenerator, store }),
         }),
       );
       await request(app).get("/");
@@ -363,9 +345,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: [
-            rateLimiter({
-              store,
-            }),
+            rateLimiter({ keyGenerator, store }),
             async (c, next) => {
               await c.get("rateLimitStore").resetKey("key");
               await next();
@@ -387,9 +367,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: [
-            rateLimiter({
-              store,
-            }),
+            rateLimiter({ keyGenerator, store }),
             async (c, next) => {
               response = await c.get("rateLimitStore").getKey("key");
               await next();
@@ -411,6 +389,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             store,
           }),
@@ -429,6 +408,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             store,
           }),
@@ -447,6 +427,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             requestWasSuccessful: (c) => c.res.status === 200,
             store,
@@ -465,6 +446,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             requestWasSuccessful(c) {
               return c.res.status === 200;
@@ -486,6 +468,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             requestWasSuccessful: (c) => c.req.query("success") === "1",
             store,
@@ -505,6 +488,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipSuccessfulRequests: true,
             requestWasSuccessful: (c) => c.req.query("success") === "1",
             store,
@@ -524,6 +508,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipFailedRequests: true,
             store,
           }),
@@ -542,6 +527,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipFailedRequests: true,
             store,
           }),
@@ -560,6 +546,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipFailedRequests: true,
             requestWasSuccessful: async () => false,
             store,
@@ -614,6 +601,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             skipFailedRequests: true,
             store,
           }),
@@ -632,6 +620,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             limit: 2,
             store,
             skipFailedRequests: true,
@@ -655,6 +644,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             limit: 1,
             store,
             handler() {
@@ -683,6 +673,7 @@ describe("middleware test", () => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
+            keyGenerator,
             limit: 1,
             store,
             skip() {
@@ -708,7 +699,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer<{ Variables: { rateLimit: RateLimitInfo } }>({
         middleware: [
-          rateLimiter(),
+          rateLimiter({ keyGenerator }),
           async (c, next) => {
             savedRequestObject = c.get("rateLimit");
             await next();
@@ -741,9 +732,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer<{ Variables: { rateLimitInfo: RateLimitInfo } }>({
         middleware: [
-          rateLimiter({
-            requestPropertyName: "rateLimitInfo",
-          }),
+          rateLimiter({ keyGenerator, requestPropertyName: "rateLimitInfo" }),
           async (c, next) => {
             savedRequestObject = c.get("rateLimitInfo");
             await next();

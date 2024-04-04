@@ -6,7 +6,7 @@ import {
   setRetryAfterHeader,
 } from "./headers";
 import { defaultKeyGenerator } from "./keyGenerator";
-import MemoryStore from "./memoryStore";
+import MemoryStore from "./store";
 import type { ConfigType, RateLimitInfo } from "./types";
 import { isValidStore } from "./validations";
 

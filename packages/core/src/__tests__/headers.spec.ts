@@ -8,13 +8,14 @@ import {
   setRetryAfterHeader,
 } from "../headers";
 import type { RateLimitInfo } from "../types";
-import { createServer } from "./helpers";
+import { createServer, keyGenerator } from "./helpers";
 
 describe("headers test", () => {
   it("should send correct `ratelimit-*` headers for the standard headers draft 6", async () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           windowMs: 60 * 1000,
           limit: 5,
           standardHeaders: true,
@@ -35,6 +36,7 @@ describe("headers test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           windowMs: 60 * 1000,
           limit: 5,
           standardHeaders: "draft-7",
@@ -53,6 +55,7 @@ describe("headers test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({
+          keyGenerator,
           windowMs: 60 * 1000,
           limit: 1,
         }),

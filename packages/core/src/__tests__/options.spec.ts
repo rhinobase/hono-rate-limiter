@@ -1,5 +1,6 @@
 import { rateLimiter } from "../core";
 import type { ClientRateLimitInfo, ConfigType, Store } from "../types";
+import { keyGenerator } from "./helpers";
 
 describe("options test", () => {
   it("should not allow the use of an invalid store", async () => {
@@ -9,6 +10,7 @@ describe("options test", () => {
 
     expect(() => {
       rateLimiter({
+        keyGenerator,
         // @ts-expect-error Check if the library can detect invalid stores without TSC's help
         store: new InvalidStore(),
       });
@@ -37,6 +39,7 @@ describe("options test", () => {
 
     expect(() => {
       rateLimiter({
+        keyGenerator,
         // @ts-expect-error Check if the library can detect invalid stores without TSC's help
         store: new InvalidStore(),
       });

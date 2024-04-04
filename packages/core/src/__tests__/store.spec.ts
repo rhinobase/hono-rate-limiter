@@ -1,4 +1,4 @@
-import MemoryStore from "../memoryStore";
+import MemoryStore from "../store";
 import type { ConfigType } from "../types";
 
 const minute = 60 * 1000;
