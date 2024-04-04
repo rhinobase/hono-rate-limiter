@@ -163,11 +163,13 @@ export class RedisStore implements Store {
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    return this.client.evalsha(
+    const results = await this.client.evalsha<never[], RedisReply>(
       await this.getScriptSha,
       [this.prefixKey(key)],
       [],
     );
+
+    return parseScriptResponse(results);
   }
 
   /**
