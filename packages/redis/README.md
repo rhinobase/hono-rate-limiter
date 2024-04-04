@@ -92,7 +92,7 @@ const store = new RedisStore({ client: redis })
 
 The text to prepend to the key in Redis.
 
-Defaults to `hrl`.
+Defaults to `hrl:`.
 
 #### `resetExpiryOnChange`
 

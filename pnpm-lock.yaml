@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@hono/node-server':
-    specifier: ^1.9.0
-    version: 1.9.0
+    specifier: ^1.9.1
+    version: 1.9.1
   '@vercel/kv':
     specifier: ^1.0.1
     version: 1.0.1
   hono:
-    specifier: ^4.1.4
-    version: 4.1.4
+    specifier: ^4.2.0
+    version: 4.2.0
 
 devDependencies:
   '@biomejs/biome':
@@ -73,6 +73,9 @@ devDependencies:
   '@typescript-eslint/parser':
     specifier: ^6.13.2
     version: 6.21.0(eslint@8.48.0)(typescript@5.4.3)
+  '@upstash/redis':
+    specifier: ^1.29.0
+    version: 1.29.0
   '@vitest/coverage-v8':
     specifier: ^1.0.4
     version: 1.4.0(vitest@1.4.0)
@@ -83,8 +86,8 @@ devDependencies:
     specifier: ^5.3.0
     version: 5.3.0
   czg:
-    specifier: ^1.9.0
-    version: 1.9.0
+    specifier: ^1.9.1
+    version: 1.9.1
   eslint:
     specifier: ~8.48.0
     version: 8.48.0
@@ -1890,8 +1893,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@hono/node-server@1.9.0:
-    resolution: {integrity: sha512-oJjk7WXBlENeHhWiMqSyxPIZ3Kmf5ZYxqdlcSIXyN8Rn50bNJsPl99G4POBS03Jxh56FdfRJ0SEnC8mAVIiavQ==}
+  /@hono/node-server@1.9.1:
+    resolution: {integrity: sha512-XBru0xbtRlTZJyAiFJLn7XDKbCVXBaRhVQAQhB9TwND2gwj8jf9SDWIj/7VxVtNAjURJf7Ofcz58DRA6DPYiWA==}
     engines: {node: '>=18.14.1'}
     dev: false
 
@@ -3345,12 +3348,12 @@ packages:
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
     dependencies:
-      '@types/eslint': 8.56.6
+      '@types/eslint': 8.56.7
       '@types/estree': 1.0.5
     dev: true
 
-  /@types/eslint@8.56.6:
-    resolution: {integrity: sha512-ymwc+qb1XkjT/gfoQwxIeHZ6ixH23A+tCT2ADSA/DPVKzAjwYkTXBMCQ/f6fe4wEa85Lhp26VPeUxI7wMhAi7A==}
+  /@types/eslint@8.56.7:
+    resolution: {integrity: sha512-SjDvI/x3zsZnOkYZ3lCt9lOZWZLB2jIlNKz+LBgCtDurK0JZcwucxYHn1w2BJkD34dgX9Tjnak0txtq4WTggEA==}
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
@@ -3619,6 +3622,12 @@ packages:
     dependencies:
       crypto-js: 4.2.0
     dev: false
+
+  /@upstash/redis@1.29.0:
+    resolution: {integrity: sha512-kbO5fgMAeUzErnA/SOtaSbAa0dguYhhBT4MZHJ1O8gVl4iK754aC9+rIYY5hsp4nlxeCGfnIDkWpof991c9jjA==}
+    dependencies:
+      crypto-js: 4.2.0
+    dev: true
 
   /@vercel/kv@1.0.1:
     resolution: {integrity: sha512-uTKddsqVYS2GRAM/QMNNXCTuw9N742mLoGRXoNDcyECaxEXvIHG0dEY+ZnYISV4Vz534VwJO+64fd9XeSggSKw==}
@@ -5139,7 +5148,6 @@ packages:
 
   /crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-    dev: false
 
   /css-declaration-sorter@6.4.1(postcss@8.4.38):
     resolution: {integrity: sha512-rtdthzxKuyq6IzqX6jEcIzQF/YqccluefyCYheovBOLhFT/drQA9zj/UbRAa9J7C0o6EG6u3E6g+vKkay7/k3g==}
@@ -5245,8 +5253,8 @@ packages:
       css-tree: 1.1.3
     dev: true
 
-  /czg@1.9.0:
-    resolution: {integrity: sha512-cYmC5/99kUGlnK1D8uXr4hykzC50MqzpMp3SlrE+w8wVzd9+0XxKsjWXhi+QIuDnzkx2CCvKSMT4xwDeaOD/xg==}
+  /czg@1.9.1:
+    resolution: {integrity: sha512-0+vLv7QkoY+YNpGrPjyw6SPqvaOlqQsNJqSI3SC2oh5jNDjMrw2VEWBUg/8j/GZWmn1zCR2ssA8yAG9WK7A5sA==}
     engines: {node: '>=v12.20.0'}
     hasBin: true
     dev: true
@@ -6489,8 +6497,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /hono@4.1.4:
-    resolution: {integrity: sha512-JcdAKRBHjWO5OEkEW6Lv5NUr4QLl4InshCIUnHwGY7hymCxmV1Ji/eAAr1hclQixWc3I7ZljMHXwIedNWRAcqA==}
+  /hono@4.2.0:
+    resolution: {integrity: sha512-4A9WSwQW1V1Bby07Ida1FZwvYceSkByd8uoxvcmYSPaEWIZqutn/s5jE3CJOci8Jt//vb9VDn+5B3xobIzvA6A==}
     engines: {node: '>=16.0.0'}
     dev: false
 
@@ -9927,12 +9935,12 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.30.0
+      terser: 5.30.1
       webpack: 5.91.0(@swc/core@1.3.107)
     dev: true
 
-  /terser@5.30.0:
-    resolution: {integrity: sha512-Y/SblUl5kEyEFzhMAQdsxVHh+utAxd4IuRNJzKywY/4uzSogh3G219jqbDDxYu4MXO9CzY3tSEqmZvW6AoEDJw==}
+  /terser@5.30.1:
+    resolution: {integrity: sha512-PJhOnRttZqqmIujxOQOMu4QuFGvh43lR7Youln3k6OJvmxwZ5FxK5rbCEh8XABRCpLf7ZnhrZuclCNCASsScnA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:

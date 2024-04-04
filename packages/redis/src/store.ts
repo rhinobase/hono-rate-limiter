@@ -75,7 +75,7 @@ export class RedisStore implements Store {
    */
   constructor(options: Options) {
     this.client = options.client;
-    this.prefix = options.prefix ?? "hrl";
+    this.prefix = options.prefix ?? "hrl:";
     this.resetExpiryOnChange = options.resetExpiryOnChange ?? false;
 
     // So that the script loading can occur non-blocking, this will send
@@ -143,7 +143,7 @@ export class RedisStore implements Store {
    * @returns {string} - The text + the key.
    */
   prefixKey(key: string): string {
-    return `${this.prefix}:${key}`;
+    return `${this.prefix}${key}`;
   }
 
   /**
@@ -163,11 +163,13 @@ export class RedisStore implements Store {
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    return this.client.evalsha(
+    const results = await this.client.evalsha<never[], RedisReply>(
       await this.getScriptSha,
       [this.prefixKey(key)],
       [],
     );
+
+    return parseScriptResponse(results);
   }
 
   /**
