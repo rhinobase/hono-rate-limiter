@@ -147,9 +147,11 @@ describe("redis store test", () => {
     await store.increment(keyOne);
     await store.increment(keyTwo);
 
+    let isReady = false;
     vi.waitFor(
       () => {
-        console.log("Waiting for the keys to timeout");
+        if (!isReady) throw new Error("Waiting for the keys to timeout");
+        isReady = true;
       },
       { interval: 6 },
     );
