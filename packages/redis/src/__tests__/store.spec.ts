@@ -147,6 +147,13 @@ describe("redis store test", () => {
     await store.increment(keyOne);
     await store.increment(keyTwo);
 
+    vi.waitFor(
+      () => {
+        console.log("Waiting for the keys to timeout");
+      },
+      { interval: 6 },
+    );
+
     // Ensure that the keys have been deleted
     expect(await client.get("hrl:test-store-one")).toEqual(null);
     expect(await client.get("hrl:test-store-two")).toEqual(null);
