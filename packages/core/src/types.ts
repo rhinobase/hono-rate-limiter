@@ -41,22 +41,18 @@ export type RateLimitInfo = {
  * @param optionsUsed {ConfigType} - The options used to set up the middleware.
  */
 export type RateLimitExceededEventHandler<
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  E extends Env = any,
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  P extends string = any,
-  I extends Input = NonNullable<unknown>,
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
 /**
  * The configuration options for the rate limiter.
  */
 export type ConfigType<
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  E extends Env = any,
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  P extends string = any,
-  I extends Input = NonNullable<unknown>,
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
 > = {
   /**
    * How long we should remember the requests.
