@@ -163,7 +163,7 @@ export type ConfigType<
    *
    * By default, the built-in `MemoryStore` will be used.
    */
-  store: Store;
+  store: Store<E, P, I>;
 };
 
 export type IncrementResponse = ClientRateLimitInfo;
@@ -171,14 +171,18 @@ export type IncrementResponse = ClientRateLimitInfo;
 /**
  * An interface that all hit counter stores must implement.
  */
-export type Store = {
+export type Store<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+> = {
   /**
    * Method that initializes the store, and has access to the options passed to
    * the middleware too.
    *
    * @param options {ConfigType} - The options used to setup the middleware.
    */
-  init?: (options: ConfigType) => void;
+  init?: (options: ConfigType<E, P, I>) => void;
 
   /**
    * Method to fetch a client's hit count and reset time.

@@ -4,6 +4,7 @@ import type {
   ConfigType as RateLimitConfiguration,
   Store,
 } from "hono-rate-limiter";
+import type { Env, Input } from "hono/types";
 import scripts from "./scripts";
 import type { Options, RedisClient, RedisReply } from "./types";
 
@@ -39,7 +40,12 @@ const parseScriptResponse = (results: RedisReply): ClientRateLimitInfo => {
   return { totalHits, resetTime };
 };
 
-export class RedisStore implements Store {
+export class RedisStore<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+> implements Store<E, P, I>
+{
   /**
    * The text to prepend to the key in Redis.
    */
@@ -151,7 +157,7 @@ export class RedisStore implements Store {
    *
    * @param options {RateLimitConfiguration} - The options used to setup the middleware.
    */
-  init(options: RateLimitConfiguration) {
+  init(options: RateLimitConfiguration<E, P, I>) {
     this.windowMs = options.windowMs;
   }
 

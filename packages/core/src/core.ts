@@ -53,7 +53,7 @@ export function rateLimiter<
       if (typeof responseMessage === "string") return c.text(responseMessage);
       return c.json(responseMessage);
     },
-    store = new MemoryStore(),
+    store = new MemoryStore<E, P, I>(),
   } = config ?? {};
 
   const options = {

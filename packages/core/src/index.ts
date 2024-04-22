@@ -1,2 +1,2 @@
 export { rateLimiter } from "./core";
-export * from "./types";
+export type * from "./types";
