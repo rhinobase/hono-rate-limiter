@@ -1,1 +1,1 @@
-export * from "./cloudflare";
+export * from "./store";
