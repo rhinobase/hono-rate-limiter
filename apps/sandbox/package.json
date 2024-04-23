@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "scripts": {
-    "vercel-build": "echo 🔥"
+    "build": "echo 🔥"
   },
   "dependencies": {
     "hono-rate-limiter": "^0.2.3",
