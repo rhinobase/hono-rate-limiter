@@ -5,7 +5,6 @@ import {
   setDraft7Headers,
   setRetryAfterHeader,
 } from "./headers";
-import { defaultKeyGenerator } from "./keyGenerator";
 import MemoryStore from "./store";
 import type { ConfigType, RateLimitInfo } from "./types";
 import { isValidStore } from "./validations";
@@ -24,7 +23,10 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(config?: Partial<ConfigType<E, P, I>>) {
+>(
+  config: Pick<ConfigType<E, P, I>, "keyGenerator"> &
+    Partial<Omit<ConfigType<E, P, I>, "keyGenerator">>,
+) {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -35,7 +37,7 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = defaultKeyGenerator,
+    keyGenerator,
     skip = () => false,
     requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
     handler = async (

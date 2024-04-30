@@ -1,5 +1,5 @@
 {
-  "name": "@hono-ratelimiter/source",
+  "name": "@hono-rate-limiter/source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {

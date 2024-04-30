@@ -12,8 +12,8 @@
 Rate limiting middleware for [Hono](https://hono.dev/). Use to
 limit repeated requests to public APIs and/or endpoints such as password reset.
 
-> [!WARNING]  
-> The `keyGenerator` function is currently under construction and needs to be defined for `hono-rate-limiter` to work properly in your environment. Please ensure that you define the `keyGenerator` function according to the documentation before using the library.
+> [!NOTE]  
+> The `keyGenerator` function needs to be defined for `hono-rate-limiter` to work properly in your environment. Please ensure that you define the `keyGenerator` function according to the documentation before using the library.
 
 ## Usage
 
@@ -55,6 +55,11 @@ Here is a list of stores:
 | [`@rlimit/storage`](https://www.npmjs.com/package/@rlimit/storage)                   | A distributed rlimit store, ideal for multi-regional deployments.                                                                                                                                  |
 
 Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creating-a-store) if you wish to create your own store.
+
+## Notes
+
+- The `keyGenerator` function determines what to limit a request on, it should represent a unique characteristic of a user or class of user that you wish to rate limit. Good choices include API keys in `Authorization` headers, URL paths or routes, specific query parameters used by your application, and/or user IDs.
+- It is not recommended to use IP addresses (since these can be shared by many users in many valid cases) or locations (the same), as you may find yourself unintentionally rate limiting a wider group of users than you intended.
 
 ## Contributing
 

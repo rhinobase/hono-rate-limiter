@@ -21,12 +21,12 @@ export const app = new Hono<{
 app.get(
   "/",
   rateLimiter({
-    windowMs: 60_000, // 1 min
-    limit: 10,
+    windowMs: 60_000, // 1 minute
+    limit: 10, // Limit each IP to 10 requests per `window` (here, per 1 minute).
+    keyGenerator: (c) => c.req.header("x-forwarded-for") ?? "", // Method to generate custom identifiers for clients.
     store: new RedisStore({
       client: kv,
     }),
-    keyGenerator: (c) => c.req.header("x-forwarded-for") ?? "",
     handler: (_, next) => next(),
   }),
   (c) => c.html(<Page info={c.get("rateLimit")} />),
