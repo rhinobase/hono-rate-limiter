@@ -126,7 +126,6 @@ export class RedisStore<
     const evalCommand = async () =>
       this.client.evalsha<string[], RedisReply>(
         await this.incrementScriptSha,
-        // "1",
         [this.prefixKey(key)],
         [this.resetExpiryOnChange ? "1" : "0", this.windowMs.toString()],
       );
