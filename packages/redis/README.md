@@ -65,7 +65,7 @@ export type RedisClient = {
 };
 ```
 
-#### Examples
+#### Usage with connectors
 
 [`@vercel/kv`](https://github.com/@vercel/kv)
 
@@ -81,8 +81,8 @@ const store = new RedisStore({ client: kv });
 import { Redis } from "@upstash/redis"
 
 const redis = new Redis({
-url: <UPSTASH_REDIS_REST_URL>,
-token: <UPSTASH_REDIS_REST_TOKEN>,
+  url: <UPSTASH_REDIS_REST_URL>,
+  token: <UPSTASH_REDIS_REST_TOKEN>,
 })
 
 const store = new RedisStore({ client: redis })
