@@ -77,7 +77,7 @@ export function rateLimiter<
 
   // Checking if store is valid
   if (!isValidStore(store))
-    throw new Error("The store is not correctly implmented!");
+    throw new Error("The store is not correctly implemented!");
 
   // Call the `init` method on the store, if it exists
   if (typeof store.init === "function") store.init(options);
