@@ -11,9 +11,9 @@ import { isValidStore } from "./validations";
 
 /**
  *
- * Create an instance of IP rate-limiting middleware for Hono.
+ * Create an instance of rate-limiting middleware for Hono.
  *
- * @param config {ConfigType} - Options to configure the rate limiter.
+ * @param config x{ConfigType} - Options to configure the rate limiter.
  *
  * @returns - The middleware that rate-limits clients based on your configuration.
  *
