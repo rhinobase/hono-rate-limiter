@@ -14,7 +14,7 @@ import { isValidStore } from "./validations";
  *
  * @public
  */
-export async function webSocketLimiter<
+export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
