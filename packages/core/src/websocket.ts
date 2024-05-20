@@ -134,8 +134,6 @@ export function webSocketLimiter<
             await shouldSkipRequest();
           } catch (error) {
             if (skipFailedRequests) await decrementKey();
-          } finally {
-            if (!c.finalized) await decrementKey();
           }
         },
         onError: async (event, ws) => {

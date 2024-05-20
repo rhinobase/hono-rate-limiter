@@ -21,7 +21,7 @@ export function createServer<
     // Register test routes
     .get("/", (c) => c.text("Hi there!"))
     .get("/error", (c) => c.text("Error!", { status: 400 }))
-    .post("/crash", (c) => {
+    .post("/crash", () => {
       throw new HTTPException(400, { message: "Oops!" });
     });
 
