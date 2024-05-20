@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.0-rc.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.4.0-rc.0...core-0.4.0-rc.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* **core:** correct try catch of websocket limiter ([5517f2b](https://github.com/rhinobase/hono-rate-limiter/commit/5517f2b693aae463646075f06f068f3732458666))
+
 ## [0.4.0-rc.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.3.0...core-0.4.0-rc.0) (2024-05-19)
 
 
