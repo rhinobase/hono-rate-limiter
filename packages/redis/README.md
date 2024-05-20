@@ -1,4 +1,4 @@
-# <div align="center"> `@hono-rate-limiter/redis` </div>
+# <div align="center">`@hono-rate-limiter/redis`</div>
 
 <div align="center">
 
@@ -8,8 +8,6 @@
 [![license](https://img.shields.io/npm/l/@hono-rate-limiter/redis)](LICENSE)
 
 </div>
-
-<br>
 
 <div align="center">
 
@@ -22,7 +20,7 @@ middleware.
 ## Installation
 
 ```sh
-# Using npm/yarn/pnpm
+# Using npm/yarn/pnpm/bun
 npm add @hono-rate-limiter/redis
 ```
 
@@ -30,7 +28,7 @@ npm add @hono-rate-limiter/redis
 
 ### Examples
 
-To use it with a [`@vercel/kv`](https://github.com/redis/node-redis) client:
+Using with [`@vercel/kv`](https://github.com/redis/node-redis)
 
 ```ts
 import { RedisStore } from "@hono-rate-limiter/redis";
@@ -79,6 +77,19 @@ const store = new RedisStore({ client: kv });
 
 ```ts
 import { Redis } from "@upstash/redis"
+
+const redis = new Redis({
+  url: <UPSTASH_REDIS_REST_URL>,
+  token: <UPSTASH_REDIS_REST_TOKEN>,
+})
+
+const store = new RedisStore({ client: redis })
+```
+
+[`@upstash/redis/cloudflare`](https://github.com/@upstash/redis)
+
+```ts
+import { Redis } from "@upstash/redis/cloudflare"
 
 const redis = new Redis({
   url: <UPSTASH_REDIS_REST_URL>,
