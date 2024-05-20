@@ -1,4 +1,4 @@
-# <div align="center">`@hono-rate-limiter/redis`</div>
+# <div align="center">🔥`@hono-rate-limiter/redis`<img src="https://github.com/rhinobase/hono-rate-limiter/packages/redis/redis.gif" width="40" height="40" /></div>
 
 <div align="center">
 
