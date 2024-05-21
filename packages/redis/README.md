@@ -77,19 +77,10 @@ const store = new RedisStore({ client: kv });
 
 ```ts
 import { Redis } from "@upstash/redis"
-
-const redis = new Redis({
-  url: <UPSTASH_REDIS_REST_URL>,
-  token: <UPSTASH_REDIS_REST_TOKEN>,
-})
-
-const store = new RedisStore({ client: redis })
-```
-
-[`@upstash/redis/cloudflare`](https://github.com/@upstash/redis)
-
-```ts
-import { Redis } from "@upstash/redis/cloudflare"
+/**
+ * for Cloudflare
+ * import { Redis } from "@upstash/redis/cloudflare"
+ */
 
 const redis = new Redis({
   url: <UPSTASH_REDIS_REST_URL>,
