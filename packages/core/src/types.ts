@@ -128,6 +128,15 @@ export interface ConfigType<
   skipSuccessfulRequests: boolean;
 
   /**
+   * If blockDuration is a positive number and more points are consumed than
+   * available, the limiter prolongs points lifetime for `blockDuration` seconds.
+   * It rejects further consume calls for that key during this blockDuration time.
+   *
+   * Defaults to `0`.
+   */
+  blockDuration: number;
+
+  /**
    * Method to generate custom identifiers for clients.
    */
   keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
