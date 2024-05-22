@@ -60,7 +60,7 @@ export class MemoryStore<
   /**
    * Method that initializes the store.
    *
-   * @param options {ConfigType} - The options used to setup the middleware.
+   * @param options {ConfigType | WSConfigType} - The options used to setup the middleware.
    */
   init(options: ConfigType<E, P, I> | WSConfigType<E, P, I>): void {
     // Get the duration of a window from the options.

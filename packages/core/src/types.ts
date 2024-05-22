@@ -323,3 +323,9 @@ export type Store<
    */
   prefix?: string;
 };
+
+export type GeneralConfigType<T extends { keyGenerator: unknown }> = Pick<
+  T,
+  "keyGenerator"
+> &
+  Partial<Omit<T, "keyGenerator">>;

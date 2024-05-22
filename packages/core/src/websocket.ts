@@ -1,8 +1,8 @@
 import type { Context, Env, Input } from "hono";
-import type { WSContext, WSEvents } from "hono/ws";
+import type { WSEvents } from "hono/ws";
 import MemoryStore from "./store";
-import type { RateLimitInfo, WSConfigType } from "./types";
-import { isValidStore } from "./validations";
+import type { GeneralConfigType, RateLimitInfo, WSConfigType } from "./types";
+import { getKeyAndIncrement, initStore } from "./utils";
 
 /**
  *
@@ -18,10 +18,7 @@ export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(
-  config: Pick<WSConfigType<E, P, I>, "keyGenerator"> &
-    Partial<Omit<WSConfigType<E, P, I>, "keyGenerator">>,
-) {
+>(config: GeneralConfigType<WSConfigType<E, P, I>>) {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -34,13 +31,10 @@ export function webSocketLimiter<
     blockDuration = 0,
     keyGenerator,
     skip = () => false,
-    handler = async (
-      _: unknown,
-      ws: WSContext,
-      options: WSConfigType<E, P, I>,
-    ) => ws.close(options.statusCode, options.message),
+    handler = async (_, ws, options) =>
+      ws.close(options.statusCode, options.message),
     store = new MemoryStore<E, P, I>(),
-  } = config ?? {};
+  } = config;
 
   const options = {
     windowMs,
@@ -58,13 +52,8 @@ export function webSocketLimiter<
     store,
   };
 
-  // Checking if store is valid
-  if (!isValidStore(store))
-    throw new Error("The store is not correctly implemented!");
-
-  // Call the `init` method on the store, if it exists
   // biome-ignore lint/suspicious/noExplicitAny: Need this for backward compatiblity
-  if (typeof store.init === "function") store.init(options as any);
+  initStore(store, options as any);
 
   return (
     createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
@@ -83,11 +72,11 @@ export function webSocketLimiter<
             return;
           }
 
-          // Get a unique key for the client
-          const key = await keyGenerator(c);
-
-          // Increment the client's hit counter by one.
-          const { totalHits, resetTime } = await store.increment(key);
+          const { key, totalHits, resetTime } = await getKeyAndIncrement(
+            c,
+            keyGenerator,
+            store,
+          );
 
           // Get the limit (max number of hits) for each client.
           const retrieveLimit = typeof limit === "function" ? limit(c) : limit;
