@@ -7,12 +7,14 @@ const globalClasses = css`
   font-weight: 400;
   font-style: normal;
   font-variation-settings: "slnt" 0;
-  background: linear-gradient(to bottom, transparent, rgb(255, 255, 255))
-    rgb(214, 219, 220);
+  background: linear-gradient(
+    to bottom,
+    rgb(214, 219, 220),
+    rgb(255, 255, 255)
+  );
   margin: 0;
   @media (prefers-color-scheme: dark) {
-    background: linear-gradient(to bottom, transparent, rgb(0, 0, 0))
-      rgb(0, 0, 0);
+    background: #000;
   }
 `;
 
