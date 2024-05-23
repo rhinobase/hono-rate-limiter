@@ -1,5 +1,6 @@
 import type { Context, Env, Input, Next } from "hono";
 import type { StatusCode } from "hono/utils/http-status";
+import type { WSContext } from "hono/ws";
 
 /**
  * Data returned from the `Store` when a client's hit counter is incremented.
@@ -49,11 +50,11 @@ export type RateLimitExceededEventHandler<
 /**
  * The configuration options for the rate limiter.
  */
-export type ConfigType<
+export interface ConfigType<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-> = {
+> {
   /**
    * How long we should remember the requests.
    *
@@ -128,8 +129,6 @@ export type ConfigType<
 
   /**
    * Method to generate custom identifiers for clients.
-   *
-   * By default, the client's IP address is used.
    */
   keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
 
@@ -164,7 +163,80 @@ export type ConfigType<
    * By default, the built-in `MemoryStore` will be used.
    */
   store: Store<E, P, I>;
-};
+}
+
+export type WSStatusCode =
+  | 1000
+  | 1001
+  | 1002
+  | 1003
+  | 1004
+  | 1005
+  | 1006
+  | 1007
+  | 1008
+  | 1009
+  | 1010;
+
+/**
+ * Hono request handler that sends back a response when a client is
+ * rate-limited.
+ *
+ * @param context {Context} - The Hono context object.
+ * @param next {Next} - The Hono `next` function, can be called to skip responding.
+ * @param optionsUsed {ConfigType} - The options used to set up the middleware.
+ */
+export type WSRateLimitExceededEventHandler<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+> = (event: unknown, ws: WSContext, optionsUsed: WSConfigType<E, P, I>) => void;
+
+/**
+ * The configuration options for the rate limiter.
+ */
+export interface WSConfigType<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+> extends Omit<
+    ConfigType<E, P, I>,
+    | "statusCode"
+    | "standardHeaders"
+    | "requestWasSuccessful"
+    | "handler"
+    | "skip"
+  > {
+  /**
+   * The response body to send back when a client is rate limited.
+   *
+   * Defaults to `'Too many requests, please try again later.'`
+   */
+  message: string;
+
+  /**
+   * The ws status code to send back when a client is rate limited.
+   *
+   * Defaults to `HTTP 1008 Terminating The Connection` (RFC 6455).
+   */
+  statusCode: WSStatusCode;
+
+  /**
+   * Hono ws request handler that sends back a response when a client is
+   * rate-limited.
+   *
+   * By default, sends back the `statusCode` and `message` set via the options.
+   */
+  handler: WSRateLimitExceededEventHandler<E, P, I>;
+
+  /**
+   * Method (in the form of middleware) to determine whether or not this ws request
+   * counts towards a client's quota.
+   *
+   * By default, skips no requests.
+   */
+  skip: (event: unknown, ws: WSContext) => Promisify<boolean>;
+}
 
 export type IncrementResponse = ClientRateLimitInfo;
 
@@ -242,3 +314,9 @@ export type Store<
    */
   prefix?: string;
 };
+
+export type GeneralConfigType<T extends { keyGenerator: unknown }> = Pick<
+  T,
+  "keyGenerator"
+> &
+  Partial<Omit<T, "keyGenerator">>;

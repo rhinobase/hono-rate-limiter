@@ -1,5 +1,10 @@
 import type { Env, Input } from "hono/types";
-import type { ClientRateLimitInfo, ConfigType, Store } from "./types";
+import type {
+  ClientRateLimitInfo,
+  ConfigType,
+  Store,
+  WSConfigType,
+} from "./types";
 
 /**
  * The record that stores information about a client - namely, how many times
@@ -55,9 +60,9 @@ export class MemoryStore<
   /**
    * Method that initializes the store.
    *
-   * @param options {ConfigType} - The options used to setup the middleware.
+   * @param options {ConfigType | WSConfigType} - The options used to setup the middleware.
    */
-  init(options: ConfigType<E, P, I>): void {
+  init(options: ConfigType<E, P, I> | WSConfigType<E, P, I>): void {
     // Get the duration of a window from the options.
     this.windowMs = options.windowMs;
 
