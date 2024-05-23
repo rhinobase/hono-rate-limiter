@@ -28,7 +28,6 @@ export function webSocketLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    blockDuration = 0,
     keyGenerator,
     skip = () => false,
     handler = async (_, ws, options) =>
@@ -45,7 +44,6 @@ export function webSocketLimiter<
     requestStorePropertyName,
     skipFailedRequests,
     skipSuccessfulRequests,
-    blockDuration,
     keyGenerator,
     skip,
     handler,
