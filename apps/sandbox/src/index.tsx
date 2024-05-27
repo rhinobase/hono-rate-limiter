@@ -2,9 +2,9 @@ import { RedisStore } from "@hono-rate-limiter/redis";
 import { kv } from "@vercel/kv";
 import { Hono } from "hono";
 import {
-  rateLimiter,
   type Promisify,
   type RateLimitInfo,
+  rateLimiter,
 } from "hono-rate-limiter";
 import { Page } from "./Page";
 
@@ -29,5 +29,5 @@ app.get(
     }),
     handler: (_, next) => next(),
   }),
-  (c) => c.html(<Page info={c.get("rateLimit")} />)
+  (c) => c.html(<Page info={c.get("rateLimit")} />),
 );
