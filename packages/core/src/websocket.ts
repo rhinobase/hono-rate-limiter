@@ -1,5 +1,5 @@
 import type { Context, Env, Input } from "hono";
-import type { WSEvents } from "hono/ws";
+import type { UpgradeWebSocket, WSEvents } from "hono/ws";
 import MemoryStore from "./store";
 import type { GeneralConfigType, RateLimitInfo, WSConfigType } from "./types";
 import { getKeyAndIncrement, initStore } from "./utils";
@@ -18,7 +18,11 @@ export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(config: GeneralConfigType<WSConfigType<E, P, I>>) {
+>(
+  config: GeneralConfigType<WSConfigType<E, P, I>>,
+): (
+  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
+) => (c: Context<E, P, I>) => Promise<WSEvents> {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -55,8 +59,8 @@ export function webSocketLimiter<
 
   return (
     createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
-  ) => {
-    return async (c: Context<E, P, I>): Promise<WSEvents> => {
+  ) =>
+    async (c: Context<E, P, I>): Promise<WSEvents> => {
       const events = await createEvents(c);
 
       return {
@@ -138,5 +142,4 @@ export function webSocketLimiter<
         },
       };
     };
-  };
 }

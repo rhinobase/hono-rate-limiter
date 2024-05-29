@@ -1,4 +1,4 @@
-import type { Env, Input } from "hono";
+import type { Env, Input, MiddlewareHandler } from "hono";
 import { createMiddleware } from "hono/factory";
 import {
   setDraft6Headers,
@@ -23,7 +23,7 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(config: GeneralConfigType<ConfigType<E, P, I>>) {
+>(config: GeneralConfigType<ConfigType<E, P, I>>): MiddlewareHandler<E, P, I> {
   const {
     windowMs = 60_000,
     limit = 5,
