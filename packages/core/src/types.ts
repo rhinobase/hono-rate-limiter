@@ -183,14 +183,20 @@ export type WSStatusCode =
  * rate-limited.
  *
  * @param context {Context} - The Hono context object.
- * @param next {Next} - The Hono `next` function, can be called to skip responding.
+ * @param event {unknown} - The WebSocket event that triggered the rate limit.
+ * @param ws {WSContext} - The Honos WebSocket context object.
  * @param optionsUsed {ConfigType} - The options used to set up the middleware.
  */
 export type WSRateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-> = (event: unknown, ws: WSContext, optionsUsed: WSConfigType<E, P, I>) => void;
+> = (
+  c: Context<E, P, I>,
+  event: unknown,
+  ws: WSContext,
+  optionsUsed: WSConfigType<E, P, I>,
+) => void;
 
 /**
  * The configuration options for the rate limiter.
@@ -235,7 +241,11 @@ export interface WSConfigType<
    *
    * By default, skips no requests.
    */
-  skip: (event: unknown, ws: WSContext) => Promisify<boolean>;
+  skip: (
+    c: Context<E, P, I>,
+    event: unknown,
+    ws: WSContext,
+  ) => Promisify<boolean>;
 }
 
 export type IncrementResponse = ClientRateLimitInfo;

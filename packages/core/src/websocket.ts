@@ -34,7 +34,7 @@ export function webSocketLimiter<
     skipSuccessfulRequests = false,
     keyGenerator,
     skip = () => false,
-    handler = async (_, ws, options) =>
+    handler = async (_c, _event, ws, options) =>
       ws.close(options.statusCode, options.message),
     store = new MemoryStore<E, P, I>(),
   } = config;
@@ -67,7 +67,7 @@ export function webSocketLimiter<
         ...events,
         onMessage: async (event, ws) => {
           // First check if we should skip the request
-          const isSkippable = await skip(event, ws);
+          const isSkippable = await skip(c, event, ws);
 
           if (isSkippable) {
             await events.onMessage?.(event, ws);
@@ -119,7 +119,7 @@ export function webSocketLimiter<
           // If the client has exceeded their rate limit call the `handler` function.
           if (totalHits > _limit) {
             await shouldSkipRequest();
-            return handler(event, ws, options);
+            return handler(c, event, ws, options);
           }
 
           try {
