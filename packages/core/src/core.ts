@@ -1,20 +1,19 @@
-import type { Context, Env, Input, Next } from "hono";
+import type { Env, Input, MiddlewareHandler } from "hono";
 import { createMiddleware } from "hono/factory";
 import {
   setDraft6Headers,
   setDraft7Headers,
   setRetryAfterHeader,
 } from "./headers";
-import { defaultKeyGenerator } from "./keyGenerator";
 import MemoryStore from "./store";
-import type { ConfigType, RateLimitInfo } from "./types";
-import { isValidStore } from "./validations";
+import type { ConfigType, GeneralConfigType, RateLimitInfo } from "./types";
+import { getKeyAndIncrement, initStore } from "./utils";
 
 /**
  *
- * Create an instance of IP rate-limiting middleware for Hono.
+ * Create an instance of rate-limiting middleware for Hono.
  *
- * @param config {ConfigType} - Options to configure the rate limiter.
+ * @param config x{ConfigType} - Options to configure the rate limiter.
  *
  * @returns - The middleware that rate-limits clients based on your configuration.
  *
@@ -24,7 +23,7 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(config?: Partial<ConfigType<E, P, I>>) {
+>(config: GeneralConfigType<ConfigType<E, P, I>>): MiddlewareHandler<E, P, I> {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -35,14 +34,10 @@ export function rateLimiter<
     requestStorePropertyName = "rateLimitStore",
     skipFailedRequests = false,
     skipSuccessfulRequests = false,
-    keyGenerator = defaultKeyGenerator,
+    keyGenerator,
     skip = () => false,
-    requestWasSuccessful = (c: Context<E, P, I>) => c.res.status < 400,
-    handler = async (
-      c: Context<E, P, I>,
-      _next: Next,
-      options: ConfigType<E, P, I>,
-    ) => {
+    requestWasSuccessful = (c) => c.res.status < 400,
+    handler = async (c, _, options) => {
       c.status(options.statusCode);
 
       const responseMessage =
@@ -53,8 +48,8 @@ export function rateLimiter<
       if (typeof responseMessage === "string") return c.text(responseMessage);
       return c.json(responseMessage);
     },
-    store = new MemoryStore(),
-  } = config ?? {};
+    store = new MemoryStore<E, P, I>(),
+  } = config;
 
   const options = {
     windowMs,
@@ -73,12 +68,7 @@ export function rateLimiter<
     store,
   };
 
-  // Checking if store is valid
-  if (!isValidStore(store))
-    throw new Error("The store is not correctly implmented!");
-
-  // Call the `init` method on the store, if it exists
-  if (typeof store.init === "function") store.init(options);
+  initStore(store, options);
 
   return createMiddleware<E, P, I>(async (c, next) => {
     // First check if we should skip the request
@@ -89,11 +79,11 @@ export function rateLimiter<
       return;
     }
 
-    // Get a unique key for the client
-    const key = await keyGenerator(c);
-
-    // Increment the client's hit counter by one.
-    const { totalHits, resetTime } = await store.increment(key);
+    const { key, totalHits, resetTime } = await getKeyAndIncrement(
+      c,
+      keyGenerator,
+      store,
+    );
 
     // Get the limit (max number of hits) for each client.
     const retrieveLimit = typeof limit === "function" ? limit(c) : limit;

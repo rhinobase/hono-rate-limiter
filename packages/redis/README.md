@@ -1,15 +1,13 @@
-# <div align="center"> `@hono-rate-limiter/redis` </div>
+# <div align="center">🔥`@hono-rate-limiter/redis`🔥</div>
 
 <div align="center">
 
-[![tests](https://img.shields.io/github/actions/workflow/status/rhinobase/hono-rate-limiter/test.yaml)](https://github.com/rhinobase/hono-rate-limiter/actions/workflows/test.yaml)
+[![tests](https://img.shields.io/github/actions/workflow/status/rhinobase/hono-rate-limiter/test.yml)](https://github.com/rhinobase/hono-rate-limiter/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/@hono-rate-limiter/redis.svg)](https://npmjs.org/package/@hono-rate-limiter/redis "View this project on NPM")
 [![npm downloads](https://img.shields.io/npm/dm/@hono-rate-limiter/redis)](https://www.npmjs.com/package/@hono-rate-limiter/redis)
 [![license](https://img.shields.io/npm/l/@hono-rate-limiter/redis)](LICENSE)
 
 </div>
-
-<br>
 
 <div align="center">
 
@@ -22,7 +20,7 @@ middleware.
 ## Installation
 
 ```sh
-# Using npm/yarn/pnpm
+# Using npm/yarn/pnpm/bun
 npm add @hono-rate-limiter/redis
 ```
 
@@ -30,7 +28,7 @@ npm add @hono-rate-limiter/redis
 
 ### Examples
 
-To use it with a [`@vercel/kv`](https://github.com/redis/node-redis) client:
+Using with [`@vercel/kv`](https://github.com/redis/node-redis)
 
 ```ts
 import { RedisStore } from "@hono-rate-limiter/redis";
@@ -65,7 +63,7 @@ export type RedisClient = {
 };
 ```
 
-#### Examples
+#### Usage with connectors
 
 [`@vercel/kv`](https://github.com/@vercel/kv)
 
@@ -79,10 +77,14 @@ const store = new RedisStore({ client: kv });
 
 ```ts
 import { Redis } from "@upstash/redis"
+/**
+ * for Cloudflare
+ * import { Redis } from "@upstash/redis/cloudflare"
+ */
 
 const redis = new Redis({
-url: <UPSTASH_REDIS_REST_URL>,
-token: <UPSTASH_REDIS_REST_TOKEN>,
+  url: <UPSTASH_REDIS_REST_URL>,
+  token: <UPSTASH_REDIS_REST_TOKEN>,
 })
 
 const store = new RedisStore({ client: redis })

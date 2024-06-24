@@ -2,6 +2,29 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.0-rc.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.4.0-rc.0...core-0.4.0-rc.1) (2024-05-20)
+
+
+### Bug Fixes
+
+* **core:** correct try catch of websocket limiter ([5517f2b](https://github.com/rhinobase/hono-rate-limiter/commit/5517f2b693aae463646075f06f068f3732458666))
+
+## [0.4.0-rc.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.3.0...core-0.4.0-rc.0) (2024-05-19)
+
+
+### Features
+
+* **core:** websockets limiter ([1ddd912](https://github.com/rhinobase/hono-rate-limiter/commit/1ddd9127bb1ef29b24d1eb6a027953728ff9239d))
+
+## [0.3.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.3...core-0.3.0) (2024-05-01)
+
+
+### Bug Fixes
+
+* **core:** made keyGenerator func required ([7a74ddd](https://github.com/rhinobase/hono-rate-limiter/commit/7a74ddd17b227e9dcf22372ad2cd73200307a28e))
+* **core:** updated the key generator function ([600a0ea](https://github.com/rhinobase/hono-rate-limiter/commit/600a0ea3b1b80616470ddeaebffde46303a71869))
+* resolved few biome errors ([c55dbca](https://github.com/rhinobase/hono-rate-limiter/commit/c55dbcaab97c69a883c0a0cf23f3efeec9c3ef63))
+
 ## [0.2.3](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.2.2...core-0.2.3) (2024-03-27)
 
 

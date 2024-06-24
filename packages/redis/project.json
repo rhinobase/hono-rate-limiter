@@ -11,6 +11,7 @@
         "outputPath": "dist/packages/redis",
         "main": "packages/redis/src/index.ts",
         "tsConfig": "packages/redis/tsconfig.lib.json",
+        "rollupConfig": "rollup.config.js",
         "assets": [
           {
             "glob": "packages/redis/README.md",

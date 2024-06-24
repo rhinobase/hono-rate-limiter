@@ -327,7 +327,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should call `increment` on the store (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({ keyGenerator, store }),
@@ -341,7 +341,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should call `resetKey` on the store (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: [
@@ -362,7 +362,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should call `get` on the store (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       let response: ClientRateLimitInfo | undefined;
       const app = createAdaptorServer(
         createServer({
@@ -385,7 +385,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when requests succeed and `skipSuccessfulRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -404,7 +404,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should not decrement hits when requests fail and `skipSuccessfulRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -423,7 +423,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -442,7 +442,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -464,7 +464,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -484,7 +484,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -504,7 +504,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when requests fail and `skipFailedRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -523,7 +523,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should not decrement hits when requests succeed and `skipFailedRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -542,7 +542,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when requests fail, `skipFailedRequests` is set to true and a custom `requestWasSuccessful` method used that returns a promise (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -561,43 +561,43 @@ describe("middleware test", () => {
 
   // FIXME: This test times out  _sometimes_ on MacOS and Windows, so it is disabled for now
   /*
-	;(platform === 'darwin' ? it.skip : it).each([
-		['modern', new MockStore()],
-	])(
-		'should decrement hits when response closes and `skipFailedRequests` is set to true (%s store)',
-		async (name, store) => {
-			vi.useRealTimers()
-			vi.setTimeout(60_000)
+  ;(platform === 'darwin' ? it.skip : it).each([
+    ['modern', new MockStore()],
+  ])(
+    'should decrement hits when response closes and `skipFailedRequests` is set to true (%s store)',
+    async (_name, store) => {
+      vi.useRealTimers()
+      vi.setTimeout(60_000)
 
-			const app = createAdaptorServer(createServer(
-				rateLimiter({
-					skipFailedRequests: true,
-					store,
-				}),
-			)
+      const app = createAdaptorServer(createServer(
+        rateLimiter({
+          skipFailedRequests: true,
+          store,
+        }),
+      )
 
-			let _resolve: () => void
-			const connectionClosed = new Promise<void>((resolve) => {
-				_resolve = resolve
-			})
+      let _resolve: () => void
+      const connectionClosed = new Promise<void>((resolve) => {
+        _resolve = resolve
+      })
 
-			app.get('/hang-server', (_request, response) => {
-				response.on('close', _resolve)
-			})
+      app.get('/hang-server', (_request, response) => {
+        response.on('close', _resolve)
+      })
 
-			const hangRequest = request(app).get('/hang-server').timeout(10)
+      const hangRequest = request(app).get('/hang-server').timeout(10)
 
-			await expect(hangRequest).rejects.toThrow()
-			await connectionClosed
+      await expect(hangRequest).rejects.toThrow()
+      await connectionClosed
 
-			expect(store.decrementWasCalled).toEqual(true)
-		},
-	)
-	*/
+      expect(store.decrementWasCalled).toEqual(true)
+    },
+  )
+  */
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when response emits an error and `skipFailedRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -616,7 +616,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should decrement hits when rate limit is reached and `skipFailedRequests` is set to true (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       const app = createAdaptorServer(
         createServer({
           middleware: rateLimiter({
@@ -638,7 +638,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should forward errors in the handler using `next()` (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       let errorCaught = false;
 
       const app = createAdaptorServer(
@@ -667,7 +667,7 @@ describe("middleware test", () => {
 
   it.each([["modern", new MockStore()]])(
     "should forward errors in `skip()` using `next()` (%s store)",
-    async (name, store) => {
+    async (_name, store) => {
       let errorCaught = false;
 
       const app = createAdaptorServer(

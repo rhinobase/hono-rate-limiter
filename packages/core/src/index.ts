@@ -1,2 +1,3 @@
 export { rateLimiter } from "./core";
-export * from "./types";
+export { webSocketLimiter } from "./websocket";
+export type * from "./types";

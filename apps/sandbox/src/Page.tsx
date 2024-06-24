@@ -6,6 +6,7 @@ import { Layout } from "./Layout";
 
 const checkOut = css`
   font-family: monospace;
+  user-select: none;
   padding: 1rem;
   border-radius: 0.75rem;
   border: 1px solid rgb(209 213 219);
@@ -16,7 +17,7 @@ const checkOut = css`
   @media (prefers-color-scheme: dark) {
     color: white;
     border: 1px solid rgb(38 38 38);
-    background-color: rgba(39, 39, 42, 0.3);
+    background-color: rgba(39, 39, 42, 0.4);
   }
 `;
 
@@ -60,6 +61,9 @@ const linkClass = css`
   font-weight: 600;
   @media (prefers-color-scheme: dark) {
     color: white;
+  }
+  &:hover {
+    text-decoration-line: underline;
   }
 `;
 

@@ -2,6 +2,7 @@ import { css } from "hono/css";
 import type { FC } from "hono/jsx";
 
 const cardLayout = css`
+  user-select: none;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid transparent;
@@ -26,7 +27,7 @@ const cardLayout = css`
 const labelClass = css`
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin: 0 0 0.75rem;
   @media (prefers-color-scheme: dark) {
     color: white;
   }
@@ -34,6 +35,7 @@ const labelClass = css`
 
 const valueClass = css`
   font-size: 14px;
+  margin: 0;
   opacity: 0.5;
   @media (prefers-color-scheme: dark) {
     color: white;
@@ -45,8 +47,8 @@ export type Card = { label: string; value?: string | number };
 export const Card: FC<Card> = ({ label, value }: Card) => {
   return (
     <div class={cardLayout}>
-      <div class={labelClass}>{label}</div>
-      <div class={valueClass}>{value}</div>
+      <h2 class={labelClass}>{label}</h2>
+      <p class={valueClass}>{value}</p>
     </div>
   );
 };

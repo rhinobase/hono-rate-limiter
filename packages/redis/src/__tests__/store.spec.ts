@@ -3,9 +3,9 @@ import type { ConfigType } from "hono-rate-limiter";
 import { RedisStore } from "../";
 
 const client = new Redis({
-  // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+  // biome-ignore lint/complexity/useLiteralKeys: Clashing with another linter
   url: process.env["UPSTASH_REDIS_REST_URL"] ?? "http://localhost:8080",
-  // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+  // biome-ignore lint/complexity/useLiteralKeys: Clashing with another linter
   token: process.env["UPSTASH_REDIS_REST_TOKEN"] ?? "example_token",
 });
 
