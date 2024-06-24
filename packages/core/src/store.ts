@@ -6,10 +6,7 @@ import type { ClientRateLimitInfo, ConfigType, Store } from "./types";
  *
  * Similar to `ClientRateLimitInfo`, except `resetTime` is a compulsory field.
  */
-type Client = {
-  totalHits: number;
-  resetTime: Date;
-};
+type Client = Required<ClientRateLimitInfo>;
 
 /**
  * A `Store` that stores the hit count for each client in memory.
@@ -177,14 +174,14 @@ export class MemoryStore implements Store {
    */
   private getClient(key: string): Client {
     // If we already have a client for that key in the `current` map, return it.
-    // biome-ignore lint/style/noNonNullAssertion: safe to use cause already checked
-    if (this.current.has(key)) return this.current.get(key)!;
+    const currentKey = this.current.get(key);
+    if (currentKey) return currentKey;
 
     let client: Client;
-    if (this.previous.has(key)) {
+    const previousKey = this.previous.get(key);
+    if (previousKey) {
       // If it's in the `previous` map, take it out
-      // biome-ignore lint/style/noNonNullAssertion: safe to use cause already checked
-      client = this.previous.get(key)!;
+      client = previousKey;
       this.previous.delete(key);
     } else {
       // Finally, if we don't have an existing entry for this client, create a new one

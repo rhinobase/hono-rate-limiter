@@ -170,8 +170,6 @@ export type ConfigType<
   store: Store;
 };
 
-export type IncrementResponse = ClientRateLimitInfo;
-
 /**
  * An interface that all hit counter stores must implement.
  */
@@ -198,9 +196,9 @@ export type Store = {
    *
    * @param key {string} - The identifier for a client.
    *
-   * @returns {IncrementResponse | undefined} - The number of hits and reset time for that client.
+   * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
-  increment: (key: string) => Promisify<IncrementResponse>;
+  increment: (key: string) => Promisify<ClientRateLimitInfo>;
 
   /**
    * Method to decrement a client's hit counter.

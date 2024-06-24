@@ -1,15 +1,27 @@
+import type { KVNamespace } from "@cloudflare/workers-types";
 import type {
   ClientRateLimitInfo,
-  IncrementResponse,
   ConfigType as RateLimitConfiguration,
   Store,
 } from "hono-rate-limiter";
+import type { Options } from "./types";
 
-export class CloudflareStore implements Store {
+export class WorkersKVStore implements Store {
   /**
    * The text to prepend to the key in Redis.
    */
   prefix: string;
+
+  /**
+   * Whether to reset the expiry for a particular key whenever its hit count
+   * changes.
+   */
+  resetExpiryOnChange: boolean;
+
+  /**
+   * The KV namespace to use.
+   */
+  namespace: KVNamespace;
 
   /**
    * The number of milliseconds to remember that user's requests.
@@ -22,7 +34,9 @@ export class CloudflareStore implements Store {
    * @param options {Options} - The configuration options for the store.
    */
   constructor(options: Options) {
+    this.namespace = options.namespace;
     this.prefix = options.prefix ?? "hrl:";
+    this.resetExpiryOnChange = options.resetExpiryOnChange ?? false;
   }
 
   /**
@@ -53,13 +67,14 @@ export class CloudflareStore implements Store {
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    const results = await this.client.evalsha<never[], RedisReply>(
-      await this.getScriptSha,
-      [this.prefixKey(key)],
-      [],
+    const result = await this.namespace.get<ClientRateLimitInfo>(
+      this.prefixKey(key),
+      "json",
     );
 
-    return parseScriptResponse(results);
+    if (result) return result;
+
+    return undefined;
   }
 
   /**
@@ -67,11 +82,31 @@ export class CloudflareStore implements Store {
    *
    * @param key {string} - The identifier for a client
    *
-   * @returns {IncrementResponse} - The number of hits and reset time for that client
+   * @returns {ClientRateLimitInfo} - The number of hits and reset time for that client
    */
-  async increment(key: string): Promise<IncrementResponse> {
-    const results = await this.retryableIncrement(key);
-    return parseScriptResponse(results);
+  async increment(key: string): Promise<ClientRateLimitInfo> {
+    const keyWithPrefix = this.prefixKey(key);
+    let payload = await this.namespace.get<ClientRateLimitInfo>(
+      keyWithPrefix,
+      "json",
+    );
+
+    if (payload) payload.totalHits += 1;
+    else {
+      payload = {
+        totalHits: 1,
+        resetTime: new Date(),
+      };
+      payload.resetTime?.setTime(this.windowMs);
+    }
+
+    await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
+      expiration: payload.resetTime
+        ? Math.floor(payload.resetTime.getTime() / 1000)
+        : undefined,
+    });
+
+    return payload;
   }
 
   /**
@@ -80,7 +115,20 @@ export class CloudflareStore implements Store {
    * @param key {string} - The identifier for a client
    */
   async decrement(key: string): Promise<void> {
-    await this.client.decr(this.prefixKey(key));
+    const keyWithPrefix = this.prefixKey(key);
+    const payload = await this.namespace.get<ClientRateLimitInfo>(
+      keyWithPrefix,
+      "json",
+    );
+
+    if (!payload) return;
+
+    payload.totalHits -= 1;
+    await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
+      expiration: payload.resetTime
+        ? Math.floor(payload.resetTime.getTime() / 1000)
+        : undefined,
+    });
   }
 
   /**
@@ -89,6 +137,6 @@ export class CloudflareStore implements Store {
    * @param key {string} - The identifier for a client
    */
   async resetKey(key: string): Promise<void> {
-    await this.client.del(this.prefixKey(key));
+    await this.namespace.delete(this.prefixKey(key));
   }
 }

@@ -1,6 +1,5 @@
 import type {
   ClientRateLimitInfo,
-  IncrementResponse,
   ConfigType as RateLimitConfiguration,
   Store,
 } from "hono-rate-limiter";
@@ -177,9 +176,9 @@ export class RedisStore implements Store {
    *
    * @param key {string} - The identifier for a client
    *
-   * @returns {IncrementResponse} - The number of hits and reset time for that client
+   * @returns {ClientRateLimitInfo} - The number of hits and reset time for that client
    */
-  async increment(key: string): Promise<IncrementResponse> {
+  async increment(key: string): Promise<ClientRateLimitInfo> {
     const results = await this.retryableIncrement(key);
     return parseScriptResponse(results);
   }
