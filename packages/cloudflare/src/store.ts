@@ -86,7 +86,7 @@ export class WorkersKVStore implements Store {
    */
   async increment(key: string): Promise<ClientRateLimitInfo> {
     const keyWithPrefix = this.prefixKey(key);
-    let payload = await this.namespace.get<ClientRateLimitInfo>(
+    let payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
     );
@@ -97,13 +97,11 @@ export class WorkersKVStore implements Store {
         totalHits: 1,
         resetTime: new Date(),
       };
-      payload.resetTime?.setTime(this.windowMs);
+      payload.resetTime.setTime(this.windowMs);
     }
 
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
-      expiration: payload.resetTime
-        ? Math.floor(payload.resetTime.getTime() / 1000)
-        : undefined,
+      expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
 
     return payload;
@@ -116,7 +114,7 @@ export class WorkersKVStore implements Store {
    */
   async decrement(key: string): Promise<void> {
     const keyWithPrefix = this.prefixKey(key);
-    const payload = await this.namespace.get<ClientRateLimitInfo>(
+    const payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
     );
@@ -125,9 +123,7 @@ export class WorkersKVStore implements Store {
 
     payload.totalHits -= 1;
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
-      expiration: payload.resetTime
-        ? Math.floor(payload.resetTime.getTime() / 1000)
-        : undefined,
+      expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
   }
 
