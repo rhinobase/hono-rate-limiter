@@ -1,11 +1,12 @@
 {
   "version": "1.0.0",
   "scripts": {
-    "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.2.6"
+    "hono": "^4.2.6",
+    "hono-rate-limiter": "^0.3.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240403.0",

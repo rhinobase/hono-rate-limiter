@@ -47,6 +47,13 @@ export interface ConfigType<
   statusCode: StatusCode;
 
   /**
+   * The name of the property on the context object to store the rate limit info.
+   *
+   * Defaults to `rateLimit`.
+   */
+  requestPropertyName: string;
+
+  /**
    * Method to generate custom identifiers for clients.
    */
   rateLimitBinding: RateLimitBinding;

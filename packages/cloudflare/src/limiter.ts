@@ -23,6 +23,7 @@ export function cloudflareRateLimiter<
   const {
     message = "Too many requests, please try again later.",
     statusCode = 429,
+    requestPropertyName = "rateLimit",
     rateLimitBinding,
     keyGenerator,
     skip = () => false,
@@ -42,6 +43,7 @@ export function cloudflareRateLimiter<
   const options = {
     message,
     statusCode,
+    requestPropertyName,
     rateLimitBinding,
     keyGenerator,
     skip,
@@ -62,6 +64,10 @@ export function cloudflareRateLimiter<
 
     // Getting the response
     const { success } = await rateLimitBinding.limit({ key: key });
+
+    // Set the rate limit information in the hono context
+    // @ts-expect-error TODO: need to figure this out
+    c.set(requestPropertyName, success);
 
     // If the client has exceeded their rate limit, set the Retry-After header
     // and call the `handler` function.

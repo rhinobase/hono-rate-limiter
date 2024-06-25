@@ -1,21 +1,16 @@
 name = "worker"
 compatibility_date = "2023-12-01"
+main = "src/index.tsx"
 
-# [vars]
-# MY_VAR = "my-variable"
+# The rate limiting API is in open beta.
+[[unsafe.bindings]]
+name = "RATE_LIMITER"
+type = "ratelimit"
+# An identifier you define, that is unique to your Cloudflare account.
+# Must be an integer.
+namespace_id = "1001"
 
-# [[kv_namespaces]]
-# binding = "MY_KV_NAMESPACE"
-# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-# [[r2_buckets]]
-# binding = "MY_BUCKET"
-# bucket_name = "my-bucket"
-
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "my-database"
-# database_id = ""
-
-# [ai]
-# binding = "AI"
+# Limit: the number of tokens allowed within a given period in a single
+# Cloudflare location
+# Period: the duration of the period, in seconds. Must be either 10 or 60
+simple = { limit = 10, period = 60 }
