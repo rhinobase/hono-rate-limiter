@@ -25,10 +25,9 @@
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
   },
   "peerDependencies": {
+    "@cloudflare/workers-types": "^4.20240620.0",
+    "hono": "^4.4.8",
     "hono-rate-limiter": "^0.2.1"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240620.0"
   },
   "types": "./index.cjs.d.ts"
 }
