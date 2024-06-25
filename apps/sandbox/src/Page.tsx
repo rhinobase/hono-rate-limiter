@@ -117,6 +117,7 @@ export const Page: FC<Page> = ({
       </h1>
       <div class={cardCss}>
         {cards.map((card) => (
+          // biome-ignore lint/correctness/useJsxKeyInIterable: There is no key here
           <Card {...card} />
         ))}
       </div>

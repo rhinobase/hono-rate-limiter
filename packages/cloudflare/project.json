@@ -12,6 +12,7 @@
         "outputPath": "dist/packages/cloudflare",
         "main": "packages/cloudflare/src/index.ts",
         "tsConfig": "packages/cloudflare/tsconfig.lib.json",
+        "rollupConfig": "rollup.config.js",
         "assets": [
           {
             "glob": "packages/cloudflare/README.md",
@@ -21,7 +22,6 @@
         ],
         "project": "packages/cloudflare/package.json",
         "compiler": "swc",
-        "rollupConfig": "rollup.config.js",
         "format": ["cjs", "esm"],
         "configurations": {
           "production": {
