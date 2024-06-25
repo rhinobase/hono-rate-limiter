@@ -28,6 +28,20 @@
       "options": {
         "reportsDirectory": "../../coverage/packages/cloudflare"
       }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional"
+      }
+    },
+    "deploy": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public",
+        "distFolderPath": "dist/packages/redis"
+      },
+      "dependsOn": ["build"]
     }
   },
   "tags": [],

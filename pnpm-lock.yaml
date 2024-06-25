@@ -22,6 +22,9 @@ devDependencies:
   '@cloudflare/workers-types':
     specifier: ^4.20240419.0
     version: 4.20240419.0
+  '@hono/node-ws':
+    specifier: ^1.0.1
+    version: 1.0.1(@hono/node-server@1.11.4)
   '@jscutlery/semver':
     specifier: ^5.2.2
     version: 5.2.2(@nx/devkit@18.1.2)
@@ -1888,7 +1891,19 @@ packages:
   /@hono/node-server@1.11.4:
     resolution: {integrity: sha512-8TOiiiAqcFC6f62P7M9p6adQREAlWdVi1awehAwgWW+3R65/rKzHnLARO/Hu/466z01VNViBoogqatqXJMyItA==}
     engines: {node: '>=18.14.1'}
-    dev: false
+
+  /@hono/node-ws@1.0.1(@hono/node-server@1.11.4):
+    resolution: {integrity: sha512-mY2oXLq0DPBDT99cT+eJy2YDufB6GYHU1LnUkE8d/Ej/yKp1+VTPrD88oYh79pXHUP0yMeHZV2dTt5O4OpkndA==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      '@hono/node-server': ^1.11.1
+    dependencies:
+      '@hono/node-server': 1.11.4
+      ws: 8.17.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: true
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -10468,6 +10483,19 @@ packages:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
+    dev: true
+
+  /ws@8.17.1:
+    resolution: {integrity: sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
     dev: true
 
   /y18n@5.0.8:
