@@ -1,4 +1,4 @@
-name = "worker"
+name = "hono-rate-limiter"
 compatibility_date = "2023-12-01"
 main = "src/index.tsx"
 
