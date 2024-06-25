@@ -7,6 +7,7 @@
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/redis",
         "main": "packages/redis/src/index.ts",
@@ -21,7 +22,16 @@
         ],
         "project": "packages/redis/package.json",
         "compiler": "swc",
-        "format": ["cjs", "esm"]
+        "format": ["cjs", "esm"],
+        "configurations": {
+          "production": {
+            "optimization": true,
+            "sourceMap": false,
+            "namedChunks": false,
+            "extractLicenses": true,
+            "vendorChunk": false
+          }
+        }
       }
     },
     "nx-release-publish": {

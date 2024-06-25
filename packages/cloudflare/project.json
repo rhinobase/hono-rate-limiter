@@ -7,14 +7,31 @@
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/cloudflare",
         "main": "packages/cloudflare/src/index.ts",
         "tsConfig": "packages/cloudflare/tsconfig.lib.json",
-        "assets": [],
+        "assets": [
+          {
+            "glob": "packages/cloudflare/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
         "project": "packages/cloudflare/package.json",
         "compiler": "swc",
-        "format": ["cjs", "esm"]
+        "rollupConfig": "rollup.config.js",
+        "format": ["cjs", "esm"],
+        "configurations": {
+          "production": {
+            "optimization": true,
+            "sourceMap": false,
+            "namedChunks": false,
+            "extractLicenses": true,
+            "vendorChunk": false
+          }
+        }
       }
     },
     "nx-release-publish": {
@@ -39,7 +56,7 @@
       "executor": "ngx-deploy-npm:deploy",
       "options": {
         "access": "public",
-        "distFolderPath": "dist/packages/redis"
+        "distFolderPath": "dist/packages/cloudflare"
       },
       "dependsOn": ["build"]
     }
