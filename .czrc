@@ -9,8 +9,16 @@
       "name": "redis:                anything redis specific"
     },
     {
+      "value": "cloudflare",
+      "name": "cloudflare:            anything cloudflare specific"
+    },
+    {
       "value": "sandbox",
       "name": "sandbox:              anything sandbox specific"
+    },
+    {
+      "value": "worker",
+      "name": "worker:               anything worker specific"
     }
   ],
   "scopesSearchValue": true,
