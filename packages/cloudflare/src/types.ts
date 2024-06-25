@@ -17,6 +17,10 @@ export type RateLimitExceededEventHandler<
   I extends Input = Input,
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
+export type RateLimitBinding = {
+  limit: (options: { key: string }) => Promise<{ success: boolean }>;
+};
+
 /**
  * The configuration options for the rate limiter.
  */
@@ -45,9 +49,7 @@ export interface ConfigType<
   /**
    * Method to generate custom identifiers for clients.
    */
-  rateLimitBinding: {
-    limit: (options: { key: string }) => Promise<{ success: boolean }>;
-  };
+  rateLimitBinding: RateLimitBinding;
 
   /**
    * Method to generate custom identifiers for clients.
@@ -84,10 +86,4 @@ export type Options = {
    * The text to prepend to the key in Redis.
    */
   readonly prefix?: string;
-
-  /**
-   * Whether to reset the expiry for a particular key whenever its hit count
-   * changes.
-   */
-  readonly resetExpiryOnChange?: boolean;
 };

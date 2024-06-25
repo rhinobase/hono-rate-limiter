@@ -13,12 +13,6 @@ export class WorkersKVStore implements Store {
   prefix: string;
 
   /**
-   * Whether to reset the expiry for a particular key whenever its hit count
-   * changes.
-   */
-  resetExpiryOnChange: boolean;
-
-  /**
    * The KV namespace to use.
    */
   namespace: KVNamespace;
@@ -36,7 +30,6 @@ export class WorkersKVStore implements Store {
   constructor(options: Options) {
     this.namespace = options.namespace;
     this.prefix = options.prefix ?? "hrl:";
-    this.resetExpiryOnChange = options.resetExpiryOnChange ?? false;
   }
 
   /**
