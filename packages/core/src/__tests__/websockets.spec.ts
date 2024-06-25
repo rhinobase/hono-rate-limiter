@@ -1,8 +1,7 @@
 import type { Store } from "../types";
 import { webSocketLimiter } from "../websocket";
-import { keyGenerator } from "./helpers";
+import { createWsServer, keyGenerator } from "./helpers";
 
-// TODO: Write tests
 describe("websockets middleware test", () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -64,5 +63,11 @@ describe("websockets middleware test", () => {
     webSocketLimiter({ keyGenerator, store });
 
     expect(store.initWasCalled).toEqual(true);
+  });
+
+  it("should integrate with the server", async () => {
+    createWsServer({
+      middleware: webSocketLimiter({ keyGenerator, limit: 2 }),
+    });
   });
 });

@@ -1,5 +1,5 @@
 import type { Context, Env, Input } from "hono";
-import type { UpgradeWebSocket, WSEvents } from "hono/ws";
+import type { WSEvents } from "hono/ws";
 import MemoryStore from "./store";
 import type { GeneralConfigType, RateLimitInfo, WSConfigType } from "./types";
 import { getKeyAndIncrement, initStore } from "./utils";
