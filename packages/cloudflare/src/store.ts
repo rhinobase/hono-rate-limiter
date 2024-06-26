@@ -1,4 +1,3 @@
-import type { KVNamespace } from "@cloudflare/workers-types";
 import type {
   ClientRateLimitInfo,
   ConfigType as RateLimitConfiguration,
@@ -6,7 +5,7 @@ import type {
 } from "hono-rate-limiter";
 import type { Options } from "./types";
 
-export class WorkersKVStore implements Store {
+export class WorkersKVStore<KVNamespace> implements Store {
   /**
    * The text to prepend to the key in Redis.
    */
@@ -27,7 +26,7 @@ export class WorkersKVStore implements Store {
    *
    * @param options {Options} - The configuration options for the store.
    */
-  constructor(options: Options) {
+  constructor(options: Options<KVNamespace>) {
     this.namespace = options.namespace;
     this.prefix = options.prefix ?? "hrl:";
   }
@@ -60,6 +59,7 @@ export class WorkersKVStore implements Store {
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
+    // @ts-ignore
     const result = await this.namespace.get<ClientRateLimitInfo>(
       this.prefixKey(key),
       "json",
@@ -79,6 +79,7 @@ export class WorkersKVStore implements Store {
    */
   async increment(key: string): Promise<ClientRateLimitInfo> {
     const keyWithPrefix = this.prefixKey(key);
+    // @ts-ignore
     let payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
@@ -93,6 +94,7 @@ export class WorkersKVStore implements Store {
       payload.resetTime.setTime(this.windowMs);
     }
 
+    // @ts-ignore
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
       expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
@@ -107,6 +109,8 @@ export class WorkersKVStore implements Store {
    */
   async decrement(key: string): Promise<void> {
     const keyWithPrefix = this.prefixKey(key);
+
+    // @ts-ignore
     const payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
@@ -115,6 +119,8 @@ export class WorkersKVStore implements Store {
     if (!payload) return;
 
     payload.totalHits -= 1;
+
+    // @ts-ignore
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
       expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
@@ -126,6 +132,7 @@ export class WorkersKVStore implements Store {
    * @param key {string} - The identifier for a client
    */
   async resetKey(key: string): Promise<void> {
+    // @ts-ignore
     await this.namespace.delete(this.prefixKey(key));
   }
 }

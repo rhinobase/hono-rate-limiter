@@ -1,4 +1,3 @@
-import type { KVNamespace } from "@cloudflare/workers-types";
 import type { Context, Env, Input, Next } from "hono";
 import type { Promisify } from "hono-rate-limiter";
 import type { StatusCode } from "hono/utils/http-status";
@@ -83,7 +82,7 @@ export interface ConfigType<
 /**
  * The configuration options for the store.
  */
-export type Options = {
+export type Options<KVNamespace> = {
   /**
    * The KV namespace to use.
    */

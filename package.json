@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
-    "@cloudflare/workers-types": "^4.20240419.0",
     "@hono/node-ws": "^1.0.1",
     "@jscutlery/semver": "^5.2.2",
     "@nx/devkit": "18.1.2",
