@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.1](https://github.com/rhinobase/hono-rate-limiter/compare/cloudflare-0.1.0...cloudflare-0.1.1) (2024-06-26)
+
+
+### Bug Fixes
+
+* **cloudflare:** resolved build errors ([309dd04](https://github.com/rhinobase/hono-rate-limiter/commit/309dd049a574f6fa8c7f49c09b5ae99f6bbbe067))
+
 ## 0.1.0 (2024-06-25)
 
 
