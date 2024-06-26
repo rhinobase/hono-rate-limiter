@@ -1,20 +1,27 @@
+import {
+  type RateLimitBinding,
+  cloudflareRateLimiter,
+} from "@hono-rate-limiter/cloudflare";
 import { Hono } from "hono";
 import { Page } from "./Page";
 
-type RateLimitBinding = unknown;
-
-const app = new Hono<{
+type AppType = {
   Variables: {
     rateLimit: boolean;
   };
   Bindings: {
     RATE_LIMITER: RateLimitBinding;
   };
-}>();
+};
 
-app.get(
+const app = new Hono<AppType>().get(
   "/",
-  async (c, next) => await next(),
+  (c, next) =>
+    cloudflareRateLimiter<AppType>({
+      rateLimitBinding: c.env.RATE_LIMITER,
+      keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "",
+      handler: (_, next) => next(),
+    })(c, next),
   (c) => c.html(<Page isSuccessful={c.get("rateLimit")} />),
 );
 
