@@ -12,7 +12,7 @@
     "rate-limiter",
     "honojs"
   ],
-  "homepage": "https://hono-rate-limiter.vercel.app",
+  "homepage": "https://hono-rate-limiter.rhinobase.workers.dev",
   "publishConfig": {
     "access": "public"
   },
