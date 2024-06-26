@@ -45,16 +45,20 @@ For more info on setting up your Workers Rate Limiting API you can check out [Ra
 ```ts
 import { cloudflareRateLimiter, RateLimitBinding } from "@hono-rate-limiter/cloudflare";
 
-type Bindings = {
-  RATE_LIMITER: RateLimitBinding;
+type AppType = {
+  Variables: {
+    rateLimit: boolean;
+  };
+  Bindings: {
+    RATE_LIMITER: RateLimitBinding;
+  };
 };
 
 // Apply the rate limiting middleware to all requests.
-app.use((c: Context, next: Next) =>
-  rateLimiter({
+const app = new Hono<AppType>().use((c: Context, next: Next) =>
+  cloudflareRateLimiter<AppType>({
     rateLimitBinding: c.env.RATE_LIMITER,
     keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "", // Method to generate custom identifiers for clients.
-    // store: ... , // Redis, MemoryStore, etc.
   })(c, next)
 );
 ```

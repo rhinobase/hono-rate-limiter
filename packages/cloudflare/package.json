@@ -25,7 +25,9 @@
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
   },
   "peerDependencies": {
-    "hono": "^4.4.8",
+    "hono": "^4.4.8"
+  },
+  "devDependencies": {
     "hono-rate-limiter": "^0.2.1"
   },
   "types": "./index.cjs.d.ts"
