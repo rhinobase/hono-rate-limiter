@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.0](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.4.0-rc.1...core-0.4.0) (2024-06-26)
+
+
+### Features
+
+* **cloudflare:** added worker kv store ([924df26](https://github.com/rhinobase/hono-rate-limiter/commit/924df2690c37dd0e3224e7afed9ad2a6813a3a18))
+
 ## [0.4.0-rc.1](https://github.com/rhinobase/hono-rate-limiter/compare/core-0.4.0-rc.0...core-0.4.0-rc.1) (2024-05-20)
 
 
