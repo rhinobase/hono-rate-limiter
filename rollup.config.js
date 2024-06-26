@@ -1,8 +1,6 @@
 const terser = require("@rollup/plugin-terser");
 
-module.exports = (config) => {
-  return {
-    ...config,
-    plugins: config.plugins ? [terser(), ...config.plugins] : [],
-  };
-};
+module.exports = (config) => ({
+  ...config,
+  plugins: config.plugins ? [terser(), ...config.plugins] : [],
+});
