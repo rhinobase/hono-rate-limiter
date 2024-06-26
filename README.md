@@ -108,6 +108,11 @@ Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creat
 - The `keyGenerator` function determines what to limit a request on, it should represent a unique characteristic of a user or class of user that you wish to rate limit. Good choices include API keys in `Authorization` headers, URL paths or routes, specific query parameters used by your application, and/or user IDs.
 - It is not recommended to use IP addresses (since these can be shared by many users in many valid cases) or locations (the same), as you may find yourself unintentionally rate limiting a wider group of users than you intended.
 
+## Examples
+
+- [hono-rate-limiter.vercel.app](https://hono-rate-limiter.vercel.app) - Uses Vercel KV and deployed on Vercel
+- [hono-rate-limiter.rhinobase.workers.dev](https://hono-rate-limiter.rhinobase.workers.dev) - Built using Cloudflare Workers
+
 ## Contributing
 
 We would love to have more contributors involved!

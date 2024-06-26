@@ -23,7 +23,7 @@ const heading = css`
   text-align: center;
   line-height: 1;
   font-weight: 600;
-  font-size: 1.31rem;
+  font-size: 2.31rem;
   @media (prefers-color-scheme: dark) {
     color: white;
   }
@@ -46,6 +46,16 @@ const linkClass = css`
   }
   &:hover {
     text-decoration-line: underline;
+  }
+`;
+
+const paragraph = css`
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.8;
+  text-align: center;
+  @media (prefers-color-scheme: dark) {
+    color: white;
   }
 `;
 
@@ -74,7 +84,11 @@ export const Page: FC<Page> = ({ isSuccessful }: Page) => {
           "You have reached the limit, please come back later"
         )}
       </h1>
-      <div />
+      <p class={paragraph}>
+        To get started, start by refreshing the page. We limit usage to 10
+        requests per 60 seconds to ensure smooth performance. If you reach this
+        limit, please wait a moment and refresh the page again to continue.
+      </p>
     </Layout>
   );
 };
