@@ -5,7 +5,7 @@
   "scripts": {
     "commit": "czg",
     "prepare": "is-ci || husky install",
-    "format": "biome check --apply ."
+    "format": "biome check --write ."
   },
   "private": true,
   "dependencies": {
@@ -41,7 +41,6 @@
     "lint-staged": "^15.2.2",
     "ngx-deploy-npm": "^8.0.1",
     "nx": "19.3.1",
-    "prettier": "^2.6.2",
     "supertest": "^6.3.4",
     "swc-loader": "0.1.15",
     "tslib": "^2.6.2",
