@@ -13,7 +13,7 @@ import { getKeyAndIncrement, initStore } from "./utils";
  *
  * Create an instance of rate-limiting middleware for Hono.
  *
- * @param config x{ConfigType} - Options to configure the rate limiter.
+ * @param config {ConfigType} - Options to configure the rate limiter.
  *
  * @returns - The middleware that rate-limits clients based on your configuration.
  *
