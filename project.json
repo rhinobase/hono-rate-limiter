@@ -1,7 +1,10 @@
 {
-  "name": "@hono-ratelimiter/source",
+  "name": "hono-rate-limiter",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "targets": {
+    "build": {
+      "command": "echo 🔥"
+    },
     "local-registry": {
       "executor": "@nx/js:verdaccio",
       "options": {
