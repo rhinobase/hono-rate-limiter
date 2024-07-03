@@ -5,7 +5,7 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "@hono-rate-limiter/cloudflare": "^0.1.0",
+    "@hono-rate-limiter/cloudflare": "^0.1.2",
     "hono": "^4.2.6"
   },
   "devDependencies": {

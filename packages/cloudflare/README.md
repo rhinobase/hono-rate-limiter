@@ -85,14 +85,16 @@ import { Context, Next } from "hono";
 import { KVNamespace } from "cloudflare:worker";
 
 // Add this in Hono app
-interface Env {
+type Bindings = {
   CACHE: KVNamespace;
   // ... other binding types
-}
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
 
 // Apply the rate limiting middleware to all requests.
 app.use((c: Context, next: Next) =>
-  rateLimiter({
+  rateLimiter<{ Bindings: Bindings }>({
     windowMs: 15 * 60 * 1000, // 15 minutes
     limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
