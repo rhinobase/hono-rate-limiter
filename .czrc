@@ -9,7 +9,7 @@
       "name": "redis:                anything redis specific"
     },
     {
-      "value": "cloudflare",
+      "value": "cf",
       "name": "cloudflare:            anything cloudflare specific"
     },
     {

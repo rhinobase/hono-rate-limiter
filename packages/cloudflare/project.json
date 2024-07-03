@@ -3,37 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/cloudflare/src",
   "projectType": "library",
-  "targets": {
-    "build": {
-      "executor": "@nx/rollup:rollup",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/packages/cloudflare",
-        "main": "packages/cloudflare/src/index.ts",
-        "tsConfig": "packages/cloudflare/tsconfig.lib.json",
-        "rollupConfig": "rollup.config.js",
-        "assets": [
-          {
-            "glob": "packages/cloudflare/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ],
-        "project": "packages/cloudflare/package.json",
-        "compiler": "swc",
-        "format": ["cjs", "esm"],
-        "configurations": {
-          "production": {
-            "optimization": true,
-            "sourceMap": false,
-            "namedChunks": false,
-            "extractLicenses": true,
-            "vendorChunk": false
-          }
-        }
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
       }
-    },
+    }
+  },
+  "tags": [],
+  "targets": {
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"
@@ -44,29 +23,6 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/packages/cloudflare"
-      }
-    },
-    "version": {
-      "executor": "@jscutlery/semver:version",
-      "options": {
-        "preset": "conventional"
-      }
-    },
-    "deploy": {
-      "executor": "ngx-deploy-npm:deploy",
-      "options": {
-        "access": "public",
-        "distFolderPath": "dist/packages/cloudflare"
-      },
-      "dependsOn": ["build"]
-    }
-  },
-  "tags": [],
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
       }
     }
   }

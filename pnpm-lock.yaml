@@ -4,120 +4,150 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@hono/node-server':
-    specifier: ^1.11.1
-    version: 1.11.4
-  '@vercel/kv':
-    specifier: ^1.0.1
-    version: 1.0.1
-  hono:
-    specifier: ^4.3.7
-    version: 4.4.7
+importers:
 
-devDependencies:
-  '@biomejs/biome':
-    specifier: ^1.7.3
-    version: 1.8.2
-  '@hono/node-ws':
-    specifier: ^1.0.1
-    version: 1.0.1(@hono/node-server@1.11.4)
-  '@jscutlery/semver':
-    specifier: ^5.2.2
-    version: 5.2.2(@nx/devkit@19.3.1)
-  '@nx/devkit':
-    specifier: 19.3.1
-    version: 19.3.1(nx@19.3.1)
-  '@nx/js':
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
-  '@nx/node':
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(eslint@8.48.0)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
-  '@nx/rollup':
-    specifier: 19.3.1
-    version: 19.3.1(@babel/core@7.24.3)(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
-  '@nx/vite':
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)(vite@5.2.13)(vitest@1.6.0)
-  '@nx/web':
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
-  '@nx/workspace':
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)
-  '@rollup/plugin-terser':
-    specifier: ^0.4.4
-    version: 0.4.4(rollup@4.18.0)
-  '@swc-node/register':
-    specifier: 1.9.2
-    version: 1.9.2(@swc/core@1.5.7)(@swc/types@0.1.7)(typescript@5.4.5)
-  '@swc/cli':
-    specifier: 0.3.14
-    version: 0.3.14(@swc/core@1.5.7)
-  '@swc/core':
-    specifier: 1.5.7
-    version: 1.5.7(@swc/helpers@0.5.11)
-  '@swc/helpers':
-    specifier: 0.5.11
-    version: 0.5.11
-  '@types/node':
-    specifier: 18.16.9
-    version: 18.16.9
-  '@types/supertest':
-    specifier: ^6.0.2
-    version: 6.0.2
-  '@upstash/redis':
-    specifier: ^1.31.1
-    version: 1.31.6
-  '@vitest/coverage-v8':
-    specifier: ^1.6.0
-    version: 1.6.0(vitest@1.6.0)
-  '@vitest/ui':
-    specifier: ^1.6.0
-    version: 1.6.0(vitest@1.6.0)
-  chalk:
-    specifier: ^5.3.0
-    version: 5.3.0
-  czg:
-    specifier: ^1.9.1
-    version: 1.9.1
-  husky:
-    specifier: ^9.0.11
-    version: 9.0.11
-  is-ci:
-    specifier: ^3.0.1
-    version: 3.0.1
-  lint-staged:
-    specifier: ^15.2.2
-    version: 15.2.2
-  ngx-deploy-npm:
-    specifier: ^8.0.1
-    version: 8.0.1(@nx/devkit@19.3.1)(tslib@2.6.2)
-  nx:
-    specifier: 19.3.1
-    version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)
-  supertest:
-    specifier: ^6.3.4
-    version: 6.3.4
-  swc-loader:
-    specifier: 0.1.15
-    version: 0.1.15(@swc/core@1.5.7)(webpack@5.91.0)
-  tslib:
-    specifier: ^2.6.2
-    version: 2.6.2
-  typescript:
-    specifier: ~5.4.5
-    version: 5.4.5
-  verdaccio:
-    specifier: ^5.0.4
-    version: 5.29.2(typanion@3.14.0)
-  vite:
-    specifier: ~5.2.11
-    version: 5.2.13(@types/node@18.16.9)
-  vitest:
-    specifier: ^1.6.0
-    version: 1.6.0(@types/node@18.16.9)(@vitest/ui@1.6.0)
+  .:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^1.11.1
+        version: 1.11.4
+      '@vercel/kv':
+        specifier: ^1.0.1
+        version: 1.0.1
+      hono:
+        specifier: ^4.3.7
+        version: 4.4.7
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^1.7.3
+        version: 1.8.2
+      '@hono/node-ws':
+        specifier: ^1.0.1
+        version: 1.0.1(@hono/node-server@1.11.4)
+      '@jscutlery/semver':
+        specifier: ^5.2.2
+        version: 5.2.2(@nx/devkit@19.3.1)
+      '@nx/devkit':
+        specifier: 19.3.1
+        version: 19.3.1(nx@19.3.1)
+      '@nx/js':
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
+      '@nx/node':
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(eslint@8.48.0)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
+      '@nx/rollup':
+        specifier: 19.3.1
+        version: 19.3.1(@babel/core@7.24.3)(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
+      '@nx/vite':
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)(vite@5.2.13)(vitest@1.6.0)
+      '@nx/web':
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)(@types/node@18.16.9)(nx@19.3.1)(typescript@5.4.5)(verdaccio@5.29.2)
+      '@nx/workspace':
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)
+      '@rollup/plugin-terser':
+        specifier: ^0.4.4
+        version: 0.4.4(rollup@4.18.0)
+      '@swc-node/register':
+        specifier: 1.9.2
+        version: 1.9.2(@swc/core@1.5.7)(@swc/types@0.1.7)(typescript@5.4.5)
+      '@swc/cli':
+        specifier: 0.3.14
+        version: 0.3.14(@swc/core@1.5.7)
+      '@swc/core':
+        specifier: 1.5.7
+        version: 1.5.7(@swc/helpers@0.5.11)
+      '@swc/helpers':
+        specifier: 0.5.11
+        version: 0.5.11
+      '@types/node':
+        specifier: 18.16.9
+        version: 18.16.9
+      '@types/supertest':
+        specifier: ^6.0.2
+        version: 6.0.2
+      '@upstash/redis':
+        specifier: ^1.31.1
+        version: 1.31.6
+      '@vitest/coverage-v8':
+        specifier: ^1.6.0
+        version: 1.6.0(vitest@1.6.0)
+      '@vitest/ui':
+        specifier: ^1.6.0
+        version: 1.6.0(vitest@1.6.0)
+      chalk:
+        specifier: ^5.3.0
+        version: 5.3.0
+      czg:
+        specifier: ^1.9.1
+        version: 1.9.1
+      husky:
+        specifier: ^9.0.11
+        version: 9.0.11
+      is-ci:
+        specifier: ^3.0.1
+        version: 3.0.1
+      lint-staged:
+        specifier: ^15.2.2
+        version: 15.2.2
+      ngx-deploy-npm:
+        specifier: ^8.0.1
+        version: 8.0.1(@nx/devkit@19.3.1)(tslib@2.6.2)
+      nx:
+        specifier: 19.3.1
+        version: 19.3.1(@swc-node/register@1.9.2)(@swc/core@1.5.7)
+      rollup:
+        specifier: ^4.18.0
+        version: 4.18.0
+      supertest:
+        specifier: ^6.3.4
+        version: 6.3.4
+      swc-loader:
+        specifier: 0.1.15
+        version: 0.1.15(@swc/core@1.5.7)(webpack@5.91.0)
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ~5.4.5
+        version: 5.4.5
+      verdaccio:
+        specifier: ^5.0.4
+        version: 5.29.2(typanion@3.14.0)
+      vite:
+        specifier: ~5.2.11
+        version: 5.2.13(@types/node@18.16.9)
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@18.16.9)(@vitest/ui@1.6.0)
+
+  packages/cloudflare:
+    dependencies:
+      hono:
+        specifier: ^4.4.8
+        version: 4.4.11
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20240620.0
+        version: 4.20240620.0
+      hono-rate-limiter:
+        specifier: ^0.2.1
+        version: 0.2.3(hono@4.4.11)
+
+  packages/core:
+    dependencies:
+      hono:
+        specifier: ^4.1.1
+        version: 4.4.7
+
+  packages/redis:
+    dependencies:
+      hono-rate-limiter:
+        specifier: ^0.2.1
+        version: 0.2.3(hono@4.4.7)
 
 packages:
 
@@ -1502,6 +1532,10 @@ packages:
     dev: true
     optional: true
 
+  /@cloudflare/workers-types@4.20240620.0:
+    resolution: {integrity: sha512-CQD8YS6evRob7LChvIX3gE3zYo0KVgaLDOu1SwNP1BVIS2Sa0b+FC8S1e1hhrNN8/E4chYlVN+FDAgA4KRDUEQ==}
+    dev: true
+
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
@@ -2757,25 +2791,9 @@ packages:
       rollup: 4.18.0
     dev: true
 
-  /@rollup/rollup-android-arm-eabi@4.13.0:
-    resolution: {integrity: sha512-5ZYPOuaAqEH/W3gYsRkxQATBW3Ii1MfaT4EQstTnLKViLi2gLSQmlmtTpGucNP3sXEpOiI5tdGhjdE111ekyEg==}
-    cpu: [arm]
-    os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-android-arm-eabi@4.18.0:
     resolution: {integrity: sha512-Tya6xypR10giZV1XzxmH5wr25VcZSncG0pZIjfePT0OVBvqNEurzValetGNarVrGiq66EBVAFn15iYX4w6FKgQ==}
     cpu: [arm]
-    os: [android]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-android-arm64@4.13.0:
-    resolution: {integrity: sha512-BSbaCmn8ZadK3UAQdlauSvtaJjhlDEjS5hEVVIN3A4bbl3X+otyf/kOJV08bYiRxfejP3DXFzO2jz3G20107+Q==}
-    cpu: [arm64]
     os: [android]
     requiresBuild: true
     dev: true
@@ -2789,25 +2807,9 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-darwin-arm64@4.13.0:
-    resolution: {integrity: sha512-Ovf2evVaP6sW5Ut0GHyUSOqA6tVKfrTHddtmxGQc1CTQa1Cw3/KMCDEEICZBbyppcwnhMwcDce9ZRxdWRpVd6g==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-darwin-arm64@4.18.0:
     resolution: {integrity: sha512-IWfdwU7KDSm07Ty0PuA/W2JYoZ4iTj3TUQjkVsO/6U+4I1jN5lcR71ZEvRh52sDOERdnNhhHU57UITXz5jC1/w==}
     cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-darwin-x64@4.13.0:
-    resolution: {integrity: sha512-U+Jcxm89UTK592vZ2J9st9ajRv/hrwHdnvyuJpa5A2ngGSVHypigidkQJP+YiGL6JODiUeMzkqQzbCG3At81Gg==}
-    cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
@@ -2817,14 +2819,6 @@ packages:
     resolution: {integrity: sha512-n2LMsUz7Ynu7DoQrSQkBf8iNrjOGyPLrdSg802vk6XT3FtsgX6JbE8IHRvposskFm9SNxzkLYGSq9QdpLYpRNA==}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-linux-arm-gnueabihf@4.13.0:
-    resolution: {integrity: sha512-8wZidaUJUTIR5T4vRS22VkSMOVooG0F4N+JSwQXWSRiC6yfEsFMLTYRFHvby5mFFuExHa/yAp9juSphQQJAijQ==}
-    cpu: [arm]
-    os: [linux]
     requiresBuild: true
     dev: true
     optional: true
@@ -2845,24 +2839,8 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-arm64-gnu@4.13.0:
-    resolution: {integrity: sha512-Iu0Kno1vrD7zHQDxOmvweqLkAzjxEVqNhUIXBsZ8hu8Oak7/5VTPrxOEZXYC1nmrBVJp0ZcL2E7lSuuOVaE3+w==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-linux-arm64-gnu@4.18.0:
     resolution: {integrity: sha512-rJ5D47d8WD7J+7STKdCUAgmQk49xuFrRi9pZkWoRD1UeSMakbcepWXPF8ycChBoAqs1pb2wzvbY6Q33WmN2ftw==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-linux-arm64-musl@4.13.0:
-    resolution: {integrity: sha512-C31QrW47llgVyrRjIwiOwsHFcaIwmkKi3PCroQY5aVq4H0A5v/vVVAtFsI1nfBngtoRpeREvZOkIhmRwUKkAdw==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
@@ -2885,14 +2863,6 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-riscv64-gnu@4.13.0:
-    resolution: {integrity: sha512-Oq90dtMHvthFOPMl7pt7KmxzX7E71AfyIhh+cPhLY9oko97Zf2C9tt/XJD4RgxhaGeAraAXDtqxvKE1y/j35lA==}
-    cpu: [riscv64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-linux-riscv64-gnu@4.18.0:
     resolution: {integrity: sha512-ROCM7i+m1NfdrsmvwSzoxp9HFtmKGHEqu5NNDiZWQtXLA8S5HBCkVvKAxJ8U+CVctHwV2Gb5VUaK7UAkzhDjlg==}
     cpu: [riscv64]
@@ -2909,24 +2879,8 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-x64-gnu@4.13.0:
-    resolution: {integrity: sha512-yUD/8wMffnTKuiIsl6xU+4IA8UNhQ/f1sAnQebmE/lyQ8abjsVyDkyRkWop0kdMhKMprpNIhPmYlCxgHrPoXoA==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-linux-x64-gnu@4.18.0:
     resolution: {integrity: sha512-xuglR2rBVHA5UsI8h8UbX4VJ470PtGCf5Vpswh7p2ukaqBGFTnsfzxUBetoWBWymHMxbIG0Cmx7Y9qDZzr648w==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-linux-x64-musl@4.13.0:
-    resolution: {integrity: sha512-9RyNqoFNdF0vu/qqX63fKotBh43fJQeYC98hCaf89DYQpv+xu0D8QFSOS0biA7cGuqJFOc1bJ+m2rhhsKcw1hw==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
@@ -2941,14 +2895,6 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-win32-arm64-msvc@4.13.0:
-    resolution: {integrity: sha512-46ue8ymtm/5PUU6pCvjlic0z82qWkxv54GTJZgHrQUuZnVH+tvvSP0LsozIDsCBFO4VjJ13N68wqrKSeScUKdA==}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-win32-arm64-msvc@4.18.0:
     resolution: {integrity: sha512-7J6TkZQFGo9qBKH0pk2cEVSRhJbL6MtfWxth7Y5YmZs57Pi+4x6c2dStAUvaQkHQLnEQv1jzBUW43GvZW8OFqA==}
     cpu: [arm64]
@@ -2957,25 +2903,9 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/rollup-win32-ia32-msvc@4.13.0:
-    resolution: {integrity: sha512-P5/MqLdLSlqxbeuJ3YDeX37srC8mCflSyTrUsgbU1c/U9j6l2g2GiIdYaGD9QjdMQPMSgYm7hgg0551wHyIluw==}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /@rollup/rollup-win32-ia32-msvc@4.18.0:
     resolution: {integrity: sha512-Txjh+IxBPbkUB9+SXZMpv+b/vnTEtFyfWZgJ6iyCmt2tdx0OF5WhFowLmnh8ENGNpfUlUZkdI//4IEmhwPieNg==}
     cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@rollup/rollup-win32-x64-msvc@4.13.0:
-    resolution: {integrity: sha512-UKXUQNbO3DOhzLRwHSpa0HnhhCgNODvfoPWv2FCXme8N/ANFfhIPMGuOT+QuKd16+B5yxZ0HdpNlqPvTMS1qfw==}
-    cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
@@ -6279,6 +6209,26 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /hono-rate-limiter@0.2.3(hono@4.4.11):
+    resolution: {integrity: sha512-/pQIJWMd8saoySMoM3rhHNiC3XtZuZDkxBvtnPmRKrpNBZIG38k0cs+nVmBW5pc8HAmkS+I/14rbHfRObekWmw==}
+    peerDependencies:
+      hono: ^4.1.1
+    dependencies:
+      hono: 4.4.11
+    dev: true
+
+  /hono-rate-limiter@0.2.3(hono@4.4.7):
+    resolution: {integrity: sha512-/pQIJWMd8saoySMoM3rhHNiC3XtZuZDkxBvtnPmRKrpNBZIG38k0cs+nVmBW5pc8HAmkS+I/14rbHfRObekWmw==}
+    peerDependencies:
+      hono: ^4.1.1
+    dependencies:
+      hono: 4.4.7
+    dev: false
+
+  /hono@4.4.11:
+    resolution: {integrity: sha512-R5RADpjoRsR3/VsnFovpsYNLPnC1f+FgdfsePk3qIgjb4D41Sg7uW5QCj41kzEOwXCjBg0sVvOZMvUNZ0DKB7g==}
+    engines: {node: '>=16.0.0'}
+
   /hono@4.4.7:
     resolution: {integrity: sha512-WoQWFQyVFEVRtIzP5sHPv7nvIw+RYL/HRnvnOCDxj6A+BtrwuC9S0vryZbV4IyFcNgOJ87r/phDiC1x2eEo4Gg==}
     engines: {node: '>=16.0.0'}
@@ -9071,29 +9021,6 @@ packages:
       estree-walker: 0.6.1
     dev: true
 
-  /rollup@4.13.0:
-    resolution: {integrity: sha512-3YegKemjoQnYKmsBlOHfMLVPPA5xLkQ8MHLLSw/fBrFaVkEayL51DilPpNNLq1exr98F2B1TzrV0FUlN3gWRPg==}
-    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
-    hasBin: true
-    dependencies:
-      '@types/estree': 1.0.5
-    optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.13.0
-      '@rollup/rollup-android-arm64': 4.13.0
-      '@rollup/rollup-darwin-arm64': 4.13.0
-      '@rollup/rollup-darwin-x64': 4.13.0
-      '@rollup/rollup-linux-arm-gnueabihf': 4.13.0
-      '@rollup/rollup-linux-arm64-gnu': 4.13.0
-      '@rollup/rollup-linux-arm64-musl': 4.13.0
-      '@rollup/rollup-linux-riscv64-gnu': 4.13.0
-      '@rollup/rollup-linux-x64-gnu': 4.13.0
-      '@rollup/rollup-linux-x64-musl': 4.13.0
-      '@rollup/rollup-win32-arm64-msvc': 4.13.0
-      '@rollup/rollup-win32-ia32-msvc': 4.13.0
-      '@rollup/rollup-win32-x64-msvc': 4.13.0
-      fsevents: 2.3.3
-    dev: true
-
   /rollup@4.18.0:
     resolution: {integrity: sha512-QmJz14PX3rzbJCN1SG4Xe/bAAX2a6NpCP8ab2vfu2GiUr8AQcr2nCV/oEO3yneFarB67zk8ShlIyWb2LGTb3Sg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -10252,7 +10179,7 @@ packages:
       '@types/node': 18.16.9
       esbuild: 0.20.2
       postcss: 8.4.38
-      rollup: 4.13.0
+      rollup: 4.18.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: true

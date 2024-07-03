@@ -3,9 +3,16 @@ import type {
   ConfigType as RateLimitConfiguration,
   Store,
 } from "hono-rate-limiter";
-import type { Options } from "./types";
+import type { Env, Input } from "hono/types";
+import type { Options } from "../types";
 
-export class WorkersKVStore<KVNamespace> implements Store {
+export class WorkersKVStore<
+  KVNamespace,
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+> implements Store<E, P, I>
+{
   /**
    * The text to prepend to the key in Redis.
    */
@@ -47,7 +54,7 @@ export class WorkersKVStore<KVNamespace> implements Store {
    *
    * @param options {RateLimitConfiguration} - The options used to setup the middleware.
    */
-  init(options: RateLimitConfiguration) {
+  init(options: RateLimitConfiguration<E, P, I>) {
     this.windowMs = options.windowMs;
   }
 
@@ -59,7 +66,7 @@ export class WorkersKVStore<KVNamespace> implements Store {
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    // @ts-ignore
+    // @ts-expect-error
     const result = await this.namespace.get<ClientRateLimitInfo>(
       this.prefixKey(key),
       "json",
@@ -79,24 +86,32 @@ export class WorkersKVStore<KVNamespace> implements Store {
    */
   async increment(key: string): Promise<ClientRateLimitInfo> {
     const keyWithPrefix = this.prefixKey(key);
-    // @ts-ignore
-    let payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
-      keyWithPrefix,
-      "json",
-    );
 
-    if (payload) payload.totalHits += 1;
-    else {
-      payload = {
-        totalHits: 1,
-        resetTime: new Date(),
-      };
-      payload.resetTime.setTime(this.windowMs);
-    }
+    const defaultPayload = {
+      totalHits: 1,
+      resetTime: new Date(Date.now() + this.windowMs),
+    };
 
-    // @ts-ignore
+    const record: Required<ClientRateLimitInfo> | null =
+      // @ts-expect-error
+      await this.namespace.get<Required<ClientRateLimitInfo>>(
+        keyWithPrefix,
+        "json",
+      );
+
+    const payload = {
+      ...defaultPayload,
+      ...(record
+        ? {
+            totalHits: record.totalHits + 1,
+            resetTime: new Date(record.resetTime),
+          }
+        : {}),
+    };
+
+    // @ts-expect-error
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
-      expiration: Math.floor(payload.resetTime.getTime() / 1000),
+      expiration: payload.resetTime.getTime() / 1000,
     });
 
     return payload;
@@ -110,7 +125,7 @@ export class WorkersKVStore<KVNamespace> implements Store {
   async decrement(key: string): Promise<void> {
     const keyWithPrefix = this.prefixKey(key);
 
-    // @ts-ignore
+    // @ts-expect-error
     const payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
@@ -120,7 +135,7 @@ export class WorkersKVStore<KVNamespace> implements Store {
 
     payload.totalHits -= 1;
 
-    // @ts-ignore
+    // @ts-expect-error
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
       expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
@@ -132,7 +147,7 @@ export class WorkersKVStore<KVNamespace> implements Store {
    * @param key {string} - The identifier for a client
    */
   async resetKey(key: string): Promise<void> {
-    // @ts-ignore
+    // @ts-expect-error
     await this.namespace.delete(this.prefixKey(key));
   }
 }
