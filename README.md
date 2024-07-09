@@ -113,6 +113,14 @@ Take a look at this [guide](https://express-rate-limit.mintlify.app/guides/creat
 - [hono-rate-limiter.vercel.app](https://hono-rate-limiter.vercel.app) - Uses Vercel KV and deployed on Vercel
 - [hono-rate-limiter.rhinobase.workers.dev](https://hono-rate-limiter.rhinobase.workers.dev) - Built using Cloudflare Workers
 
+## Troubleshooting
+
+If the suggestions here don't work, please try posting questions on [GitHub Discussions](https://github.com/rhinobase/hono-rate-limiter/discussions) or in the #help channel of [Hono Discord](https://discord.gg/xUtamz2vxH).
+
+### Typescript Type Issue
+
+When working with packages that are not officially supported by `hono-rate-limiter`, you might encounter type-related issues. These can be easily resolved by referring to the discussions in [#22](https://github.com/rhinobase/hono-rate-limiter/issues/22), [#10](https://github.com/rhinobase/hono-rate-limiter/issues/10)
+
 ## Contributing
 
 We would love to have more contributors involved!
