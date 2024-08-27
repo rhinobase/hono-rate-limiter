@@ -112,7 +112,7 @@ The KV namespace to use. The value you set for <BINDING_NAME> will be used to re
 
 #### `prefix`
 
-The text to prepend to the key in Redis.
+The text to prepend to the key in the KV namespace.
 
 Defaults to `hrl:`.
 
