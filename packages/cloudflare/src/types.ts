@@ -16,16 +16,6 @@ export type RateLimitExceededEventHandler<
   I extends Input = Input,
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
-export type RateLimitBinding = {
-  limit: (options: { key: string }) => Promise<{ success: boolean }>;
-};
-
-export type RateLimitBindingProp<
-  E extends Env = Env,
-  P extends string = string,
-  I extends Input = Input,
-> = RateLimitBinding | ((c: Context<E, P, I>) => RateLimitBinding);
-
 /**
  * The configuration options for the rate limiter.
  */
@@ -61,7 +51,7 @@ export interface ConfigType<
   /**
    * Method to generate custom identifiers for clients.
    */
-  rateLimitBinding: RateLimitBindingProp<E, P, I>;
+  rateLimitBinding: RateLimit | ((c: Context<E, P, I>) => RateLimit);
 
   /**
    * Method to generate custom identifiers for clients.
@@ -88,11 +78,11 @@ export interface ConfigType<
 /**
  * The configuration options for the store.
  */
-export type Options<KVNamespace> = {
+export type Options<Binding> = {
   /**
    * The KV namespace to use.
    */
-  namespace: KVNamespace;
+  namespace: Binding;
 
   /**
    * The text to prepend to the key in Redis.

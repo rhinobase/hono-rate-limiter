@@ -7,7 +7,6 @@ import type { Env, Input } from "hono/types";
 import type { Options } from "../types";
 
 export class WorkersKVStore<
-  KVNamespace,
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
@@ -66,7 +65,6 @@ export class WorkersKVStore<
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    // @ts-expect-error
     const result = await this.namespace.get<ClientRateLimitInfo>(
       this.prefixKey(key),
       "json",
@@ -93,7 +91,6 @@ export class WorkersKVStore<
     };
 
     const record: Required<ClientRateLimitInfo> | null =
-      // @ts-expect-error
       await this.namespace.get<Required<ClientRateLimitInfo>>(
         keyWithPrefix,
         "json",
@@ -109,7 +106,6 @@ export class WorkersKVStore<
         : {}),
     };
 
-    // @ts-expect-error
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
       expiration: payload.resetTime.getTime() / 1000,
     });
@@ -125,7 +121,6 @@ export class WorkersKVStore<
   async decrement(key: string): Promise<void> {
     const keyWithPrefix = this.prefixKey(key);
 
-    // @ts-expect-error
     const payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
       keyWithPrefix,
       "json",
@@ -135,7 +130,6 @@ export class WorkersKVStore<
 
     payload.totalHits -= 1;
 
-    // @ts-expect-error
     await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
       expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
@@ -147,7 +141,6 @@ export class WorkersKVStore<
    * @param key {string} - The identifier for a client
    */
   async resetKey(key: string): Promise<void> {
-    // @ts-expect-error
     await this.namespace.delete(this.prefixKey(key));
   }
 }

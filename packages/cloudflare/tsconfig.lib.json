@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "types": ["node"]
+    "types": ["node", "@cloudflare/workers-types/2023-07-01"]
   },
   "include": ["src/**/*.ts"],
   "exclude": [

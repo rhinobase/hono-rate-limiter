@@ -7,7 +7,8 @@
       "vitest/importMeta",
       "vite/client",
       "node",
-      "vitest"
+      "vitest",
+      "@cloudflare/workers-types/2023-07-01"
     ]
   },
   "include": [
