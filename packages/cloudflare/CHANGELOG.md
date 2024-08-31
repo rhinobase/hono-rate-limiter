@@ -1,3 +1,16 @@
+## 0.2.0 (2024-08-31)
+
+### 🚀 Features
+
+- **cf:** added cloudflare types
+
+- **cf:** added support for durable object
+
+
+### 🩹 Fixes
+
+- **cf:** improved the rate-limiter api
+
 # Changelog
 
 ## 0.1.2 (2024-07-03)
