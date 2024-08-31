@@ -152,11 +152,11 @@ export default app;
 
 #### `namespace`
 
-The KV namespace to use. The value you set for <BINDING_NAME> will be used to reference this database in your Worker.
+The KV / Durable Object namespace to use. The value you set for <BINDING_NAME> will be used to reference this database / durable object in your Worker.
 
 #### `prefix`
 
-The text to prepend to the key in the KV namespace.
+The text to prepend to the key in the KV / Durable Object namespace.
 
 Defaults to `hrl:`.
 

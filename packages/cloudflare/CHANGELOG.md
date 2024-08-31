@@ -1,3 +1,5 @@
+# Changelog
+
 ## 0.2.0 (2024-08-31)
 
 ### 🚀 Features
@@ -10,8 +12,6 @@
 ### 🩹 Fixes
 
 - **cf:** improved the rate-limiter api
-
-# Changelog
 
 ## 0.1.2 (2024-07-03)
 
