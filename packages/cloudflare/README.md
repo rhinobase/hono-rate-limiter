@@ -104,7 +104,51 @@ app.use((c: Context, next: Next) =>
 );
 ```
 
-### Configuration
+#### Using `DurableObjectStore`
+
+```toml
+# wrangler.toml
+[[durable_objects.bindings]]
+name = "CACHE"
+class_name = "DurableObjectRateLimiter"
+```
+
+For more info on setting up your `Durable Objects` you can check out [Get Started Guide](https://developers.cloudflare.com/durable-objects/get-started/) on cloudflare.
+
+```ts
+// index.ts
+import { DurableObjectStore, DurableObjectRateLimiter } from "@hono-rate-limiter/cloudflare";
+import { rateLimiter } from "hono-rate-limiter";
+import { Context, Next } from "hono";
+import { DurableObjectNamespace } from "cloudflare:worker";
+
+// Add this in Hono app
+type Bindings = {
+  CACHE: DurableObjectNamespace<DurableObjectRateLimiter>;
+  // ... other binding types
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+// Apply the rate limiting middleware to all requests.
+app.use((c: Context, next: Next) =>
+  rateLimiter<{ Bindings: Bindings }>({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "", // Method to generate custom identifiers for clients.
+    store: new DurableObjectStore({ namespace: c.env.CACHE }), // Here CACHE is your Durable Object Binding.
+  })(c, next)
+);
+
+// ...
+
+export { DurableObjectRateLimiter };
+
+export default app;
+```
+
+### Configuration Props of `WorkersKVStore` and `DurableObjectStore`
 
 #### `namespace`
 
