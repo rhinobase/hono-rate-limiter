@@ -58,11 +58,11 @@ type AppType = {
 };
 
 // Apply the rate limiting middleware to all requests.
-const app = new Hono<AppType>().use((c: Context, next: Next) =>
+const app = new Hono<AppType>().use(
   cloudflareRateLimiter<AppType>({
-    rateLimitBinding: c.env.RATE_LIMITER,
+    rateLimitBinding: (c) => c.env.RATE_LIMITER,
     keyGenerator: (c) => c.req.header("cf-connecting-ip") ?? "", // Method to generate custom identifiers for clients.
-  })(c, next)
+  })
 );
 ```
 

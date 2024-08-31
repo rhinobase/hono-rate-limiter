@@ -24,7 +24,7 @@ export function cloudflareRateLimiter<
     message = "Too many requests, please try again later.",
     statusCode = 429,
     requestPropertyName = "rateLimit",
-    rateLimitBinding,
+    rateLimitBinding: rateLimitBindingProp,
     keyGenerator,
     skip = () => false,
     handler = async (c, _, options) => {
@@ -40,17 +40,22 @@ export function cloudflareRateLimiter<
     },
   } = config;
 
-  const options = {
-    message,
-    statusCode,
-    requestPropertyName,
-    rateLimitBinding,
-    keyGenerator,
-    skip,
-    handler,
-  };
-
   return createMiddleware<E, P, I>(async (c, next) => {
+    let rateLimitBinding = rateLimitBindingProp;
+    if (typeof rateLimitBinding === "function") {
+      rateLimitBinding = rateLimitBinding(c);
+    }
+
+    const options = {
+      message,
+      statusCode,
+      requestPropertyName,
+      rateLimitBinding,
+      keyGenerator,
+      skip,
+      handler,
+    };
+
     // First check if we should skip the request
     const isSkippable = await skip(c);
 
