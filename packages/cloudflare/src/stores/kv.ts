@@ -28,7 +28,7 @@ export class WorkersKVStore<
   windowMs!: number;
 
   /**
-   * @constructor for `RedisStore`.
+   * @constructor for `WorkersKVStore`.
    *
    * @param options {Options} - The configuration options for the store.
    */
@@ -83,30 +83,23 @@ export class WorkersKVStore<
    * @returns {ClientRateLimitInfo} - The number of hits and reset time for that client
    */
   async increment(key: string): Promise<ClientRateLimitInfo> {
-    const keyWithPrefix = this.prefixKey(key);
-
-    const defaultPayload = {
+    let payload = {
       totalHits: 1,
       resetTime: new Date(Date.now() + this.windowMs),
     };
 
-    const record: Required<ClientRateLimitInfo> | null =
-      await this.namespace.get<Required<ClientRateLimitInfo>>(
-        keyWithPrefix,
-        "json",
-      );
+    const record = await this.get(key);
 
-    const payload = {
-      ...defaultPayload,
-      ...(record
-        ? {
-            totalHits: record.totalHits + 1,
-            resetTime: new Date(record.resetTime),
-          }
-        : {}),
-    };
+    if (record) {
+      payload = {
+        totalHits: record.totalHits + 1,
+        resetTime: record.resetTime
+          ? new Date(record.resetTime)
+          : payload.resetTime,
+      };
+    }
 
-    await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
+    await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
       expiration: payload.resetTime.getTime() / 1000,
     });
 
@@ -119,18 +112,13 @@ export class WorkersKVStore<
    * @param key {string} - The identifier for a client
    */
   async decrement(key: string): Promise<void> {
-    const keyWithPrefix = this.prefixKey(key);
+    const payload = await this.get(key);
 
-    const payload = await this.namespace.get<Required<ClientRateLimitInfo>>(
-      keyWithPrefix,
-      "json",
-    );
-
-    if (!payload) return;
+    if (!payload || !payload.resetTime) return;
 
     payload.totalHits -= 1;
 
-    await this.namespace.put(keyWithPrefix, JSON.stringify(payload), {
+    await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
       expiration: Math.floor(payload.resetTime.getTime() / 1000),
     });
   }
