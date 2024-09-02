@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 (2024-09-02)
+
+### 🩹 Fixes
+
+- **cf:** corrected DO class
+
+- **cf:** minor changes
+
 ## 0.2.0 (2024-08-31)
 
 ### 🚀 Features
