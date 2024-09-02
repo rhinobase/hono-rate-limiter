@@ -46,14 +46,14 @@ simple = { limit = 100, period = 60 }
 For more info on setting up your Workers Rate Limiting API you can check out [Rate Limiting Guide](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/) on cloudflare.
 
 ```ts
-import { cloudflareRateLimiter, RateLimitBinding } from "@hono-rate-limiter/cloudflare";
+import { cloudflareRateLimiter } from "@hono-rate-limiter/cloudflare";
 
 type AppType = {
   Variables: {
     rateLimit: boolean;
   };
   Bindings: {
-    RATE_LIMITER: RateLimitBinding;
+    RATE_LIMITER: RateLimit;
   };
 };
 
