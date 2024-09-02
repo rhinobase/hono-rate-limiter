@@ -111,6 +111,10 @@ app.use((c: Context, next: Next) =>
 [[durable_objects.bindings]]
 name = "CACHE"
 class_name = "DurableObjectRateLimiter"
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["DurableObjectRateLimiter"]
 ```
 
 For more info on setting up your `Durable Objects` you can check out [Get Started Guide](https://developers.cloudflare.com/durable-objects/get-started/) on cloudflare.
