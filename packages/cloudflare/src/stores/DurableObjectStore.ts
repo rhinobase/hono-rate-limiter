@@ -68,7 +68,7 @@ export class DurableObjectStore<
    * @returns {ClientRateLimitInfo | undefined} - The number of hits and reset time for that client.
    */
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
-    return this.namespace.get(this.prefixKey(key)).payload;
+    return this.namespace.get(this.prefixKey(key)).value();
   }
 
   /**

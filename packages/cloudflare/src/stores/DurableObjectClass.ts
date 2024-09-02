@@ -6,6 +6,10 @@ const initialState: ClientRateLimitInfo = {
 };
 
 export class DurableObjectRateLimiter extends DurableObject {
+  value() {
+    return this.ctx.storage.get<ClientRateLimitInfo>("value");
+  }
+
   async update(hits: number, windowMs: number) {
     let payload =
       (await this.ctx.storage.get<ClientRateLimitInfo>("value")) ||
