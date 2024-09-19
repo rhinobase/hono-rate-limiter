@@ -1,5 +1,6 @@
 {
   "name": "@hono-rate-limiter/redis",
+  "description": "A serverless redis store for hono-rate-limiter.",
   "version": "0.1.4",
   "license": "MIT",
   "keywords": [

@@ -9,7 +9,7 @@
 
 </div>
 
-This package include [`WorkersKV`](https://developers.cloudflare.com/kv/) and [Durable Object](https://developers.cloudflare.com/durable-objects/) store for the [`hono-rate-limiter`](https://github.com/rhinobase/hono-rate-limiter) middleware and `cloudflareRateLimiter` func for [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/) API.
+This package includes [`WorkersKV`](https://developers.cloudflare.com/kv/) and [Durable Object](https://developers.cloudflare.com/durable-objects/) store for the [`hono-rate-limiter`](https://github.com/rhinobase/hono-rate-limiter) middleware and `cloudflareRateLimiter` func for [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/) API.
 
 > [!NOTE]  
 > The `keyGenerator` function and `rateLimitBinding` bindings needs to be defined for `cloudflareRateLimiter` to work properly in your environment. Please ensure that you define the `keyGenerator` function according to the documentation before using the library.
