@@ -1,3 +1,4 @@
+import { clearInterval, setInterval } from "node:timers";
 import type { Env, Input } from "hono/types";
 import type {
   ClientRateLimitInfo,
@@ -46,7 +47,7 @@ export class MemoryStore<
   /**
    * A reference to the active timer.
    */
-  interval?: NodeJS.Timeout;
+  interval?: ReturnType<typeof setInterval>;
 
   /**
    * Method that initializes the store.
