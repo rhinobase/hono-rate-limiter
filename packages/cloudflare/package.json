@@ -1,7 +1,7 @@
 {
   "name": "@hono-rate-limiter/cloudflare",
   "description": "Cloudflare stores and helper functions for hono-rate-limiter.",
-  "version": "0.1.1",
+  "version": "0.2.2",
   "license": "MIT",
   "keywords": [
     "hono",
