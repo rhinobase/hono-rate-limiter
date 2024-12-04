@@ -36,7 +36,7 @@
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist\\{projectRoot}"
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
