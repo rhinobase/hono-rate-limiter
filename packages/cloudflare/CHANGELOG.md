@@ -1,3 +1,42 @@
+## 0.2.2 (2024-12-04)
+
+
+### 🚀 Features
+
+- **cloudflare:** init commit
+
+- **cloudflare:** added worker kv store
+
+- **cloudflare:** added cloudlfare limiter
+
+- **worker:** added components
+
+- **cf:** added cloudflare types
+
+- **cf:** added support for durable object
+
+
+### 🩹 Fixes
+
+- updated package descriptions and readme
+
+- **cloudflare:** resolved build errors
+
+- **cf:** corrected increment func
+
+- **cf:** improved the rate-limiter api
+
+- **cf:** corrected DO class
+
+- **cf:** minor changes
+
+- **cf:** improve bundle size
+
+
+### ❤️  Thank You
+
+- Aditya Mathur
+
 # Changelog
 
 ## 0.2.1 (2024-09-02)
