@@ -119,13 +119,22 @@ If the suggestions here don't work, please try posting questions on [GitHub Disc
 
 ### Typescript Type Issue
 
-When working with packages that are not officially supported by `hono-rate-limiter`, you might encounter type-related issues. These can be easily resolved by referring to the discussions in [#22](https://github.com/rhinobase/hono-rate-limiter/issues/22), [#10](https://github.com/rhinobase/hono-rate-limiter/issues/10)
+When working with packages that are not officially supported by `hono-rate-limiter`, you might encounter type-related issues. These can be easily resolved by referring to the discussions in [#22](https://github.com/rhinobase/hono-rate-limiter/issues/22), [#10](https://github.com/rhinobase/hono-rate-limiter/issues/10). Example -
+
+```ts
+rateLimiter({
+  // ...
+  store: new RedisStore({
+    sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+  }) as unknown as Store,
+});
+```
 
 ### Using `hono-rate-limiter` with Cloudflare Workers or Pages
 
 If you're trying to use `hono-rate-limiter` in a Cloudflare environment (such as Workers or Pages), you may encounter the following error:
 
-```
+```bash
 Uncaught Error: Disallowed operation called within global scope. Asynchronous I/O (ex: fetch() or connect()), setting a timeout, and generating random values are not allowed within global scope. To fix this error, perform this operation within a handler. https://developers.cloudflare.com/workers/runtime-apis/handlers/
 ```
 
