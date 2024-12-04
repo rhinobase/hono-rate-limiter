@@ -1,3 +1,50 @@
+## 0.4.1 (2024-12-04)
+
+
+### 🚀 Features
+
+- added supported data stores
+
+- **core:** added redis store and minor corrections
+
+- **core:** websockets limiter
+
+- **cloudflare:** added worker kv store
+
+- **core:** added jsr support
+
+
+### 🩹 Fixes
+
+- updated build for esm
+
+- resolved few biome errors
+
+- updated package descriptions and readme
+
+- **core:** added repo details in package.json
+
+- **core:** corrected the esm issue
+
+- **core:** minor config update
+
+- **sandbox:** correct the handler
+
+- **sandbox:** resolved the bug
+
+- **core:** updated the key generator function
+
+- **core:** made keyGenerator func required
+
+- **core:** correct try catch of websocket limiter
+
+- **core:** improve bundle size
+
+
+### ❤️  Thank You
+
+- Aditya Mathur
+
 # Changelog
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
