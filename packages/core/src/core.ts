@@ -1,5 +1,5 @@
 import type { Env, Input, MiddlewareHandler } from "hono";
-import { createMiddleware } from "hono/factory";
+import type {} from "hono";
 import {
   setDraft6Headers,
   setDraft7Headers,
@@ -70,7 +70,7 @@ export function rateLimiter<
 
   initStore(store, options);
 
-  return createMiddleware<E, P, I>(async (c, next) => {
+  return async (c, next) => {
     // First check if we should skip the request
     const isSkippable = await skip(c);
 
@@ -158,5 +158,5 @@ export function rateLimiter<
     } finally {
       if (!c.finalized) await decrementKey();
     }
-  });
+  };
 }

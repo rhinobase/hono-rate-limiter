@@ -28,7 +28,7 @@ export class MemoryStore<
   /**
    * The duration of time before which all hit counts are reset (in milliseconds).
    */
-  windowMs!: number;
+  #windowMs!: number;
 
   /**
    * These two maps store usage (requests) and reset time by key (for example, IP
@@ -49,19 +49,13 @@ export class MemoryStore<
   interval?: NodeJS.Timeout;
 
   /**
-   * Confirmation that the keys incremented in once instance of MemoryStore
-   * cannot affect other instances.
-   */
-  localKeys = true;
-
-  /**
    * Method that initializes the store.
    *
    * @param options {ConfigType | WSConfigType} - The options used to setup the middleware.
    */
   init(options: ConfigType<E, P, I> | WSConfigType<E, P, I>): void {
     // Get the duration of a window from the options.
-    this.windowMs = options.windowMs;
+    this.#windowMs = options.windowMs;
 
     // Indicates that init was called more than once.
     // Could happen if a store was shared between multiple instances.
@@ -70,7 +64,7 @@ export class MemoryStore<
     // Reset all clients left in previous every `windowMs`.
     this.interval = setInterval(() => {
       this.clearExpired();
-    }, this.windowMs);
+    }, this.#windowMs);
 
     // Cleaning up the interval will be taken care of by the `shutdown` method.
     if (this.interval.unref) this.interval.unref();
@@ -85,7 +79,7 @@ export class MemoryStore<
    *
    * @public
    */
-  async get(key: string): Promise<ClientRateLimitInfo | undefined> {
+  get(key: string): ClientRateLimitInfo | undefined {
     return this.current.get(key) ?? this.previous.get(key);
   }
 
@@ -98,7 +92,7 @@ export class MemoryStore<
    *
    * @public
    */
-  async increment(key: string): Promise<ClientRateLimitInfo> {
+  increment(key: string): ClientRateLimitInfo {
     const client = this.getClient(key);
 
     const now = Date.now();
@@ -117,7 +111,7 @@ export class MemoryStore<
    *
    * @public
    */
-  async decrement(key: string): Promise<void> {
+  decrement(key: string) {
     const client = this.getClient(key);
 
     if (client.totalHits > 0) client.totalHits--;
@@ -130,7 +124,7 @@ export class MemoryStore<
    *
    * @public
    */
-  async resetKey(key: string): Promise<void> {
+  resetKey(key: string) {
     this.current.delete(key);
     this.previous.delete(key);
   }
@@ -140,7 +134,7 @@ export class MemoryStore<
    *
    * @public
    */
-  async resetAll(): Promise<void> {
+  resetAll(): void {
     this.current.clear();
     this.previous.clear();
   }
@@ -170,7 +164,7 @@ export class MemoryStore<
    */
   private resetClient(client: Client, now = Date.now()): Client {
     client.totalHits = 0;
-    client.resetTime.setTime(now + this.windowMs);
+    client.resetTime.setTime(now + this.#windowMs);
 
     return client;
   }
