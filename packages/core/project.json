@@ -34,10 +34,6 @@
         }
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs core {args.ver} {args.tag}",
-      "dependsOn": []
-    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist\\{projectRoot}"
@@ -49,29 +45,7 @@
       "options": {
         "reportsDirectory": "../../coverage/packages/core"
       }
-    },
-    "version": {
-      "executor": "@jscutlery/semver:version",
-      "options": {
-        "preset": "conventional"
-      }
-    },
-    "deploy": {
-      "executor": "ngx-deploy-npm:deploy",
-      "options": {
-        "access": "public",
-        "distFolderPath": "dist/packages/core"
-      },
-      "dependsOn": ["build"]
     }
   },
-  "tags": [],
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist\\{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
-    }
-  }
+  "tags": []
 }
