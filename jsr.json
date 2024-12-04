@@ -1,6 +1,6 @@
 {
   "name": "@hono-rate-limiter/hono-rate-limiter",
-  "version": "0.4.1",
+  "version": "0.0.1",
   "license": "MIT",
   "unstable": [
     "sloppy-imports"
