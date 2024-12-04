@@ -1,5 +1,6 @@
 const { withNx } = require("@nx/rollup/with-nx");
 const terser = require("@rollup/plugin-terser");
+const pkg = require("./package.json");
 
 module.exports = withNx(
   {
@@ -8,7 +9,9 @@ module.exports = withNx(
     tsConfig: "./tsconfig.lib.json",
     compiler: "swc",
     format: ["cjs", "esm"],
-    assets: [{ input: "./packages/cloudflare", output: ".", glob: "*.md" }],
+    assets: [
+      { input: "./packages/cloudflare", output: ".", glob: "README.md" },
+    ],
   },
   {
     plugins: [terser()],

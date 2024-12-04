@@ -1,5 +1,4 @@
 import type { Env, Input, MiddlewareHandler } from "hono";
-import { createMiddleware } from "hono/factory";
 import type { ConfigType } from "./types";
 
 /**
@@ -40,7 +39,7 @@ export function cloudflareRateLimiter<
     },
   } = config;
 
-  return createMiddleware<E, P, I>(async (c, next) => {
+  return async (c, next) => {
     let rateLimitBinding = rateLimitBindingProp;
     if (typeof rateLimitBinding === "function") {
       rateLimitBinding = rateLimitBinding(c);
@@ -81,5 +80,5 @@ export function cloudflareRateLimiter<
     }
 
     await next();
-  });
+  };
 }
