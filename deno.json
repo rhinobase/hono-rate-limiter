@@ -15,5 +15,8 @@
     "exclude": [
       "./packages/core/src/__tests__/*.spec.ts"
     ]
+  },
+  "imports": {
+    "hono": "jsr:@hono/hono@^4.6.12"
   }
 }

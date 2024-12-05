@@ -1,5 +1,4 @@
 import type { Env, Input, MiddlewareHandler } from "hono";
-import type {} from "hono";
 import {
   setDraft6Headers,
   setDraft7Headers,
