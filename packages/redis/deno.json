@@ -1,0 +1,15 @@
+{
+  "name": "@hono-rate-limiter/cloudflare",
+  "version": "0.1.4",
+  "license": "MIT",
+  "unstable": ["sloppy-imports"],
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": ["jsr.json", "README.md", "./src/**/*.ts"],
+    "exclude": ["./src/__tests__/**/*.ts"]
+  },
+  "imports": {
+    "hono": "jsr:@hono/hono@^4.6.12",
+    "hono-rate-limiter": "jsr:@hono-rate-limiter/hono-rate-limiter@^0.4.2"
+  }
+}

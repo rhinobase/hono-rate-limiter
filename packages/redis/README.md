@@ -5,6 +5,7 @@
 [![tests](https://img.shields.io/github/actions/workflow/status/rhinobase/hono-rate-limiter/test.yml)](https://github.com/rhinobase/hono-rate-limiter/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/@hono-rate-limiter/redis.svg)](https://npmjs.org/package/@hono-rate-limiter/redis "View this project on NPM")
 [![npm downloads](https://img.shields.io/npm/dm/@hono-rate-limiter/redis)](https://www.npmjs.com/package/@hono-rate-limiter/redis)
+[![JSR](https://jsr.io/badges/@hono-rate-limiter/redis)](https://jsr.io/@hono-rate-limiter/hono-rate-limiter)
 [![license](https://img.shields.io/npm/l/%40hono-rate-limiter%2Fredis)](LICENSE)
 
 </div>

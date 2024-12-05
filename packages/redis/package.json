@@ -28,5 +28,8 @@
   "peerDependencies": {
     "hono-rate-limiter": "^0.2.1"
   },
+  "devDependencies": {
+    "hono": "^4.6.12"
+  },
   "types": "./index.cjs.d.ts"
 }
