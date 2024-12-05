@@ -5,6 +5,9 @@
 [![tests](https://img.shields.io/github/actions/workflow/status/rhinobase/hono-rate-limiter/test.yml)](https://github.com/rhinobase/hono-rate-limiter/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/hono-rate-limiter.svg)](https://npmjs.org/package/hono-rate-limiter "View this project on NPM")
 [![npm downloads](https://img.shields.io/npm/dm/hono-rate-limiter)](https://www.npmjs.com/package/hono-rate-limiter)
+[![JSR](https://jsr.io/badges/@hono-rate-limiter/hono-rate-limiter)](https://jsr.io/@hono-rate-limiter/hono-rate-limiter)
+[![Bundle Size](https://img.shields.io/bundlephobia/min/hono-rate-limiter)](https://bundlephobia.com/result?p=hono-rate-limiter)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/hono-rate-limiter)](https://bundlephobia.com/result?p=hono-rate-limiter)
 [![license](https://img.shields.io/npm/l/hono-rate-limiter)](LICENSE)
 
 </div>
