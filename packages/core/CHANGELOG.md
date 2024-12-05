@@ -1,3 +1,15 @@
+## 0.4.2 (2024-12-05)
+
+
+### 🩹 Fixes
+
+- replace jsr to deno file
+
+
+### ❤️  Thank You
+
+- Aditya Mathur
+
 ## 0.4.1 (2024-12-04)
 
 
