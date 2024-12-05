@@ -1,4 +1,5 @@
-# <div align="center">🔥`@hono-rate-limiter/redis`🔥</div>
+# <div align="center">
+<code>🔥@hono-rate-limiter/redis🔥</code></div>
 
 <div align="center">
 
