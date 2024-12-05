@@ -1,5 +1,5 @@
 {
-  "name": "@hono-rate-limiter/cloudflare",
+  "name": "@hono-rate-limiter/redis",
   "version": "0.1.4",
   "license": "MIT",
   "unstable": ["sloppy-imports"],
