@@ -2,19 +2,11 @@
   "name": "@hono-rate-limiter/hono-rate-limiter",
   "version": "0.4.2",
   "license": "MIT",
-  "unstable": [
-    "sloppy-imports"
-  ],
+  "unstable": ["sloppy-imports"],
   "exports": "./packages/core/src/index.ts",
   "publish": {
-    "include": [
-      "jsr.json",
-      "README.md",
-      "./packages/core/src/**/*.ts"
-    ],
-    "exclude": [
-      "./packages/core/src/__tests__/**/*.ts"
-    ]
+    "include": ["README.md", "./packages/core/src/**/*.ts"],
+    "exclude": ["./packages/core/src/__tests__/**/*.ts"]
   },
   "imports": {
     "hono": "jsr:@hono/hono@^4.6.12"

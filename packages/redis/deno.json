@@ -5,7 +5,7 @@
   "unstable": ["sloppy-imports"],
   "exports": "./src/index.ts",
   "publish": {
-    "include": ["jsr.json", "README.md", "./src/**/*.ts"],
+    "include": ["README.md", "./src/**/*.ts"],
     "exclude": ["./src/__tests__/**/*.ts"]
   },
   "imports": {
