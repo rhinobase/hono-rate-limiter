@@ -100,7 +100,11 @@ export class WorkersKVStore<
     }
 
     await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
-      expiration: payload.resetTime.getTime() / 1000,
+      // This fixes the error: "KV PUT failed: 400 Invalid expiration of <timestamp>, which occurs when there's a time difference.
+      expiration: Math.max(
+        Math.floor(payload.resetTime.getTime() / 1000), // Convert window reset time to seconds
+        Math.floor(Date.now() / 1000) + 60 // Ensure minimum 60s future expiration
+      ),
     });
 
     return payload;
@@ -119,7 +123,11 @@ export class WorkersKVStore<
     payload.totalHits -= 1;
 
     await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
-      expiration: Math.floor(payload.resetTime.getTime() / 1000),
+      // This fixes the error: "KV PUT failed: 400 Invalid expiration of <timestamp>, which occurs when there's a time difference.
+      expiration: Math.max(
+        Math.floor(payload.resetTime.getTime() / 1000), // Convert window reset time to seconds
+        Math.floor(Date.now() / 1000) + 60 // Ensure minimum 60s future expiration
+      ),
     });
   }
 
