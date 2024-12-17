@@ -100,7 +100,7 @@ export class WorkersKVStore<
     }
 
     await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
-      expiration: payload.resetTime.getTime() / 1000,
+      expiration: Math.floor(payload.resetTime.getTime() / 1000) + 60, // meets Cloudflare's 60-second minimum requirement
     });
 
     return payload;
@@ -119,7 +119,7 @@ export class WorkersKVStore<
     payload.totalHits -= 1;
 
     await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
-      expiration: Math.floor(payload.resetTime.getTime() / 1000),
+      expiration: Math.floor(payload.resetTime.getTime() / 1000) + 60, // meets Cloudflare's 60-second minimum requirement
     });
   }
 
