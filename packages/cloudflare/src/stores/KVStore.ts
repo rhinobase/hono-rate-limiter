@@ -165,9 +165,9 @@ export class WorkersKVStore<
   private calculateExpiration(resetTime: Date): number {
     const resetTimeSeconds = Math.floor(resetTime.getTime() / 1000);
     const nowSeconds = Math.floor(Date.now() / 1000);
-    return Math.max(
-      resetTimeSeconds + WorkersKVStore.KV_MIN_EXPIRATION_BUFFER,
-      nowSeconds + WorkersKVStore.KV_MIN_EXPIRATION_BUFFER,
+    return (
+      Math.max(resetTimeSeconds, nowSeconds) +
+      WorkersKVStore.KV_MIN_EXPIRATION_BUFFER
     );
   }
 
