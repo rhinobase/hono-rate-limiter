@@ -2,7 +2,15 @@
   "name": "@hono-rate-limiter/redis",
   "description": "A serverless redis store for hono-rate-limiter.",
   "version": "0.1.4",
+  "type": "module",
   "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "pkgroll --minify --clean-dist"
+  },
   "keywords": [
     "hono",
     "redis",
@@ -26,10 +34,11 @@
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
   },
   "peerDependencies": {
-    "hono-rate-limiter": "^0.2.1"
+    "hono-rate-limiter": "workspace:*"
   },
   "devDependencies": {
-    "hono": "^4.6.12"
-  },
-  "types": "./index.cjs.d.ts"
+    "@upstash/redis": "^1.34.5",
+    "hono": "^4.6.12",
+    "pkgroll": "^2.11.2"
+  }
 }

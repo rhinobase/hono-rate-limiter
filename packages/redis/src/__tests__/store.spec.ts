@@ -1,6 +1,7 @@
 import { Redis } from "@upstash/redis";
 import type { ConfigType } from "hono-rate-limiter";
-import { RedisStore } from "../";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { RedisStore } from "../index.js";
 
 const client = new Redis({
   // biome-ignore lint/complexity/useLiteralKeys: Clashing with another linter

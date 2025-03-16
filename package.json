@@ -1,55 +1,23 @@
 {
-  "name": "@hono-rate-limiter/source",
+  "name": "@hrl/workspace",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "commit": "czg",
-    "prepare": "is-ci || husky install",
+    "test": "vitest",
+    "prepare": "is-ci || husky",
     "format": "biome check --write ."
   },
   "private": true,
-  "dependencies": {
-    "@hono/node-server": "^1.11.1",
-    "@vercel/kv": "^1.0.1",
-    "hono": "^4.3.7"
-  },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
-    "@cloudflare/workers-types": "^4.20240821.1",
-    "@hono/node-ws": "^1.0.1",
-    "@nx/devkit": "19.3.1",
-    "@nx/js": "19.3.1",
-    "@nx/node": "19.3.1",
-    "@nx/rollup": "19.3.1",
-    "@nx/vite": "19.3.1",
-    "@nx/web": "19.3.1",
-    "@nx/workspace": "19.3.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@swc-node/register": "1.9.2",
-    "@swc/cli": "0.3.14",
-    "@swc/core": "1.5.7",
-    "@swc/helpers": "0.5.11",
-    "@types/node": "18.16.9",
-    "@types/supertest": "^6.0.2",
-    "@upstash/redis": "^1.31.1",
-    "@vitest/coverage-v8": "^1.6.0",
-    "@vitest/ui": "^1.6.0",
-    "chalk": "^5.3.0",
+    "@types/node": "20",
     "czg": "^1.9.1",
-    "husky": "^9.0.11",
+    "husky": "^9.1.7",
     "is-ci": "^3.0.1",
     "nano-staged": "^0.8.0",
-    "nx": "19.3.1",
-    "rollup": "^4.18.0",
-    "supertest": "^6.3.4",
-    "swc-loader": "0.1.15",
-    "tslib": "^2.6.2",
     "typescript": "~5.4.5",
-    "verdaccio": "^5.0.4",
-    "vite": "~5.2.11",
     "vitest": "^1.6.0"
   },
-  "nx": {
-    "includedScripts": []
-  }
+  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf"
 }

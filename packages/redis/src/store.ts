@@ -4,8 +4,8 @@ import type {
   Store,
 } from "hono-rate-limiter";
 import type { Env, Input } from "hono/types";
-import scripts from "./scripts";
-import type { Options, RedisClient, RedisReply } from "./types";
+import scripts from "./scripts.js";
+import type { Options, RedisClient, RedisReply } from "./types.js";
 
 /**
  * Converts a string/number to a number.

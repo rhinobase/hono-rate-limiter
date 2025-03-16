@@ -2,7 +2,12 @@
   "name": "@hono-rate-limiter/cloudflare",
   "description": "Cloudflare stores and helper functions for hono-rate-limiter.",
   "version": "0.2.2",
+  "type": "module",
   "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "keywords": [
     "hono",
     "cloudflare",
@@ -30,7 +35,7 @@
     "hono": "^4.4.8"
   },
   "devDependencies": {
-    "hono-rate-limiter": "^0.2.1"
-  },
-  "types": "./index.cjs.d.ts"
+    "hono-rate-limiter": "workspace:*",
+    "pkgroll": "^2.11.2"
+  }
 }
