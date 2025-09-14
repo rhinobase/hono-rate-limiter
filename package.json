@@ -1,23 +1,60 @@
 {
-  "name": "@hrl/workspace",
-  "version": "0.0.0",
+  "name": "hono-rate-limiter",
+  "description": "Rate limit middleware for Hono.",
+  "version": "0.5.0",
+  "type": "module",
   "license": "MIT",
+  "keywords": [
+    "hono",
+    "api",
+    "middleware",
+    "rest-api",
+    "rate-limiting",
+    "rate-limiter",
+    "honojs"
+  ],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
-    "commit": "czg",
+    "build": "pkgroll --clean-dist",
     "test": "vitest",
     "prepare": "is-ci || husky",
     "format": "biome check --write ."
   },
-  "private": true,
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "homepage": "https://hono-rate-limiter.vercel.app",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhinobase/hono-rate-limiter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
+  },
+  "peerDependencies": {
+    "hono": "^4.1.1",
+    "unstorage": "^1.17.1"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
     "@types/node": "20",
-    "czg": "^1.9.1",
     "husky": "^9.1.7",
     "is-ci": "^3.0.1",
     "nano-staged": "^0.8.0",
     "typescript": "~5.4.5",
     "vitest": "^1.6.0"
-  },
-  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf"
+  }
 }
