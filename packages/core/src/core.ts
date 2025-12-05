@@ -1,4 +1,5 @@
 import type { Env, Input, MiddlewareHandler } from "hono";
+import type { HandlerResponse } from "hono/types";
 import {
   setDraft6Headers,
   setDraft7Headers,
@@ -22,7 +23,8 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
->(config: GeneralConfigType<ConfigType<E, P, I>>): MiddlewareHandler<E, P, I> {
+  R extends HandlerResponse<any> = Response
+>(config: GeneralConfigType<ConfigType<E, P, I>>): MiddlewareHandler<E, P, I, R> {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -159,3 +161,4 @@ export function rateLimiter<
     }
   };
 }
+
