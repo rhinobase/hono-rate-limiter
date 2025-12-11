@@ -16,7 +16,9 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pkgroll --clean-dist",
     "test": "vitest",
@@ -49,12 +51,12 @@
     "unstorage": "^1.17.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
+    "@biomejs/biome": "^2.2.4",
     "@types/node": "20",
     "husky": "^9.1.7",
-    "is-ci": "^3.0.1",
+    "is-ci": "^4.1.0",
     "nano-staged": "^0.8.0",
-    "typescript": "~5.4.5",
-    "vitest": "^1.6.0"
+    "typescript": "~5.9.2",
+    "vitest": "^3.2.4"
   }
 }
