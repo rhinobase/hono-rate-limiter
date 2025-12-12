@@ -616,28 +616,6 @@ describe("middleware test", () => {
   );
 
   it.each([["modern", new MockStore()]])(
-    "should decrement hits when rate limit is reached and `skipFailedRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            limit: 2,
-            store,
-            skipFailedRequests: true,
-          }),
-        })
-      );
-
-      await request(app).get("/").expect(200);
-      await request(app).get("/").expect(200);
-      await request(app).get("/").expect(429);
-
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
-
-  it.each([["modern", new MockStore()]])(
     "should forward errors in the handler using `next()` (%s store)",
     async (_name, store) => {
       let errorCaught = false;

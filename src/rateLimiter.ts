@@ -156,8 +156,9 @@ export function rateLimiter<
     try {
       await next();
       await shouldSkipRequest();
-    } catch {
+    } catch (error) {
       if (skipFailedRequests) await decrementKey();
+      throw error;
     }
   };
 }
