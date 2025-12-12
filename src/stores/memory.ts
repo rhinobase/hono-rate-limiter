@@ -1,7 +1,7 @@
 import type { Env, Input } from "hono/types";
 import type {
   ClientRateLimitInfo,
-  ConfigType,
+  HonoConfigType,
   Store,
   WSConfigType,
 } from "../types.ts";
@@ -16,13 +16,11 @@ type Client = Required<ClientRateLimitInfo>;
 
 /**
  * A `Store` that stores the hit count for each client in memory.
- *
- * @public
  */
 export class MemoryStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > implements Store<E, P, I>
 {
   /**
@@ -51,9 +49,9 @@ export class MemoryStore<
   /**
    * Method that initializes the store.
    *
-   * @param options {ConfigType | WSConfigType} - The options used to setup the middleware.
+   * @param options {HonoConfigType | WSConfigType} - The options used to setup the middleware.
    */
-  init(options: ConfigType<E, P, I> | WSConfigType<E, P, I>): void {
+  init(options: HonoConfigType<E, P, I> | WSConfigType<E, P, I>): void {
     // Get the duration of a window from the options.
     this.#windowMs = options.windowMs;
 

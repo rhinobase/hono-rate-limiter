@@ -1,6 +1,6 @@
 import type { Context, Env, Input, Next } from "hono";
 import type { StatusCode } from "hono/utils/http-status";
-import type { Promisify } from "../types";
+import type { Promisify } from "../../types";
 
 /**
  * Hono request handler that sends back a response when a client is
@@ -13,7 +13,7 @@ import type { Promisify } from "../types";
 export type RateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
 /**
@@ -22,7 +22,7 @@ export type RateLimitExceededEventHandler<
 export interface ConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > {
   /**
    * The response body to send back when a client is rate limited.

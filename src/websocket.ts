@@ -1,8 +1,8 @@
 import type { Context, Env, Input } from "hono";
 import type { WSEvents } from "hono/ws";
 import { MemoryStore } from "./stores/memory";
-import type { GeneralConfigType, RateLimitInfo, WSConfigType } from "./types";
-import { getKeyAndIncrement, initStore } from "./utils";
+import type { Promisify, RateLimitInfo, WSConfigType } from "./types";
+import { initStore } from "./utils";
 
 /**
  *
@@ -17,11 +17,11 @@ import { getKeyAndIncrement, initStore } from "./utils";
 export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 >(
-  config: GeneralConfigType<WSConfigType<E, P, I>>,
+  config: WSConfigType<E, P, I>
 ): (
-  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
+  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>
 ) => (c: Context<E, P, I>) => Promise<WSEvents> {
   const {
     windowMs = 60_000,
@@ -56,9 +56,7 @@ export function webSocketLimiter<
 
   initStore(store, options as any);
 
-  return (
-    createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
-  ) =>
+  return (createEvents: (c: Context<E, P, I>) => Promisify<WSEvents>) =>
     async (c: Context<E, P, I>): Promise<WSEvents> => {
       const events = await createEvents(c);
 
@@ -73,11 +71,11 @@ export function webSocketLimiter<
             return;
           }
 
-          const { key, totalHits, resetTime } = await getKeyAndIncrement(
-            c,
-            keyGenerator,
-            store,
-          );
+          // Get a unique key for the client
+          const key = await keyGenerator(c);
+
+          // Increment the client's hit counter by one.
+          const { totalHits, resetTime } = await store.increment(key);
 
           // Get the limit (max number of hits) for each client.
           const retrieveLimit = typeof limit === "function" ? limit(c) : limit;

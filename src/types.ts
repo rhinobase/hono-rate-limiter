@@ -44,17 +44,76 @@ export type RateLimitInfo = {
 export type RateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
-/**
- * The configuration options for the rate limiter.
- */
-export interface ConfigType<
+type CommonProps<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
-> {
+  I extends Input = Input
+> = {
+  /**
+   * The response body to send back when a client is rate limited.
+   *
+   * Defaults to `'Too many requests, please try again later.'`
+   */
+  message:
+    | string
+    | Record<string, unknown>
+    | ((c: Context<E, P, I>) => Promisify<string | Record<string, unknown>>);
+
+  /**
+   * The HTTP status code to send back when a client is rate limited.
+   *
+   * Defaults to `HTTP 429 Too Many Requests` (RFC 6585).
+   */
+  statusCode: StatusCode;
+
+  /**
+   * The name of the property on the context object to store the rate limit info.
+   *
+   * Defaults to `rateLimit`.
+   */
+  requestPropertyName: string;
+
+  /**
+   * Method to generate custom identifiers for clients.
+   */
+  keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
+
+  /**
+   * Hono request handler that sends back a response when a client is
+   * rate-limited.
+   *
+   * By default, sends back the `statusCode` and `message` set via the options.
+   */
+  handler: RateLimitExceededEventHandler<E, P, I>;
+
+  /**
+   * Method (in the form of middleware) to determine whether or not this request
+   * counts towards a client's quota.
+   *
+   * By default, skips no requests.
+   */
+  skip: (c: Context<E, P, I>) => Promisify<boolean>;
+};
+
+export type CloudflareConfigType<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input
+> = {
+  /**
+   * The Cloudflare rate limit binding to use.
+   */
+  binding: RateLimit | ((c: Context<E, P, I>) => RateLimit);
+} & CommonProps<E, P, I>;
+
+export type HonoConfigType<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input
+> = {
   /**
    * How long we should remember the requests.
    *
@@ -74,35 +133,11 @@ export interface ConfigType<
   limit: number | ((c: Context<E, P, I>) => Promisify<number>);
 
   /**
-   * The response body to send back when a client is rate limited.
-   *
-   * Defaults to `'Too many requests, please try again later.'`
-   */
-  message:
-    | string
-    | Record<string, unknown>
-    | ((c: Context<E, P, I>) => Promisify<string | Record<string, unknown>>);
-
-  /**
-   * The HTTP status code to send back when a client is rate limited.
-   *
-   * Defaults to `HTTP 429 Too Many Requests` (RFC 6585).
-   */
-  statusCode: StatusCode;
-
-  /**
    * Whether to enable support for the standardized rate limit headers (`RateLimit-*`).
    *
    * Defaults to `draft-6`.
    */
   standardHeaders: boolean | "draft-6" | "draft-7";
-
-  /**
-   * The name of the property on the context object to store the rate limit info.
-   *
-   * Defaults to `rateLimit`.
-   */
-  requestPropertyName: string;
 
   /**
    * The name of the property on the context object to store the Data Store instance.
@@ -128,27 +163,6 @@ export interface ConfigType<
   skipSuccessfulRequests: boolean;
 
   /**
-   * Method to generate custom identifiers for clients.
-   */
-  keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
-
-  /**
-   * Hono request handler that sends back a response when a client is
-   * rate-limited.
-   *
-   * By default, sends back the `statusCode` and `message` set via the options.
-   */
-  handler: RateLimitExceededEventHandler<E, P, I>;
-
-  /**
-   * Method (in the form of middleware) to determine whether or not this request
-   * counts towards a client's quota.
-   *
-   * By default, skips no requests.
-   */
-  skip: (c: Context<E, P, I>) => Promisify<boolean>;
-
-  /**
    * Method to determine whether or not the request counts as 'succesful'. Used
    * when either `skipSuccessfulRequests` or `skipFailedRequests` is set to true.
    *
@@ -163,7 +177,16 @@ export interface ConfigType<
    * By default, the built-in `MemoryStore` will be used.
    */
   store: Store<E, P, I>;
-}
+} & CommonProps<E, P, I>;
+
+/**
+ * The configuration options for the rate limiter.
+ */
+export type ConfigType<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input
+> = HonoConfigType<E, P, I> | CloudflareConfigType<E, P, I>;
 
 export type WSStatusCode =
   | 1000
@@ -189,7 +212,7 @@ export type WSStatusCode =
 export type WSRateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > = (event: unknown, ws: WSContext, optionsUsed: WSConfigType<E, P, I>) => void;
 
 /**
@@ -198,9 +221,9 @@ export type WSRateLimitExceededEventHandler<
 export interface WSConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > extends Omit<
-    ConfigType<E, P, I>,
+    HonoConfigType<E, P, I>,
     | "statusCode"
     | "standardHeaders"
     | "requestWasSuccessful"
@@ -244,15 +267,15 @@ export interface WSConfigType<
 export type Store<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > = {
   /**
    * Method that initializes the store, and has access to the options passed to
    * the middleware too.
    *
-   * @param options {ConfigType} - The options used to setup the middleware.
+   * @param options {HonoConfigType} - The options used to setup the middleware.
    */
-  init?: (options: ConfigType<E, P, I>) => void;
+  init?: (options: HonoConfigType<E, P, I>) => void;
 
   /**
    * Method to fetch a client's hit count and reset time.
@@ -312,9 +335,3 @@ export type Store<
    */
   prefix?: string;
 };
-
-export type GeneralConfigType<T extends { keyGenerator: unknown }> = Pick<
-  T,
-  "keyGenerator"
-> &
-  Partial<Omit<T, "keyGenerator">>;

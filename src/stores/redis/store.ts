@@ -1,7 +1,7 @@
 import type { Env, Input } from "hono/types";
 import type {
   ClientRateLimitInfo,
-  ConfigType as RateLimitConfiguration,
+  HonoConfigType as RateLimitConfiguration,
   Store,
 } from "../../types";
 import scripts from "./scripts";
@@ -42,7 +42,7 @@ const parseScriptResponse = (results: RedisReply): ClientRateLimitInfo => {
 export class RedisStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 > implements Store<E, P, I>
 {
   /**
@@ -126,7 +126,7 @@ export class RedisStore<
       this.client.evalsha<string[], RedisReply>(
         await this.incrementScriptSha,
         [this.prefixKey(key)],
-        [this.resetExpiryOnChange ? "1" : "0", this.windowMs.toString()],
+        [this.resetExpiryOnChange ? "1" : "0", this.windowMs.toString()]
       );
 
     try {
@@ -170,7 +170,7 @@ export class RedisStore<
     const results = await this.client.evalsha<never[], RedisReply>(
       await this.getScriptSha,
       [this.prefixKey(key)],
-      [],
+      []
     );
 
     return parseScriptResponse(results);

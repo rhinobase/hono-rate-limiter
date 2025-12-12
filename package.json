@@ -26,7 +26,6 @@
     "format": "biome check --write ."
   },
   "exports": {
-    ".": {
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
@@ -35,27 +34,6 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    },
-    "./cloudflare": {
-      "import": {
-        "types": "./dist/cloudflare/index.d.ts",
-        "default": "./dist/cloudflare/index.js"
-      },
-      "require": {
-        "types": "./dist/cloudflare/index.d.cts",
-        "default": "./dist/cloudflare/index.cjs"
-      }
-    },
-    "./stores": {
-      "import": {
-        "types": "./dist/stores/index.d.ts",
-        "default": "./dist/stores/index.js"
-      },
-      "require": {
-        "types": "./dist/stores/index.d.cts",
-        "default": "./dist/stores/index.cjs"
-      }
-    }
   },
   "homepage": "https://honohub.dev/docs/rate-limiter",
   "publishConfig": {

@@ -6,8 +6,13 @@ import {
   setRetryAfterHeader,
 } from "./headers";
 import { MemoryStore } from "./stores/memory";
-import type { ConfigType, GeneralConfigType, RateLimitInfo } from "./types";
-import { getKeyAndIncrement, initStore } from "./utils";
+import type {
+  CloudflareConfigType,
+  ConfigType,
+  HonoConfigType,
+  RateLimitInfo,
+} from "./types";
+import { initStore } from "./utils";
 
 /**
  *
@@ -23,10 +28,21 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response,
->(
-  config: GeneralConfigType<ConfigType<E, P, I>>,
-): MiddlewareHandler<E, P, I, R> {
+  R extends HandlerResponse<any> = Response
+>(config: ConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
+  if ("windowMs" in config) {
+    return honoRateLimiter(config);
+  }
+
+  return cloudflareRateLimiter(config);
+}
+
+function honoRateLimiter<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+  R extends HandlerResponse<any> = Response
+>(config: HonoConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -82,11 +98,11 @@ export function rateLimiter<
       return;
     }
 
-    const { key, totalHits, resetTime } = await getKeyAndIncrement(
-      c,
-      keyGenerator,
-      store,
-    );
+    // Get a unique key for the client
+    const key = await keyGenerator(c);
+
+    // Increment the client's hit counter by one.
+    const { totalHits, resetTime } = await store.increment(key);
 
     // Get the limit (max number of hits) for each client.
     const retrieveLimit = typeof limit === "function" ? limit(c) : limit;
@@ -160,5 +176,75 @@ export function rateLimiter<
       if (skipFailedRequests) await decrementKey();
       throw error;
     }
+  };
+}
+
+function cloudflareRateLimiter<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input,
+  R extends HandlerResponse<any> = Response
+>(config: CloudflareConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
+  const {
+    message = "Too many requests, please try again later.",
+    statusCode = 429,
+    requestPropertyName = "rateLimit",
+    binding: bindingProp,
+    keyGenerator,
+    skip = () => false,
+    handler = async (c, _, options) => {
+      c.status(options.statusCode);
+
+      const responseMessage =
+        typeof options.message === "function"
+          ? await options.message(c)
+          : options.message;
+
+      if (typeof responseMessage === "string") return c.text(responseMessage);
+      return c.json(responseMessage);
+    },
+  } = config;
+
+  return async (c, next) => {
+    let rateLimitBinding = bindingProp;
+    if (typeof rateLimitBinding === "function") {
+      rateLimitBinding = rateLimitBinding(c);
+    }
+
+    const options = {
+      message,
+      statusCode,
+      requestPropertyName,
+      binding: rateLimitBinding,
+      keyGenerator,
+      skip,
+      handler,
+    };
+
+    // First check if we should skip the request
+    const isSkippable = await skip(c);
+
+    if (isSkippable) {
+      await next();
+      return;
+    }
+
+    // Get a unique key for the client
+    const key = await keyGenerator(c);
+
+    // Getting the response
+    const { success } = await rateLimitBinding.limit({ key: key });
+
+    // Set the rate limit information in the hono context
+    // @ts-expect-error TODO: need to figure this out
+    c.set(requestPropertyName, success);
+
+    // If the client has exceeded their rate limit, set the Retry-After header
+    // and call the `handler` function.
+    if (!success) {
+      return handler(c, next, options);
+    }
+
+    await next();
   };
 }
