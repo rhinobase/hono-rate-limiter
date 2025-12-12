@@ -2,10 +2,10 @@
 import { createAdaptorServer } from "@hono/node-server";
 import type { Context } from "hono";
 import { agent as request } from "supertest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { rateLimiter } from "../rateLimiter";
 import type { ClientRateLimitInfo, RateLimitInfo, Store } from "../types";
 import { createServer, keyGenerator } from "./helpers";
-import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 
 describe("middleware test", () => {
   beforeEach(() => {
@@ -72,7 +72,7 @@ describe("middleware test", () => {
 
   it("should let the first request through", async () => {
     const app = createAdaptorServer(
-      createServer({ middleware: rateLimiter({ keyGenerator, limit: 1 }) })
+      createServer({ middleware: rateLimiter({ keyGenerator, limit: 1 }) }),
     );
 
     await request(app).get("/").expect(200).expect("Hi there!");
@@ -82,7 +82,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: 2 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -94,7 +94,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: 2, windowMs: 50 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -108,7 +108,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: 2, windowMs: 50 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -124,7 +124,7 @@ describe("middleware test", () => {
 
   it("should block all requests if max is set to 0", async () => {
     const app = createAdaptorServer(
-      createServer({ middleware: rateLimiter({ keyGenerator, limit: 0 }) })
+      createServer({ middleware: rateLimiter({ keyGenerator, limit: 0 }) }),
     );
 
     await request(app).get("/").expect(429);
@@ -140,7 +140,7 @@ describe("middleware test", () => {
           limit: 2,
           message,
         }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -158,7 +158,7 @@ describe("middleware test", () => {
           // @ts-expect-error Checking if we can use custom status code
           statusCode,
         }),
-      })
+      }),
     );
     await request(app).get("/").expect(200);
     await request(app).get("/").expect(statusCode);
@@ -174,7 +174,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, message, limit: 1 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200, "Hi there!");
@@ -189,7 +189,7 @@ describe("middleware test", () => {
           message: () => "Too many requests.",
           limit: 1,
         }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200, "Hi there!");
@@ -204,7 +204,7 @@ describe("middleware test", () => {
           message: async () => "Too many requests.",
           limit: 1,
         }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200, "Hi there!");
@@ -223,7 +223,7 @@ describe("middleware test", () => {
             return c.text("Enhance your calm");
           },
         }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -237,7 +237,7 @@ describe("middleware test", () => {
           limit: 2,
           keyGenerator: (c) => c.req.query("key") ?? "",
         }),
-      })
+      }),
     );
 
     await request(app).get("/").query({ key: 1 }).expect(200);
@@ -255,7 +255,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: 2, skip: () => true }),
-      })
+      }),
     );
 
     await request(app).get("/").query({ key: 1 }).expect(200);
@@ -282,7 +282,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: () => 2 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -294,7 +294,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: async () => 2 }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -306,7 +306,7 @@ describe("middleware test", () => {
     const app = createAdaptorServer(
       createServer({
         middleware: rateLimiter({ keyGenerator, limit: async () => 2 }),
-      })
+      }),
     );
 
     await request(app)
@@ -319,246 +319,234 @@ describe("middleware test", () => {
           throw new Error(
             `Expected no retry-after header, got ${
               response.headers["retry-after"] as string
-            }`
+            }`,
           );
         }
       })
       .expect(200, "Hi there!");
   });
 
-  it.each([["modern", new MockStore()]])(
-    "should call `increment` on the store (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({ keyGenerator, store }),
-        })
-      );
-      await request(app).get("/");
+  it.each([
+    ["modern", new MockStore()],
+  ])("should call `increment` on the store (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({ keyGenerator, store }),
+      }),
+    );
+    await request(app).get("/");
 
-      expect(store.incrementWasCalled).toEqual(true);
-    }
-  );
+    expect(store.incrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should call `resetKey` on the store (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: [
-            rateLimiter({ keyGenerator, store }),
-            async (c, next) => {
-              await c.get("rateLimitStore").resetKey("key");
-              await next();
-            },
-          ],
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should call `resetKey` on the store (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: [
+          rateLimiter({ keyGenerator, store }),
+          async (c, next) => {
+            await c.get("rateLimitStore").resetKey("key");
+            await next();
+          },
+        ],
+      }),
+    );
 
-      await request(app).get("/").expect(200);
+    await request(app).get("/").expect(200);
 
-      expect(store.resetKeyWasCalled).toEqual(true);
-    }
-  );
+    expect(store.resetKeyWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should call `get` on the store (%s store)",
-    async (_name, store) => {
-      let response: ClientRateLimitInfo | undefined;
-      const app = createAdaptorServer(
-        createServer({
-          middleware: [
-            rateLimiter({ keyGenerator, store }),
-            async (c, next) => {
-              response = await c.get("rateLimitStore").getKey("key");
-              await next();
-            },
-          ],
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should call `get` on the store (%s store)", async (_name, store) => {
+    let response: ClientRateLimitInfo | undefined;
+    const app = createAdaptorServer(
+      createServer({
+        middleware: [
+          rateLimiter({ keyGenerator, store }),
+          async (c, next) => {
+            response = await c.get("rateLimitStore").getKey("key");
+            await next();
+          },
+        ],
+      }),
+    );
 
-      await request(app).get("/").expect(200);
+    await request(app).get("/").expect(200);
 
-      expect(store.getWasCalled).toEqual(true);
-      expect(typeof response?.totalHits).toBe("number");
-    }
-  );
+    expect(store.getWasCalled).toEqual(true);
+    expect(typeof response?.totalHits).toBe("number");
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when requests succeed and `skipSuccessfulRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when requests succeed and `skipSuccessfulRequests` is set to true (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/").expect(200);
+    await request(app).get("/").expect(200);
 
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should not decrement hits when requests fail and `skipSuccessfulRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should not decrement hits when requests fail and `skipSuccessfulRequests` is set to true (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/error").expect(400);
+    await request(app).get("/error").expect(400);
 
-      expect(store.decrementWasCalled).toEqual(false);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(false);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            requestWasSuccessful: (c) => c.res.status === 200,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          requestWasSuccessful: (c) => c.res.status === 200,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/").expect(200);
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    await request(app).get("/").expect(200);
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            requestWasSuccessful(c) {
-              return c.res.status === 200;
-            },
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          requestWasSuccessful(c) {
+            return c.res.status === 200;
+          },
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/error").expect(400);
+    await request(app).get("/error").expect(400);
 
-      expect(store.decrementWasCalled).toEqual(false);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(false);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            requestWasSuccessful: (c) => c.req.query("success") === "1",
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when requests succeed, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          requestWasSuccessful: (c) => c.req.query("success") === "1",
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/?success=1");
+    await request(app).get("/?success=1");
 
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipSuccessfulRequests: true,
-            requestWasSuccessful: (c) => c.req.query("success") === "1",
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should not decrement hits when requests fail, `skipSuccessfulRequests` is set to true and a custom `requestWasSuccessful` method used (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipSuccessfulRequests: true,
+          requestWasSuccessful: (c) => c.req.query("success") === "1",
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/?success=0");
+    await request(app).get("/?success=0");
 
-      expect(store.decrementWasCalled).toEqual(false);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(false);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when requests fail and `skipFailedRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipFailedRequests: true,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when requests fail and `skipFailedRequests` is set to true (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipFailedRequests: true,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/error").expect(400);
+    await request(app).get("/error").expect(400);
 
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should not decrement hits when requests succeed and `skipFailedRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipFailedRequests: true,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should not decrement hits when requests succeed and `skipFailedRequests` is set to true (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipFailedRequests: true,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/").expect(200);
+    await request(app).get("/").expect(200);
 
-      expect(store.decrementWasCalled).toEqual(false);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(false);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when requests fail, `skipFailedRequests` is set to true and a custom `requestWasSuccessful` method used that returns a promise (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipFailedRequests: true,
-            requestWasSuccessful: async () => false,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when requests fail, `skipFailedRequests` is set to true and a custom `requestWasSuccessful` method used that returns a promise (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipFailedRequests: true,
+          requestWasSuccessful: async () => false,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/").expect(200);
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    await request(app).get("/").expect(200);
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
   // FIXME: This test times out  _sometimes_ on MacOS and Windows, so it is disabled for now
   /*
@@ -596,81 +584,78 @@ describe("middleware test", () => {
   )
   */
 
-  it.each([["modern", new MockStore()]])(
-    "should decrement hits when response emits an error and `skipFailedRequests` is set to true (%s store)",
-    async (_name, store) => {
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            skipFailedRequests: true,
-            store,
-          }),
-        })
-      );
+  it.each([
+    ["modern", new MockStore()],
+  ])("should decrement hits when response emits an error and `skipFailedRequests` is set to true (%s store)", async (_name, store) => {
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          skipFailedRequests: true,
+          store,
+        }),
+      }),
+    );
 
-      await request(app).get("/crash");
+    await request(app).get("/crash");
 
-      expect(store.decrementWasCalled).toEqual(true);
-    }
-  );
+    expect(store.decrementWasCalled).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should forward errors in the handler using `next()` (%s store)",
-    async (_name, store) => {
-      let errorCaught = false;
+  it.each([
+    ["modern", new MockStore()],
+  ])("should forward errors in the handler using `next()` (%s store)", async (_name, store) => {
+    let errorCaught = false;
 
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            limit: 1,
-            store,
-            handler() {
-              const exception = new Error("420: Enhance your calm");
-              throw exception;
-            },
-          }),
-        }).onError((error, c) => {
-          errorCaught = true;
-          return c.text(error.message, 500);
-        })
-      );
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          limit: 1,
+          store,
+          handler() {
+            const exception = new Error("420: Enhance your calm");
+            throw exception;
+          },
+        }),
+      }).onError((error, c) => {
+        errorCaught = true;
+        return c.text(error.message, 500);
+      }),
+    );
 
-      await request(app).get("/").expect(200);
-      await request(app).get("/").expect(500);
+    await request(app).get("/").expect(200);
+    await request(app).get("/").expect(500);
 
-      expect(errorCaught).toEqual(true);
-    }
-  );
+    expect(errorCaught).toEqual(true);
+  });
 
-  it.each([["modern", new MockStore()]])(
-    "should forward errors in `skip()` using `next()` (%s store)",
-    async (_name, store) => {
-      let errorCaught = false;
+  it.each([
+    ["modern", new MockStore()],
+  ])("should forward errors in `skip()` using `next()` (%s store)", async (_name, store) => {
+    let errorCaught = false;
 
-      const app = createAdaptorServer(
-        createServer({
-          middleware: rateLimiter({
-            keyGenerator,
-            limit: 1,
-            store,
-            skip() {
-              const exception = new Error("420: Enhance your calm");
-              throw exception;
-            },
-          }),
-        }).onError((error, c) => {
-          errorCaught = true;
-          return c.text(error.message, 500);
-        })
-      );
+    const app = createAdaptorServer(
+      createServer({
+        middleware: rateLimiter({
+          keyGenerator,
+          limit: 1,
+          store,
+          skip() {
+            const exception = new Error("420: Enhance your calm");
+            throw exception;
+          },
+        }),
+      }).onError((error, c) => {
+        errorCaught = true;
+        return c.text(error.message, 500);
+      }),
+    );
 
-      await request(app).get("/").expect(500);
+    await request(app).get("/").expect(500);
 
-      expect(errorCaught).toEqual(true);
-    }
-  );
+    expect(errorCaught).toEqual(true);
+  });
 
   it("should pass the number of hits and the limit to the next request handler in the `request.rateLimiter` property", async () => {
     let savedRequestObject: RateLimitInfo | undefined;
@@ -684,7 +669,7 @@ describe("middleware test", () => {
             await next();
           },
         ],
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -717,7 +702,7 @@ describe("middleware test", () => {
             await next();
           },
         ],
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -783,7 +768,7 @@ describe("middleware test", () => {
             },
           }),
         ],
-      })
+      }),
     );
 
     await request(app).get("/").query({ key: 1 }).expect(200);

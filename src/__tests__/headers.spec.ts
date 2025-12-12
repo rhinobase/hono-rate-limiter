@@ -1,15 +1,15 @@
 import { createAdaptorServer } from "@hono/node-server";
 import type { Context } from "hono";
 import { agent as request } from "supertest";
-import { rateLimiter } from "../rateLimiter";
+import { describe, expect, it, vi } from "vitest";
 import {
   setDraft6Headers,
   setDraft7Headers,
   setRetryAfterHeader,
 } from "../headers";
+import { rateLimiter } from "../rateLimiter";
 import type { RateLimitInfo } from "../types";
 import { createServer, keyGenerator } from "./helpers";
-import { describe, it, expect, vi } from "vitest";
 
 describe("headers test", () => {
   it("should send correct `ratelimit-*` headers for the standard headers draft 6", async () => {
@@ -21,7 +21,7 @@ describe("headers test", () => {
           limit: 5,
           standardHeaders: true,
         }),
-      })
+      }),
     );
 
     await request(app)
@@ -42,7 +42,7 @@ describe("headers test", () => {
           limit: 5,
           standardHeaders: "draft-7",
         }),
-      })
+      }),
     );
 
     await request(app)
@@ -60,7 +60,7 @@ describe("headers test", () => {
           windowMs: 60 * 1000,
           limit: 1,
         }),
-      })
+      }),
     );
 
     await request(app).get("/").expect(200);
@@ -71,7 +71,6 @@ describe("headers test", () => {
     const context: Context = {
       finalized: true,
       header: vi.fn(),
-      // biome-ignore lint/suspicious/noExplicitAny: For testing
     } as any;
     const info: RateLimitInfo = {
       limit: 5,

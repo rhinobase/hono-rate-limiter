@@ -26,14 +26,16 @@
     "format": "biome check --write ."
   },
   "exports": {
-    ".": {"import": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
-    "require": {
-      "types": "./dist/index.d.cts",
-      "default": "./dist/index.cjs"
-    }},
     "./cloudflare": {
       "import": {
         "types": "./dist/cloudflare/index.d.ts",
@@ -55,7 +57,7 @@
       }
     }
   },
-  "homepage": "https://hono-rate-limiter.vercel.app",
+  "homepage": "https://honohub.dev/docs/rate-limiter",
   "publishConfig": {
     "access": "public"
   },

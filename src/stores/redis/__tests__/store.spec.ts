@@ -1,7 +1,7 @@
 import { Redis } from "@upstash/redis";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ConfigType } from "../../../types";
 import { RedisStore } from "../store";
-import { describe, it, afterEach, expect, vi } from "vitest";
 
 const client = new Redis({
   // biome-ignore lint/complexity/useLiteralKeys: Clashing with another linter
@@ -160,7 +160,7 @@ describe.skip("redis store test", () => {
       },
       {
         interval: 30,
-      }
+      },
     );
 
     // Ensure that the keys have been deleted

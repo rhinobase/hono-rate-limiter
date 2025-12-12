@@ -23,9 +23,9 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response
+  R extends HandlerResponse<any> = Response,
 >(
-  config: GeneralConfigType<ConfigType<E, P, I>>
+  config: GeneralConfigType<ConfigType<E, P, I>>,
 ): MiddlewareHandler<E, P, I, R> {
   const {
     windowMs = 60_000,
@@ -85,7 +85,7 @@ export function rateLimiter<
     const { key, totalHits, resetTime } = await getKeyAndIncrement(
       c,
       keyGenerator,
-      store
+      store,
     );
 
     // Get the limit (max number of hits) for each client.

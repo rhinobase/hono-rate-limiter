@@ -1,7 +1,7 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Store } from "../types";
 import { webSocketLimiter } from "../websocket";
 import { createWsServer, keyGenerator } from "./helpers";
-import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 
 describe("websockets middleware test", () => {
   beforeEach(() => {

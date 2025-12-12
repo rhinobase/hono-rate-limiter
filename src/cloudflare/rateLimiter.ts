@@ -14,10 +14,10 @@ import type { ConfigType } from "./types";
 export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 >(
   config: Pick<ConfigType<E, P, I>, "rateLimitBinding" | "keyGenerator"> &
-    Partial<Omit<ConfigType<E, P, I>, "rateLimitBinding" | "keyGenerator">>
+    Partial<Omit<ConfigType<E, P, I>, "rateLimitBinding" | "keyGenerator">>,
 ): MiddlewareHandler<E, P, I> {
   const {
     message = "Too many requests, please try again later.",

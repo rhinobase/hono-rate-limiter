@@ -1,3 +1,3 @@
-export * from "./KVStore";
-export * from "./DurableObjectStore";
 export * from "./DurableObjectClass";
+export * from "./DurableObjectStore";
+export * from "./KVStore";

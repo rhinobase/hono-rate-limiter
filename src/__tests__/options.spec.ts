@@ -1,7 +1,7 @@
+import { describe, expect, it } from "vitest";
 import { rateLimiter } from "../rateLimiter";
 import type { ClientRateLimitInfo, ConfigType, Store } from "../types";
 import { keyGenerator } from "./helpers";
-import { describe, it, expect } from "vitest";
 
 describe("options test", () => {
   it("should not allow the use of an invalid store", () => {

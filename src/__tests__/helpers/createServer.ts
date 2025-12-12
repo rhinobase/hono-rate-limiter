@@ -58,7 +58,7 @@ export function createWsServer<
   app.get(
     "/",
     upgradeWebSocket(
-      middleware((c) => {
+      middleware(() => {
         return {
           onOpen: () => {
             console.log("Connection opened");

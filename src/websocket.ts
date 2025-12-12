@@ -17,11 +17,11 @@ import { getKeyAndIncrement, initStore } from "./utils";
 export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 >(
-  config: GeneralConfigType<WSConfigType<E, P, I>>
+  config: GeneralConfigType<WSConfigType<E, P, I>>,
 ): (
-  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>
+  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
 ) => (c: Context<E, P, I>) => Promise<WSEvents> {
   const {
     windowMs = 60_000,
@@ -54,12 +54,11 @@ export function webSocketLimiter<
     store,
   };
 
-  // biome-ignore lint/suspicious/noExplicitAny: Need this for backward compatiblity
   initStore(store, options as any);
 
   return (
-      createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>
-    ) =>
+    createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
+  ) =>
     async (c: Context<E, P, I>): Promise<WSEvents> => {
       const events = await createEvents(c);
 
@@ -77,7 +76,7 @@ export function webSocketLimiter<
           const { key, totalHits, resetTime } = await getKeyAndIncrement(
             c,
             keyGenerator,
-            store
+            store,
           );
 
           // Get the limit (max number of hits) for each client.
@@ -127,6 +126,7 @@ export function webSocketLimiter<
             await shouldSkipRequest();
           } catch (error) {
             if (skipFailedRequests) await decrementKey();
+            throw error;
           }
         },
         onError: async (event, ws) => {

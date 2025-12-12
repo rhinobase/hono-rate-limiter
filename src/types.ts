@@ -44,7 +44,7 @@ export type RateLimitInfo = {
 export type RateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
 /**
@@ -53,7 +53,7 @@ export type RateLimitExceededEventHandler<
 export interface ConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > {
   /**
    * How long we should remember the requests.
@@ -189,7 +189,7 @@ export type WSStatusCode =
 export type WSRateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = (event: unknown, ws: WSContext, optionsUsed: WSConfigType<E, P, I>) => void;
 
 /**
@@ -198,7 +198,7 @@ export type WSRateLimitExceededEventHandler<
 export interface WSConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > extends Omit<
     ConfigType<E, P, I>,
     | "statusCode"
@@ -244,7 +244,7 @@ export interface WSConfigType<
 export type Store<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * Method that initializes the store, and has access to the options passed to

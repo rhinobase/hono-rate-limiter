@@ -1,15 +1,15 @@
+import type { Env, Input } from "hono/types";
 import type {
   ClientRateLimitInfo,
   ConfigType as RateLimitConfiguration,
   Store,
 } from "../../types";
-import type { Env, Input } from "hono/types";
 import type { Options } from "../types";
 
 export class WorkersKVStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > implements Store<E, P, I>
 {
   /**
@@ -75,7 +75,7 @@ export class WorkersKVStore<
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
     const result = await this.namespace.get<ClientRateLimitInfo>(
       this.prefixKey(key),
-      "json"
+      "json",
     );
 
     if (result) return result;
@@ -179,7 +179,7 @@ export class WorkersKVStore<
    */
   private async updateRecord(
     key: string,
-    payload: ClientRateLimitInfo
+    payload: ClientRateLimitInfo,
   ): Promise<void> {
     await this.namespace.put(this.prefixKey(key), JSON.stringify(payload), {
       expiration: this.calculateExpiration(payload.resetTime as Date),

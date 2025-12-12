@@ -22,7 +22,7 @@ type Client = Required<ClientRateLimitInfo>;
 export class MemoryStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > implements Store<E, P, I>
 {
   /**
@@ -46,7 +46,6 @@ export class MemoryStore<
   /**
    * A reference to the active timer.
    */
-  // biome-ignore lint/suspicious/noExplicitAny: Deno is giving issue with NodeJS.Timeout
   interval?: any;
 
   /**

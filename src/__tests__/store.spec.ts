@@ -1,6 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryStore } from "../stores/memory";
 import type { ConfigType } from "../types";
-import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 
 const minute = 60 * 1000;
 
