@@ -23,7 +23,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node", "@cloudflare/workers-types"]
   },
   "include": ["./src/**/*"]
 }
