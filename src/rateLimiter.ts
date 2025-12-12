@@ -28,7 +28,7 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response
+  R extends HandlerResponse<any> = Response,
 >(config: ConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
   if ("windowMs" in config) {
     return honoRateLimiter(config);
@@ -41,7 +41,7 @@ function honoRateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response
+  R extends HandlerResponse<any> = Response,
 >(config: HonoConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
   const {
     windowMs = 60_000,
@@ -183,7 +183,7 @@ function cloudflareRateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response
+  R extends HandlerResponse<any> = Response,
 >(config: CloudflareConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
   const {
     message = "Too many requests, please try again later.",

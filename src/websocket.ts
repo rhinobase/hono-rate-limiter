@@ -17,11 +17,11 @@ import { initStore } from "./utils";
 export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 >(
-  config: WSConfigType<E, P, I>
+  config: WSConfigType<E, P, I>,
 ): (
-  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>
+  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
 ) => (c: Context<E, P, I>) => Promise<WSEvents> {
   const {
     windowMs = 60_000,

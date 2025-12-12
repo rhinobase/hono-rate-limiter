@@ -1,4 +1,4 @@
 export default {
-  "{apps,packages,tools}/**/*.{js,jsx,ts,tsx,json}": (api) =>
+  "./src/**/*.{js,ts}": (api) =>
     `pnpm dlx @biomejs/biome check --write ${api.filenames.join(" ")}`,
 };

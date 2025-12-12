@@ -20,7 +20,7 @@ type Client = Required<ClientRateLimitInfo>;
 export class MemoryStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > implements Store<E, P, I>
 {
   /**

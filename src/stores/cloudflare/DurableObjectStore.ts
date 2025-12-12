@@ -10,7 +10,7 @@ import type { Options } from "./types";
 export class DurableObjectStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > implements Store<E, P, I>
 {
   /**
@@ -34,7 +34,7 @@ export class DurableObjectStore<
    * @param options {Options} - The configuration options for the store.
    */
   constructor(
-    options: Options<DurableObjectNamespace<DurableObjectRateLimiter>>
+    options: Options<DurableObjectNamespace<DurableObjectRateLimiter>>,
   ) {
     this.namespace = options.namespace;
     this.prefix = options.prefix ?? "hrl:";

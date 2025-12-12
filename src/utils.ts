@@ -4,14 +4,14 @@ import type { HonoConfigType, Store } from "./types";
 export const isValidStore = <
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 >(
-  value: Store<E, P, I>
+  value: Store<E, P, I>,
 ): value is Store<E, P, I> => !!value?.increment;
 
 export function initStore<E extends Env, P extends string, I extends Input>(
   store: Store<E, P, I>,
-  options: HonoConfigType<E, P, I>
+  options: HonoConfigType<E, P, I>,
 ) {
   // Checking if store is valid
   if (!isValidStore(store)) {

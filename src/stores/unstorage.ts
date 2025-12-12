@@ -10,7 +10,7 @@ import type { ClientRateLimitInfo, HonoConfigType, Store } from "../types.ts";
 export class UnstorageStore<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > implements Store<E, P, I>
 {
   /**
@@ -69,7 +69,7 @@ export class UnstorageStore<
     const result = await this.storage
       .get(this.prefixKey(key))
       .then((value) =>
-        value ? (JSON.parse(String(value)) as ClientRateLimitInfo) : undefined
+        value ? (JSON.parse(String(value)) as ClientRateLimitInfo) : undefined,
       );
 
     return result;
@@ -152,7 +152,7 @@ export class UnstorageStore<
    */
   private async updateRecord(
     key: string,
-    payload: ClientRateLimitInfo
+    payload: ClientRateLimitInfo,
   ): Promise<void> {
     await this.storage.set(this.prefixKey(key), JSON.stringify(payload));
   }
