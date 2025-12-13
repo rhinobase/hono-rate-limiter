@@ -5,11 +5,17 @@ on: push
 jobs:
   test:
     name: Testing
-    strategy:
-      matrix:
-        node-version: [lts/*, latest]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis/redis-stack-server:6.2.6-v6 # 6.2 is the Upstash compatible Redis version
+      srh:
+        image: hiett/serverless-redis-http:latest
+        env:
+          SRH_MODE: env # We are using env mode because we are only connecting to one server.
+          SRH_TOKEN: ${{ env.SRH_TOKEN }}
+          SRH_CONNECTION_STRING: redis://redis:6379
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -17,10 +23,10 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: 8
-      - name: Use Node ${{ matrix.node-version }}
+      - name: Use Node lts/*
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: lts/*
           registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
       - name: Install dependencies
