@@ -47,6 +47,17 @@ export type RateLimitExceededEventHandler<
   I extends Input = Input
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
+type KeyGeneratorType<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input
+> = {
+  /**
+   * Method to generate custom identifiers for clients.
+   */
+  keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
+};
+
 type CommonConfigType<
   E extends Env = Env,
   P extends string = string,
@@ -77,11 +88,6 @@ type CommonConfigType<
   requestPropertyName: string;
 
   /**
-   * Method to generate custom identifiers for clients.
-   */
-  keyGenerator: (c: Context<E, P, I>) => Promisify<string>;
-
-  /**
    * Hono request handler that sends back a response when a client is
    * rate-limited.
    *
@@ -107,7 +113,20 @@ export type CloudflareConfigType<
    * The Cloudflare rate limit binding to use.
    */
   binding: RateLimit | ((c: Context<E, P, I>) => RateLimit);
-} & CommonConfigType<E, P, I>;
+} & KeyGeneratorType<E, P, I> &
+  CommonConfigType<E, P, I>;
+
+export type CloudflareConfigProps<
+  E extends Env = Env,
+  P extends string = string,
+  I extends Input = Input
+> = {
+  /**
+   * The Cloudflare rate limit binding to use.
+   */
+  binding: RateLimit | ((c: Context<E, P, I>) => RateLimit);
+} & KeyGeneratorType<E, P, I> &
+  Partial<CommonConfigType<E, P, I>>;
 
 export type HonoConfigType<
   E extends Env = Env,
@@ -177,35 +196,23 @@ export type HonoConfigType<
    * By default, the built-in `MemoryStore` will be used.
    */
   store: Store<E, P, I>;
-} & CommonConfigType<E, P, I>;
-
-/**
- * The configuration options for the rate limiter.
- */
-export type ConfigType<
-  E extends Env = Env,
-  P extends string = string,
-  I extends Input = Input
-> = HonoConfigType<E, P, I> | CloudflareConfigType<E, P, I>;
-
-export type GeneralConfigPropsWrapper<
-  T extends { keyGenerator: unknown },
-  U extends keyof T
-> = Pick<T, U> & Partial<Omit<T, U>>;
+} & KeyGeneratorType<E, P, I> &
+  CommonConfigType<E, P, I>;
 
 export type HonoConfigProps<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input
-> = GeneralConfigPropsWrapper<HonoConfigType<E, P, I>, "keyGenerator">;
-export type CloudflareConfigProps<
+> = {
+  binding?: never;
+} & KeyGeneratorType<E, P, I> &
+  Partial<HonoConfigType<E, P, I>>;
+
+export type ConfigType<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input
-> = GeneralConfigPropsWrapper<
-  CloudflareConfigType<E, P, I>,
-  "binding" | "keyGenerator"
->;
+> = HonoConfigType<E, P, I> | CloudflareConfigType<E, P, I>;
 
 export type ConfigProps<
   E extends Env = Env,
@@ -290,7 +297,7 @@ export type WSConfigProps<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input
-> = GeneralConfigPropsWrapper<WSConfigType<E, P, I>, "keyGenerator">;
+> = KeyGeneratorType<E, P, I> & Partial<WSConfigType<E, P, I>>;
 
 /**
  * An interface that all hit counter stores must implement.

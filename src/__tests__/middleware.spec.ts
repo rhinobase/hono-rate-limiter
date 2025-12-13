@@ -58,7 +58,7 @@ describe("middleware test", () => {
   }
 
   it("should not modify the options object passed", () => {
-    const options = {};
+    const options: any = {};
     rateLimiter(options);
     expect(options).toStrictEqual({});
   });
@@ -344,7 +344,7 @@ describe("middleware test", () => {
     "should call `resetKey` on the store (%s store)",
     async (_name, store) => {
       const app = createAdaptorServer(
-        createServer({
+        createServer<{ Variables: { rateLimitStore: any } }>({
           middleware: [
             rateLimiter({ keyGenerator, store }),
             async (c, next) => {
@@ -366,7 +366,7 @@ describe("middleware test", () => {
     async (_name, store) => {
       let response: ClientRateLimitInfo | undefined;
       const app = createAdaptorServer(
-        createServer({
+        createServer<{ Variables: { rateLimitStore: any } }>({
           middleware: [
             rateLimiter({ keyGenerator, store }),
             async (c, next) => {

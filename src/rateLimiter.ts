@@ -30,7 +30,7 @@ export function rateLimiter<
   I extends Input = Input,
   R extends HandlerResponse<any> = Response
 >(config: ConfigProps<E, P, I>): MiddlewareHandler<E, P, I, R> {
-  if ("binding" in config) {
+  if ("binding" in config && config.binding !== undefined) {
     return cloudflareRateLimiter(config);
   }
 
