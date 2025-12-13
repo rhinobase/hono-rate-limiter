@@ -7,9 +7,9 @@ import {
 } from "./headers";
 import { MemoryStore } from "./stores/memory";
 import type {
-  CloudflareConfigType,
-  ConfigType,
-  HonoConfigType,
+  CloudflareConfigProps,
+  ConfigProps,
+  HonoConfigProps,
   RateLimitInfo,
 } from "./types";
 import { initStore } from "./utils";
@@ -18,7 +18,7 @@ import { initStore } from "./utils";
  *
  * Create an instance of rate-limiting middleware for Hono.
  *
- * @param config {ConfigType} - Options to configure the rate limiter.
+ * @param config {ConfigProps} - Options to configure the rate limiter.
  *
  * @returns - The middleware that rate-limits clients based on your configuration.
  *
@@ -28,21 +28,23 @@ export function rateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response,
->(config: ConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
+  R extends HandlerResponse<any> = Response
+>(config: ConfigProps<E, P, I>): MiddlewareHandler<E, P, I, R> {
   if ("windowMs" in config) {
     return honoRateLimiter(config);
+  } else if ("binding" in config) {
+    return cloudflareRateLimiter(config);
   }
 
-  return cloudflareRateLimiter(config);
+  throw new Error("[hono-rate-limiter] Invalid configuration object");
 }
 
 function honoRateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response,
->(config: HonoConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
+  R extends HandlerResponse<any> = Response
+>(config: HonoConfigProps<E, P, I>): MiddlewareHandler<E, P, I, R> {
   const {
     windowMs = 60_000,
     limit = 5,
@@ -183,8 +185,8 @@ function cloudflareRateLimiter<
   E extends Env = Env,
   P extends string = string,
   I extends Input = Input,
-  R extends HandlerResponse<any> = Response,
->(config: CloudflareConfigType<E, P, I>): MiddlewareHandler<E, P, I, R> {
+  R extends HandlerResponse<any> = Response
+>(config: CloudflareConfigProps<E, P, I>): MiddlewareHandler<E, P, I, R> {
   const {
     message = "Too many requests, please try again later.",
     statusCode = 429,

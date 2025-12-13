@@ -1,14 +1,14 @@
 import type { Context, Env, Input } from "hono";
 import type { WSEvents } from "hono/ws";
 import { MemoryStore } from "./stores/memory";
-import type { Promisify, RateLimitInfo, WSConfigType } from "./types";
+import type { Promisify, RateLimitInfo, WSConfigProps } from "./types";
 import { initStore } from "./utils";
 
 /**
  *
  * Create an instance of ws based rate-limiting middleware for Hono.
  *
- * @param config {WSConfigType} - Options to configure the rate limiter.
+ * @param config {WSConfigProps} - Options to configure the rate limiter.
  *
  * @returns - The middleware that rate-limits clients based on your configuration.
  *
@@ -17,11 +17,11 @@ import { initStore } from "./utils";
 export function webSocketLimiter<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input,
+  I extends Input = Input
 >(
-  config: WSConfigType<E, P, I>,
+  config: WSConfigProps<E, P, I>
 ): (
-  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>,
+  createEvents: (c: Context<E, P, I>) => WSEvents | Promise<WSEvents>
 ) => (c: Context<E, P, I>) => Promise<WSEvents> {
   const {
     windowMs = 60_000,
