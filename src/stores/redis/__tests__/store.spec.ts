@@ -17,52 +17,52 @@ describe("redis store test", () => {
 
   it("supports custom prefixes", async () => {
     const store = new RedisStore({ client, prefix: "test-" });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "store";
 
     await store.increment(key);
 
-    // Ensure the hit count is 1, and the expiry is 10 milliseconds (value of
+    // Ensure the hit count is 1, and the expiry is 1000 milliseconds (value of
     // `windowMs`).
     expect(Number(await client.get("test-store"))).toEqual(1);
-    expect(Number(await client.pttl("test-store"))).lessThan(10);
+    expect(Number(await client.pttl("test-store"))).lessThan(1000);
   });
 
   it("sets the value to 1 on first call to `increment`", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "test-store";
 
     const { totalHits } = await store.increment(key); // => 1
 
-    // Ensure the hit count is 1, and the expiry is 10 milliseconds (value of
+    // Ensure the hit count is 1, and the expiry is 1000 milliseconds (value of
     // `windowMs`).
     expect(totalHits).toEqual(1);
     expect(Number(await client.get("hrl:test-store"))).toEqual(1);
-    expect(Number(await client.pttl("hrl:test-store"))).lessThan(10);
+    expect(Number(await client.pttl("hrl:test-store"))).lessThan(1000);
   });
 
   it("increments the key for the store when `increment` is called", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "test-store";
 
     await store.increment(key); // => 1
     const { totalHits } = await store.increment(key); // => 2
 
-    // Ensure the hit count is 2, and the expiry is 10 milliseconds (value of
+    // Ensure the hit count is 2, and the expiry is 1000 milliseconds (value of
     // `windowMs`).
     expect(totalHits).toEqual(2);
     expect(Number(await client.get("hrl:test-store"))).toEqual(2);
-    expect(Number(await client.pttl("hrl:test-store"))).lessThan(10);
+    expect(Number(await client.pttl("hrl:test-store"))).lessThan(1000);
   });
 
   it("decrements the key for the store when `decrement` is called", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "test-store";
 
@@ -71,16 +71,16 @@ describe("redis store test", () => {
     await store.decrement(key); // => 1
     const { totalHits } = await store.increment(key); // => 2
 
-    // Ensure the hit count is 2, and the expiry is 10 milliseconds (value of
+    // Ensure the hit count is 2, and the expiry is 1000 milliseconds (value of
     // `windowMs`).
     expect(totalHits).toEqual(2);
     expect(Number(await client.get("hrl:test-store"))).toEqual(2);
-    expect(Number(await client.pttl("hrl:test-store"))).lessThan(10);
+    expect(Number(await client.pttl("hrl:test-store"))).lessThan(1000);
   });
 
   it("resets the count for a key in the store when `resetKey` is called", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "test-store";
 
@@ -90,16 +90,16 @@ describe("redis store test", () => {
 
     const { totalHits } = await store.increment(key); // => 1
 
-    // Ensure the hit count is 1, and the expiry is 10 milliseconds (value of
+    // Ensure the hit count is 1, and the expiry is 1000 milliseconds (value of
     // `windowMs`).
     expect(totalHits).toEqual(1);
     expect(Number(await client.get("hrl:test-store"))).toEqual(1);
-    expect(Number(await client.pttl("hrl:test-store"))).lessThan(10);
+    expect(Number(await client.pttl("hrl:test-store"))).lessThan(1000);
   });
 
   it("fetches the count for a key in the store when `getKey` is called", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 10 } as ConfigType);
+    store.init({ windowMs: 1000 } as ConfigType);
 
     const key = "test-store";
 
