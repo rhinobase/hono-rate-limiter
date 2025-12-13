@@ -10,7 +10,7 @@ const client = new Redis({
   token: process.env["UPSTASH_REDIS_REST_TOKEN"] ?? "example_token",
 });
 
-describe.skip("redis store test", () => {
+describe("redis store test", () => {
   afterEach(async () => {
     await client.flushall();
   });
@@ -160,7 +160,7 @@ describe.skip("redis store test", () => {
       },
       {
         interval: 30,
-      },
+      }
     );
 
     // Ensure that the keys have been deleted
