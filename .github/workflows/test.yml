@@ -23,3 +23,6 @@ jobs:
         run: pnpm install
       - name: Run library tests
         run: pnpm run test
+        env:
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
