@@ -30,13 +30,11 @@ export function rateLimiter<
   I extends Input = Input,
   R extends HandlerResponse<any> = Response
 >(config: ConfigProps<E, P, I>): MiddlewareHandler<E, P, I, R> {
-  if ("windowMs" in config) {
-    return honoRateLimiter(config);
-  } else if ("binding" in config) {
+  if ("binding" in config) {
     return cloudflareRateLimiter(config);
   }
 
-  throw new Error("[hono-rate-limiter] Invalid configuration object");
+  return honoRateLimiter(config);
 }
 
 function honoRateLimiter<
