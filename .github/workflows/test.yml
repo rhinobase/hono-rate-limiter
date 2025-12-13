@@ -32,6 +32,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run library tests
-        run: |
-          pnpm install
-          pnpm run test
+        run: pnpm run test
+        env:
+          UPSTASH_REDIS_REST_URL: http://srh:80
+          UPSTASH_REDIS_REST_TOKEN: ${{ env.SRH_TOKEN }}
