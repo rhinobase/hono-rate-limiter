@@ -1,0 +1,49 @@
+import { describe, expect, it } from "vitest";
+import { rateLimiter } from "../rateLimiter";
+import type { ClientRateLimitInfo, ConfigType, Store } from "../types";
+import { keyGenerator } from "./helpers";
+
+describe("options test", () => {
+  it("should not allow the use of an invalid store", () => {
+    class InvalidStore {
+      invalid = true;
+    }
+
+    expect(() => {
+      rateLimiter({
+        keyGenerator,
+        // @ts-expect-error Check if the library can detect invalid stores without TSC's help
+        store: new InvalidStore(),
+      });
+    }).toThrowError(/store/);
+  });
+
+  it("should not call `init` if it is not a function", async () => {
+    class InvalidStore implements Store {
+      options!: ConfigType;
+
+      // @ts-expect-error Check if the library can detect invalid stores without TSC's help
+      init = "not-a-function";
+
+      async increment(): Promise<ClientRateLimitInfo> {
+        return { totalHits: 1, resetTime: undefined };
+      }
+
+      async decrement(): Promise<void> {
+        return undefined;
+      }
+
+      async resetKey(): Promise<void> {
+        return undefined;
+      }
+    }
+
+    expect(() => {
+      rateLimiter({
+        keyGenerator,
+        // @ts-expect-error Check if the library can detect invalid stores without TSC's help
+        store: new InvalidStore(),
+      });
+    }).not.toThrowError(/store/);
+  });
+});
