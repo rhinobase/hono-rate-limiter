@@ -47,21 +47,16 @@
     "url": "https://github.com/rhinobase/hono-rate-limiter/issues"
   },
   "peerDependencies": {
-    "@cloudflare/workers-types": "^4.20251212.0",
     "hono": "^4.10.8",
     "unstorage": "^1.17.3"
   },
   "peerDependenciesMeta": {
-    "@cloudflare/workers-types": {
-      "optional": true
-    },
     "unstorage": {
       "optional": true
     }
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
-    "@cloudflare/workers-types": "^4.20251212.0",
     "@hono/node-server": "^1.19.7",
     "@hono/node-ws": "^1.2.0",
     "@types/node": "20",

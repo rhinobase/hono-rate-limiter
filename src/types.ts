@@ -81,13 +81,6 @@ type CommonConfigType<
   statusCode: StatusCode;
 
   /**
-   * The name of the property on the context object to store the rate limit info.
-   *
-   * Defaults to `rateLimit`.
-   */
-  requestPropertyName: string;
-
-  /**
    * Hono request handler that sends back a response when a client is
    * rate-limited.
    *
@@ -102,6 +95,10 @@ type CommonConfigType<
    * By default, skips no requests.
    */
   skip: (c: Context<E, P, I>) => Promisify<boolean>;
+};
+
+type RateLimit = {
+  limit: (options: { key: string }) => Promisify<{ success: boolean }>;
 };
 
 export type CloudflareConfigType<
@@ -157,6 +154,13 @@ export type HonoConfigType<
    * Defaults to `draft-6`.
    */
   standardHeaders: boolean | "draft-6" | "draft-7";
+
+  /**
+   * The name of the property on the context object to store the rate limit info.
+   *
+   * Defaults to `rateLimit`.
+   */
+  requestPropertyName: string;
 
   /**
    * The name of the property on the context object to store the Data Store instance.
