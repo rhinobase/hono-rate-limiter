@@ -62,7 +62,7 @@ describe("redis store test", () => {
 
   it("decrements the key for the store when `decrement` is called", async () => {
     const store = new RedisStore({ client });
-    store.init({ windowMs: 1000 } as ConfigType);
+    store.init({ windowMs: 2000 } as ConfigType);
 
     const key = "test-store";
 
