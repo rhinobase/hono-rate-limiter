@@ -1,6 +1,11 @@
 import type { Env, Input } from "hono/types";
-import type { Storage } from "unstorage";
 import type { ClientRateLimitInfo, HonoConfigType, Store } from "../types.ts";
+
+export type UnstorageInstance = {
+  get: (key: string) => Promise<any>;
+  set: (key: string, value: any) => Promise<void>;
+  remove: (key: string) => Promise<void>;
+};
 
 /**
  * A `Store` that stores the hit count for each client using Unstorage
@@ -26,14 +31,14 @@ export class UnstorageStore<
   /**
    * The unstorage storage instance.
    */
-  storage: Storage;
+  storage: UnstorageInstance;
 
   /**
    * @constructor for `UnstorageStore`.
    *
    * @param options {Options} - The configuration options for the store.
    */
-  constructor(options: { storage: Storage; prefix?: string }) {
+  constructor(options: { storage: UnstorageInstance; prefix?: string }) {
     this.storage = options.storage;
     this.prefix = options.prefix ?? "hrl:";
   }

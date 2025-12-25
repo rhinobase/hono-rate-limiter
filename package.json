@@ -50,6 +50,11 @@
     "hono": "^4.10.8",
     "unstorage": "^1.17.3"
   },
+  "peerDependenciesMeta": {
+    "unstorage": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
     "@hono/node-server": "^1.19.7",
