@@ -44,13 +44,13 @@ export type RateLimitInfo = {
 export type RateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = (c: Context<E, P, I>, next: Next, optionsUsed: ConfigType<E, P, I>) => void;
 
 type KeyGeneratorType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * Method to generate custom identifiers for clients.
@@ -61,7 +61,7 @@ type KeyGeneratorType<
 type CommonConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * The response body to send back when a client is rate limited.
@@ -104,7 +104,7 @@ type RateLimit = {
 export type CloudflareConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * The Cloudflare rate limit binding to use.
@@ -116,7 +116,7 @@ export type CloudflareConfigType<
 export type CloudflareConfigProps<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * The Cloudflare rate limit binding to use.
@@ -128,7 +128,7 @@ export type CloudflareConfigProps<
 export type HonoConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * How long we should remember the requests.
@@ -206,7 +206,7 @@ export type HonoConfigType<
 export type HonoConfigProps<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   binding?: never;
 } & KeyGeneratorType<E, P, I> &
@@ -215,13 +215,13 @@ export type HonoConfigProps<
 export type ConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = HonoConfigType<E, P, I> | CloudflareConfigType<E, P, I>;
 
 export type ConfigProps<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = HonoConfigProps<E, P, I> | CloudflareConfigProps<E, P, I>;
 
 export type WSStatusCode =
@@ -248,7 +248,7 @@ export type WSStatusCode =
 export type WSRateLimitExceededEventHandler<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = (event: unknown, ws: WSContext, optionsUsed: WSConfigType<E, P, I>) => void;
 
 /**
@@ -257,7 +257,7 @@ export type WSRateLimitExceededEventHandler<
 export interface WSConfigType<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > extends Omit<
     HonoConfigType<E, P, I>,
     | "statusCode"
@@ -300,7 +300,7 @@ export interface WSConfigType<
 export type WSConfigProps<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = KeyGeneratorType<E, P, I> & Partial<WSConfigType<E, P, I>>;
 
 /**
@@ -309,7 +309,7 @@ export type WSConfigProps<
 export type Store<
   E extends Env = Env,
   P extends string = string,
-  I extends Input = Input
+  I extends Input = Input,
 > = {
   /**
    * Method that initializes the store, and has access to the options passed to

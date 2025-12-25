@@ -160,7 +160,7 @@ describe("redis store test", () => {
       },
       {
         interval: 30,
-      }
+      },
     );
 
     // Ensure that the keys have been deleted
