@@ -68,9 +68,13 @@ export class UnstorageStore<
   async get(key: string): Promise<ClientRateLimitInfo | undefined> {
     const result = await this.storage
       .get(this.prefixKey(key))
-      .then((value) =>
-        value ? (JSON.parse(String(value)) as ClientRateLimitInfo) : undefined,
-      );
+      .then((value) => {
+        if (typeof value === 'object') {
+          return value as ClientRateLimitInfo;
+        }
+        
+        return value ? JSON.parse(String(value)) as ClientRateLimitInfo : undefined;
+      });
 
     return result;
   }
