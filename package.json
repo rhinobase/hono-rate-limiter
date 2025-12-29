@@ -1,7 +1,7 @@
 {
   "name": "hono-rate-limiter",
   "description": "Rate limit middleware for Hono.",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "type": "module",
   "license": "MIT",
   "keywords": [
