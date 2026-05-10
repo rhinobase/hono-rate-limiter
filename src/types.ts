@@ -186,7 +186,7 @@ export type HonoConfigType<
   skipSuccessfulRequests: boolean;
 
   /**
-   * Method to determine whether or not the request counts as 'succesful'. Used
+   * Method to determine whether or not the request counts as 'successful'. Used
    * when either `skipSuccessfulRequests` or `skipFailedRequests` is set to true.
    *
    * By default, requests with a response status code less than 400 are considered
