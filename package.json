@@ -70,5 +70,6 @@
     "supertest": "^7.1.4",
     "typescript": "~5.9.2",
     "vitest": "^4.0.15"
-  }
+  },
+  "packageManager": "pnpm@10.0.0"
 }
