@@ -99,8 +99,10 @@ export function webSocketLimiter<
             resetKey: store.resetKey.bind(store),
           });
 
-          // If we are to skip failed/successfull requests, decrement the
-          // counter accordingly once we know the status code of the request
+          // If we are to skip failed/successful requests, decrement the
+          // counter accordingly once we know the outcome of the request. For a
+          // WebSocket message there is no HTTP status code, so "successful"
+          // means the `onMessage` handler ran without throwing.
           let decremented = false;
           const decrementKey = async () => {
             if (!decremented) {
@@ -109,33 +111,29 @@ export function webSocketLimiter<
             }
           };
 
-          const shouldSkipRequest = async () => {
-            if (skipSuccessfulRequests) await decrementKey();
-          };
-
-          // If the client has exceeded their rate limit call the `handler` function.
+          // If the client has exceeded their rate limit call the `handler`
+          // function. The request is rejected and the handler never runs, so
+          // it is neither successful nor failed: do not decrement here.
           if (totalHits > _limit) {
-            await shouldSkipRequest();
             return handler(event, ws, options);
           }
 
           try {
             await events.onMessage?.(event, ws);
-            await shouldSkipRequest();
+            // The handler completed without throwing, so the request was
+            // successful.
+            if (skipSuccessfulRequests) await decrementKey();
           } catch (error) {
+            // The handler threw, so the request failed.
             if (skipFailedRequests) await decrementKey();
             throw error;
           }
         },
         onError: async (event, ws) => {
-          if (skipFailedRequests) {
-            // Get a unique key for the client
-            const key = await keyGenerator(c);
-
-            // decrement the counter
-            await store.decrement(key);
-          }
-
+          // `skipFailedRequests` is handled where a message actually fails, in
+          // the `onMessage` catch above. `onError` is a transport-level event
+          // that is not tied to a specific message, so decrementing here would
+          // double-count (and is unguarded). Just forward the event.
           events.onError?.(event, ws);
         },
       };
