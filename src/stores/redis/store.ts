@@ -90,6 +90,15 @@ export class RedisStore<
     // before it continues.
     this.incrementScriptSha = this.loadIncrementScript();
     this.getScriptSha = this.loadGetScript();
+
+    // Nothing awaits these promises here, so a failed SCRIPT LOAD would be an
+    // unhandled rejection that crashes the process on Node's default policy.
+    // `get()` is also optional on the Store interface, so `getScriptSha` may
+    // never be awaited at all. Attaching a no-op handler marks the rejection
+    // as handled without consuming it: whoever awaits these later still sees
+    // the original error.
+    this.incrementScriptSha.catch(() => {});
+    this.getScriptSha.catch(() => {});
   }
 
   /**
