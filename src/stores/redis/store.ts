@@ -72,6 +72,7 @@ export class RedisStore<
    */
   incrementScriptSha: Promise<string>;
   getScriptSha: Promise<string>;
+  decrementScriptSha: Promise<string>;
 
   /**
    * @constructor for `RedisStore`.
@@ -90,6 +91,7 @@ export class RedisStore<
     // before it continues.
     this.incrementScriptSha = this.loadIncrementScript();
     this.getScriptSha = this.loadGetScript();
+    this.decrementScriptSha = this.loadDecrementScript();
 
     // Nothing awaits these promises here, so a failed SCRIPT LOAD would be an
     // unhandled rejection that crashes the process on Node's default policy.
@@ -99,6 +101,7 @@ export class RedisStore<
     // the original error.
     this.incrementScriptSha.catch(() => {});
     this.getScriptSha.catch(() => {});
+    this.decrementScriptSha.catch(() => {});
   }
 
   /**
@@ -128,6 +131,19 @@ export class RedisStore<
   }
 
   /**
+   * Loads the script used to decrement a client's hit count.
+   */
+  async loadDecrementScript(): Promise<string> {
+    const result = await this.client.scriptLoad(scripts.decrement);
+
+    if (typeof result !== "string") {
+      throw new TypeError("unexpected reply from redis client");
+    }
+
+    return result;
+  }
+
+  /**
    * Runs the increment command, and retries it if the script is not loaded.
    */
   async retryableIncrement(key: string): Promise<RedisReply> {
@@ -144,6 +160,27 @@ export class RedisStore<
     } catch {
       // TODO: distinguish different error types
       this.incrementScriptSha = this.loadIncrementScript();
+      return evalCommand();
+    }
+  }
+
+  /**
+   * Runs the decrement command, and retries it if the script is not loaded.
+   */
+  async retryableDecrement(key: string): Promise<RedisReply> {
+    const evalCommand = async () =>
+      this.client.evalsha<string[], RedisReply>(
+        await this.decrementScriptSha,
+        [this.prefixKey(key)],
+        [],
+      );
+
+    try {
+      const result = await evalCommand();
+      return result;
+    } catch {
+      // TODO: distinguish different error types
+      this.decrementScriptSha = this.loadDecrementScript();
       return evalCommand();
     }
   }
@@ -200,10 +237,16 @@ export class RedisStore<
   /**
    * Method to decrement a client's hit counter.
    *
+   * Uses a Lua script so the read-and-decrement is atomic. It never takes the
+   * counter below zero and never touches the key's expiry, mirroring the
+   * `MemoryStore`. This prevents a decrement that lands after the window has
+   * expired from creating a negative, TTL-less key that would leak extra
+   * requests into the next window.
+   *
    * @param key {string} - The identifier for a client
    */
   async decrement(key: string): Promise<void> {
-    await this.client.decr(this.prefixKey(key));
+    await this.retryableDecrement(key);
   }
 
   /**

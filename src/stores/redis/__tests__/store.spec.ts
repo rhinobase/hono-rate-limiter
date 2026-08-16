@@ -71,11 +71,82 @@ describe("redis store test", () => {
     await store.decrement(key); // => 1
     const { totalHits } = await store.increment(key); // => 2
 
-    // Ensure the hit count is 2, and the expiry is 1000 milliseconds (value of
+    // Ensure the hit count is 2, and the expiry is 2000 milliseconds (value of
     // `windowMs`).
     expect(totalHits).toEqual(2);
     expect(Number(await client.get("hrl:test-store"))).toEqual(2);
+    expect(Number(await client.pttl("hrl:test-store"))).lessThan(2000);
+  });
+
+  it("does not take the counter below zero when `decrement` is called on a missing key", async () => {
+    const store = new RedisStore({ client });
+    store.init({ windowMs: 1000 } as ConfigType);
+
+    const key = "test-store";
+
+    // The window expired (or the key was evicted) before the response left, so
+    // the decrement lands on a key that no longer exists. A raw DECR would
+    // create it at -1 with no expiry; the script must leave it absent.
+    await store.decrement(key);
+
+    expect(await client.get("hrl:test-store")).toEqual(null);
+    // No TTL-less negative key should linger.
+    expect(Number(await client.pttl("hrl:test-store"))).toEqual(-2);
+  });
+
+  it("does not leak a negative count into the next window", async () => {
+    const store = new RedisStore({ client });
+    store.init({ windowMs: 1000 } as ConfigType);
+
+    const key = "test-store";
+
+    // Simulate the boundary straddle: increment happened in a window that has
+    // since expired, and the decrement arrives afterwards on the missing key.
+    await store.decrement(key);
+
+    // The first request of the new window must count as 1, not 0.
+    const { totalHits } = await store.increment(key);
+
+    expect(totalHits).toEqual(1);
+    expect(Number(await client.get("hrl:test-store"))).toEqual(1);
     expect(Number(await client.pttl("hrl:test-store"))).lessThan(1000);
+  });
+
+  it("does not accumulate a negative count under concurrent straddles", async () => {
+    const store = new RedisStore({ client });
+    store.init({ windowMs: 1000 } as ConfigType);
+
+    const key = "test-store";
+
+    // Several decrements landing on the same missing key must not stack up to
+    // a large negative value that would admit extra requests later.
+    await Promise.all(Array.from({ length: 8 }, () => store.decrement(key)));
+
+    const { totalHits } = await store.increment(key);
+
+    expect(totalHits).toEqual(1);
+    expect(Number(await client.get("hrl:test-store"))).toEqual(1);
+  });
+
+  it("does not disturb the expiry when `decrement` is called", async () => {
+    const store = new RedisStore({ client });
+    store.init({ windowMs: 2000 } as ConfigType);
+
+    const key = "test-store";
+
+    await store.increment(key); // => 1
+    await store.increment(key); // => 2
+
+    const ttlBefore = Number(await client.pttl("hrl:test-store"));
+
+    await store.decrement(key); // => 1
+
+    const ttlAfter = Number(await client.pttl("hrl:test-store"));
+
+    // Decrement must never re-arm or clear the expiry.
+    expect(Number(await client.get("hrl:test-store"))).toEqual(1);
+    expect(ttlAfter).toBeGreaterThan(0);
+    expect(ttlAfter).toBeLessThanOrEqual(ttlBefore);
   });
 
   it("resets the count for a key in the store when `resetKey` is called", async () => {
