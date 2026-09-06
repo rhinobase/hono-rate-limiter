@@ -11,6 +11,22 @@ export type UnstorageInstance = {
  * A `Store` that stores the hit count for each client using Unstorage
  *
  * {@link https://unstorage.unjs.io/}
+ *
+ * @remarks
+ * **Not safe under high concurrency.** Unstorage exposes no atomic
+ * increment or compare-and-swap primitive, so `increment()` and
+ * `decrement()` perform a non-atomic read-modify-write against the backing
+ * driver. When many requests for the same key arrive at once, they can all
+ * read the same hit count before any of them writes it back, so the counter
+ * under-counts and a client can exceed the configured limit. The wider the
+ * driver's read/write latency (e.g. Vercel KV, Cloudflare KV, S3), the wider
+ * this window. The same applies across multiple server instances sharing one
+ * backend.
+ *
+ * If you need correct counting under concurrent load, use a store backed by
+ * an atomic counter such as `RedisStore` (which does all its work inside a
+ * Lua script). `MemoryStore` is also race-free within a single process, but
+ * does not share state across instances.
  */
 export class UnstorageStore<
   E extends Env = Env,
@@ -87,6 +103,11 @@ export class UnstorageStore<
   /**
    * Method to increment a client's hit counter. If the current time is within an active window,
    * it increments the existing hit count. Otherwise, it starts a new window with a hit count of 1.
+   *
+   * @remarks
+   * This read-modify-write is not atomic. Concurrent calls for the same key
+   * may under-count and let a client exceed the limit. See the class-level
+   * remarks for details and alternatives.
    *
    * @param key {string} - The identifier for a client
    *
